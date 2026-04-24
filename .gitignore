@@ -5,3 +5,7 @@ captures/*
 !captures/.gitkeep
 Replays/*
 !Replays/.gitkeep
+game/
+text strings
+Desktop.rar
+.tmp_task_game_message.txt

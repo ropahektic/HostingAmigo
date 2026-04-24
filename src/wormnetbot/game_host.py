@@ -182,6 +182,98 @@ def _body_preview(data: bytes, limit: int = 64) -> str:
     return preview
 
 
+def _packet_family(body: bytes) -> str:
+    if not body:
+        return "<empty>"
+    if body == C2_ENDGAME_SENTINEL:
+        return "400600"
+    if body.startswith(bytes.fromhex("400204")) and len(body) >= 7:
+        return f"400204/{body[3]:02x}/{body[4:7].hex()}"
+    if body.startswith(bytes.fromhex("401e0102")) and len(body) >= 8:
+        return f"401e0102/{body[4:8].hex()}"
+    if body.startswith(bytes.fromhex("401e0202")) and len(body) >= 8:
+        return f"401e0202/{body[4:8].hex()}"
+    if body.startswith(bytes.fromhex("401f0102")) and len(body) >= 8:
+        return f"401f0102/{body[4:8].hex()}"
+    if body.startswith(bytes.fromhex("401f0202")) and len(body) >= 8:
+        return f"401f0202/{body[4:8].hex()}"
+    if len(body) >= 4:
+        return body[:4].hex()
+    return body.hex()
+
+
+def _slot_from_endgame_family(family: str) -> int | None:
+    prefix = family.split("/", 1)[0]
+    if len(prefix) != 8:
+        return None
+    if prefix[:4] not in {"401e", "401f", "4021", "441f"}:
+        return None
+    if prefix[6:8] not in {"02", "1e"}:
+        return None
+    try:
+        slot = int(prefix[4:6], 16)
+    except ValueError:
+        return None
+    return slot if slot > 0 else None
+
+
+ENDGAME_SLOT_BODY_MARKERS: dict[int, frozenset[str]] = {
+    1: frozenset(
+        {
+            "6002020000",
+            "7402020000",
+            "540200032001502015020c1e84e8370000",
+            "540200030c1e60980401f07a0000",
+            "401f02020ccc050c1e021008a6c000",
+        }
+    ),
+    2: frozenset(
+        {
+            "4402020000",
+            "400204060000",
+            "40020400050c1e0301601b144000",
+        }
+    ),
+}
+
+ENDGAME_SLOT_FAMILY_MARKERS: dict[int, frozenset[str]] = {
+    1: frozenset(
+        {
+            "401f0102",
+            "401e0102/0c24050c",
+            "401e0102/0c60050c",
+            "401e0102/0c78050c",
+            "54020003",
+            "40210102",
+            "40200102",
+            "40022001",
+            "5c1e0102",
+            "5c02000b",
+            "44020001",
+            "401f0202/0ccc050c",
+        }
+    ),
+    2: frozenset(
+        {
+            "401e0202",
+            "401e0102/0ccc050c",
+            "5c020001",
+            "44020200",
+            "48020200",
+            "54020200",
+            "40020406",
+            "4021021f",
+            "40210202",
+            "60020003",
+            "64020003",
+            "401f0202/0c3ec020",
+            "c01f0204",
+            "e00c1e03",
+        }
+    ),
+}
+
+
 def _pack_lobby(command: int, payload: bytes = b"", *, unknown: int = 0, pad: int = 0) -> bytes:
     return WA_HEADER.pack(LOBBY_CHANNEL, unknown, WA_HEADER.size + len(payload), command, pad) + payload
 
@@ -632,7 +724,7 @@ class GameSession:
             for team in self._sorted_teams()
             if team.player_id != self._host_player.player_id and not team.name.endswith("'s team")
         ]
-        if len(candidate_teams) != 2:
+        if not candidate_teams:
             return
 
         recent_hex = [
@@ -643,162 +735,105 @@ class GameSession:
         if not recent_hex:
             return
 
-        def has_prefix(prefix: str) -> bool:
-            return any(body.startswith(prefix) for body in recent_hex)
+        endgame_window = [
+            (frame, body)
+            for frame, body in self._recent_incoming_game_frames[-16:]
+            if body and body != C2_ENDGAME_SENTINEL
+        ]
+        family_window = [
+            {
+                "frame": frame,
+                "body_hex": body.hex(),
+                "family": _packet_family(body),
+            }
+            for frame, body in endgame_window
+        ]
 
-        def has_exact(value: str) -> bool:
-            return any(body == value for body in recent_hex)
+        if len(candidate_teams) > 2:
+            teams_by_slot = {team.slot: team for team in candidate_teams}
+            slot_scores = {team.slot: 0 for team in candidate_teams}
+            reasons: list[str] = []
+            total = len(family_window)
+            for index, packet in enumerate(family_window):
+                rel_index = index - total
+                weight = max(1, index + 1)
+                family = str(packet["family"])
+                slot = _slot_from_endgame_family(family)
+                if slot not in teams_by_slot:
+                    continue
+                score = 3 + weight
+                slot_scores[slot] += score
+                reasons.append(f"slot{slot}:family:{family}@{rel_index}")
 
-        first_score = 0
-        second_score = 0
-        reasons: list[str] = []
+            ranked = sorted(slot_scores.items(), key=lambda item: item[1], reverse=True)
+            best_slot, best_score = ranked[0]
+            second_score = ranked[1][1] if len(ranked) > 1 else 0
+            if best_score < 6 or best_score - second_score < 3:
+                LOGGER.info(
+                    "WA multi-team winner inference inconclusive: scores=%s recent=%s",
+                    slot_scores,
+                    recent_hex,
+                )
+                return
 
-        if has_exact("6002020000"):
-            first_score += 5
-            reasons.append("slot1:6002020000")
-        if has_exact("7402020000"):
-            first_score += 5
-            reasons.append("slot1:7402020000")
-        if has_exact("5002020000"):
-            first_score += 4
-            reasons.append("slot1:5002020000")
-        if has_prefix("44020009"):
-            first_score += 3
-            reasons.append("slot1:44020009")
-        if has_prefix("40020418030c1e31"):
-            first_score += 4
-            reasons.append("slot1:0402181e31")
-        if has_prefix("40020418030c1ee1"):
-            first_score += 4
-            reasons.append("slot1:0402181ee1")
-        if has_prefix("40020408030c1e31"):
-            first_score += 4
-            reasons.append("slot1:0402081e31")
-        slot1_long_tail_count = sum(
-            1
-            for prefix in (
-                "6802020000",
-                "4002040403250131",
-                "742001020a002000",
-                "401e01020c60050c1e",
-                "5c1e01020aa0",
-                "402101020c48050c1e",
-                "540200032001",
-            )
-            if has_prefix(prefix)
-        )
-        if slot1_long_tail_count >= 3 and has_prefix("4002040403250131"):
-            first_score += 7
-            reasons.append(f"slot1:long-tailx{slot1_long_tail_count}")
-        if has_prefix("64020005"):
-            first_score += 1
-            reasons.append("slot1:64020005")
-        if has_prefix("4026010208"):
-            first_score += 1
-            reasons.append("slot1:4026010208")
-        if has_prefix("401e02020c"):
-            first_score += 2
-            reasons.append("slot1:401e02020c")
-
-        if has_exact("4802020000"):
-            second_score += 3
-            reasons.append("slot2:4802020000")
-        if has_exact("5402020000"):
-            second_score += 4
-            reasons.append("slot2:5402020000")
-        if has_exact("6402020000"):
-            second_score += 3
-            reasons.append("slot2:6402020000")
-        if has_exact("400204060000"):
-            second_score += 4
-            reasons.append("slot2:400204060000")
-        if has_prefix("64020009"):
-            second_score += 3
-            reasons.append("slot2:64020009")
-        if has_prefix("7c020009"):
-            second_score += 3
-            reasons.append("slot2:7c020009")
-        if has_prefix("c01f0204"):
-            second_score += 3
-            reasons.append("slot2:c01f0204")
-        if has_prefix("e00c1e03"):
-            second_score += 3
-            reasons.append("slot2:e00c1e03")
-        if has_prefix("40020418030c1e91"):
-            second_score += 4
-            reasons.append("slot2:0402181e91")
-        if has_prefix("40020418030c1e51"):
-            second_score += 4
-            reasons.append("slot2:0402181e51")
-        if has_prefix("40020408030c1ee1"):
-            second_score += 4
-            reasons.append("slot2:0402081ee1")
-        if has_prefix("40020418030c1e01b078"):
-            second_score += 1
-            reasons.append("slot2:040218b078")
-        if has_prefix("6c0200030c1e"):
-            second_score += 1
-            reasons.append("slot2:6c020003")
-        if has_prefix("68020003"):
-            second_score += 1
-            reasons.append("slot2:68020003")
-        if has_prefix("64020003"):
-            second_score += 1
-            reasons.append("slot2:64020003")
-        if has_prefix("60020003"):
-            second_score += 1
-            reasons.append("slot2:60020003")
-        slot2_chain_count = sum(
-            1
-            for prefix in (
-                "40020404030c1e",
-                "40020400030c1e",
-                "7c0200030c1e0140",
-                "780200030c1e",
-            )
-            if has_prefix(prefix)
-        )
-        if slot2_chain_count >= 3 and has_prefix("40020404030c1e"):
-            second_score += 3
-            reasons.append(f"slot2:0402-chainx{slot2_chain_count}")
-        slot2_050c_tail_count = sum(
-            1
-            for prefix in (
-                "40020414050c1e03",
-                "40020410050c1e03",
-                "4002040c050c1e03",
-                "40020408050c1e03",
-            )
-            if has_prefix(prefix)
-        )
-        if slot2_050c_tail_count >= 3:
-            second_score += 5
-            reasons.append(f"slot2:050c-tailx{slot2_050c_tail_count}")
-        elif slot2_050c_tail_count == 2:
-            second_score += 3
-            reasons.append("slot2:050c-tailx2")
-        if has_exact("4402020000"):
-            second_score += 2
-            reasons.append("slot2:4402020000")
-        slot2_c1e1_tail_count = sum(
-            1
-            for prefix in (
-                "40020404030c1ec1",
-                "40020408030c1ee1",
-                "40020418030c1e51",
-                "401e01020ccc050c1e",
-            )
-            if has_prefix(prefix)
-        )
-        if slot2_c1e1_tail_count >= 2 and has_prefix("40020404030c1ec1"):
-            second_score += 6
-            reasons.append(f"slot2:c1e1-tailx{slot2_c1e1_tail_count}")
-
-        if max(first_score, second_score) < 4 or abs(first_score - second_score) < 2:
+            winner = teams_by_slot[best_slot]
+            winner_player_nickname = self._player_nickname_for_team(winner)
+            self._winner_team_name = winner.name
+            self._winner_player_nickname = winner_player_nickname
+            self._winner_reason = "endgame-family-multiteam"
             LOGGER.info(
-                "WA winner inference inconclusive: slot1=%s slot2=%s recent=%s",
+                "WA probable multi-team winner inferred: team=%s player=%s slot=%s owner_player_id=%s scores=%s reasons=%s recent=%s",
+                winner.name,
+                winner_player_nickname or "<unknown>",
+                winner.slot,
+                winner.player_id,
+                slot_scores,
+                ",".join(reasons),
+                recent_hex,
+            )
+            self._append_capture(
+                {
+                    "type": "winner_inferred",
+                    "team_name": winner.name,
+                    "team_slot": winner.slot,
+                    "player_id": winner.player_id,
+                    "player_nickname": winner_player_nickname,
+                    "slot_scores": slot_scores,
+                    "reasons": reasons,
+                    "families": family_window,
+                    "recent_bodies": recent_hex,
+                }
+            )
+            return
+
+        slot_scores = {1: 0, 2: 0}
+        reasons: list[str] = []
+        family_counts = {1: 0, 2: 0}
+        total = len(family_window)
+        for index, packet in enumerate(family_window):
+            rel_index = index - total
+            weight = max(1, index + 1)
+            body_hex = str(packet["body_hex"])
+            family = str(packet["family"])
+            for slot in (1, 2):
+                if body_hex in ENDGAME_SLOT_BODY_MARKERS[slot]:
+                    score = 8 + weight
+                    slot_scores[slot] += score
+                    reasons.append(f"slot{slot}:body:{body_hex}@{rel_index}")
+                family_prefix = family.split("/", 1)[0]
+                if family in ENDGAME_SLOT_FAMILY_MARKERS[slot] or family_prefix in ENDGAME_SLOT_FAMILY_MARKERS[slot]:
+                    slot_scores[slot] += 2 + weight
+                    family_counts[slot] += 1
+                    reasons.append(f"slot{slot}:family:{family}@{rel_index}")
+
+        first_score = slot_scores[1]
+        second_score = slot_scores[2]
+        if max(first_score, second_score) < 6 or abs(first_score - second_score) < 3:
+            LOGGER.info(
+                "WA winner inference inconclusive: slot1=%s slot2=%s family_hits=%s recent=%s",
                 first_score,
                 second_score,
+                family_counts,
                 recent_hex,
             )
             return
@@ -807,15 +842,16 @@ class GameSession:
         winner_player_nickname = self._player_nickname_for_team(winner)
         self._winner_team_name = winner.name
         self._winner_player_nickname = winner_player_nickname
-        self._winner_reason = "heuristic"
+        self._winner_reason = "endgame-family"
         LOGGER.info(
-            "WA probable winner inferred: team=%s player=%s slot=%s owner_player_id=%s slot1=%s slot2=%s reasons=%s recent=%s",
+            "WA probable winner inferred: team=%s player=%s slot=%s owner_player_id=%s slot1=%s slot2=%s family_hits=%s reasons=%s recent=%s",
             winner.name,
             winner_player_nickname or "<unknown>",
             winner.slot,
             winner.player_id,
             first_score,
             second_score,
+            family_counts,
             ",".join(reasons),
             recent_hex,
         )
@@ -828,7 +864,9 @@ class GameSession:
                 "player_nickname": winner_player_nickname,
                 "slot1_score": first_score,
                 "slot2_score": second_score,
+                "family_hits": family_counts,
                 "reasons": reasons,
+                "families": family_window,
                 "recent_bodies": recent_hex,
             }
         )

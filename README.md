@@ -14,9 +14,10 @@ The bot can already host complete playable games:
 - join handshake, lobby sync, team add/color handling, wormcount, scheme configuration, ready flow, and manual game start. Some chat commands not yet implemented but functionality is there.
 - channel-2 relay modes for loading/gameplay traffic
 - per-session capture logging to `captures/*.jsonl`
-- winner/team/player analysis tooling in `scripts/analyze_result_frames.py`
+- replay/capture analysis tooling in `scripts/analyze_result_frames.py`
+- live winner inference from endgame packet families, including winner team and player attribution for validated 1v1 games and recent multi-team tests
 
-The main area still under active work is automatic winner detection from live network traffic. Hosting the game itself already works; reliably inferring the winner at the end is the remaining piece.
+The recent work on this project focused on mirroring WA's own local endgame logic closely enough to infer the winner from live channel-2 traffic instead of relying on manual reporting. The reverse-engineering notes and the path from the symbolized WA build to the current detector are documented in `Findings.md`.
 
 ## Quick start
 
@@ -35,6 +36,17 @@ wormnetbot
 ```
 
 On Linux, keep `WORMNET_GAME_BIND_HOST=0.0.0.0` so the bot can own `17011` for remote WA clients.
+
+## Winner detection approach
+
+Winner inference is based on the end of the live game packet stream, not on lobby metadata.
+
+- `captures/*.jsonl` stores raw packet captures from live hosted games.
+- `scripts/analyze_result_frames.py` parses captures and replay task/message streams to compare endgame traffic against known outcomes.
+- `src/wormnetbot/game_host.py` normalizes channel-2 packets into stable packet families and scores recent endgame families to infer the winning slot.
+- For multi-team games, the detector falls back to slot-coded endgame families so that a winning slot can still be attributed when more than two non-host teams played.
+
+This work was guided by an unstripped WA build with symbols plus the in-game `text strings` dump, but those local reverse-engineering artifacts are intentionally not part of the repository.
 
 ## Environment variables
 
@@ -77,10 +89,11 @@ On Linux, keep `WORMNET_GAME_BIND_HOST=0.0.0.0` so the bot can own `17011` for r
 - Captures are written automatically to `captures/` for debugging and protocol analysis.
 - Replay-assisted reverse-engineering tooling lives in `scripts/analyze_result_frames.py`.
 - Some lobby snapshots currently include a synthetic host placeholder team in slot `0`; this is an artifact of the current emulation and should not be treated as a real playable team.
+- Local reverse-engineering inputs such as the symbolized WA binary are kept out of git; the repo only contains the reusable tooling and conclusions.
 
 ## Remaining gaps
 
-- Make winner detection from live traffic reliable enough for production use.
+- Keep widening validation coverage across more game formats, schemes, and edge-case finishes.
 - Improve map/scheme coverage and polish the lobby emulation.
 - Add channel/user access control and other operational safeguards.
 

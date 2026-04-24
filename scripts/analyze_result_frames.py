@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import struct
 from collections import Counter, defaultdict
 from datetime import datetime
 from pathlib import Path
@@ -9,6 +10,8 @@ from pathlib import Path
 ENDGAME_SENTINEL_HEX = "400600"
 DEFAULT_LABELS_PATH = Path(__file__).with_name("result_labels.json")
 DEFAULT_REPLAYS_DIR = Path(__file__).resolve().parents[1] / "Replays"
+REPLAY_HEADER_SIZE = 4
+REPLAY_U32 = struct.Struct("<I")
 REPLAY_FIXED_EVENT_SIZES = {
     0x00: 1,
     0x02: 1,
@@ -150,10 +153,26 @@ def replay_stream_candidates(data: bytes) -> list[int]:
     return candidates
 
 
-def parse_replay_stream(data: bytes, start_marker: int) -> tuple[list[dict[str, object]], Counter[int]]:
+def extract_replay_task_message_stream_offset(data: bytes) -> int | None:
+    if len(data) < REPLAY_HEADER_SIZE + REPLAY_U32.size * 2:
+        return None
+
+    map_chunk_size = REPLAY_U32.unpack_from(data, REPLAY_HEADER_SIZE)[0]
+    settings_chunk_offset = REPLAY_HEADER_SIZE + REPLAY_U32.size + map_chunk_size
+    if settings_chunk_offset + REPLAY_U32.size > len(data):
+        return None
+
+    settings_chunk_size = REPLAY_U32.unpack_from(data, settings_chunk_offset)[0]
+    task_message_stream_offset = settings_chunk_offset + REPLAY_U32.size + settings_chunk_size
+    if task_message_stream_offset > len(data):
+        return None
+    return task_message_stream_offset
+
+
+def parse_replay_stream(data: bytes, stream_offset: int) -> tuple[list[dict[str, object]], Counter[int]]:
     events: list[dict[str, object]] = []
     unknown_counts: Counter[int] = Counter()
-    index = start_marker + 1
+    index = stream_offset
     while index < len(data):
         opcode = data[index]
         if 0x70 <= opcode <= 0x73:
@@ -191,16 +210,21 @@ def parse_replay_stream(data: bytes, start_marker: int) -> tuple[list[dict[str, 
 
 
 def locate_replay_stream(data: bytes) -> tuple[int | None, list[dict[str, object]], Counter[int]]:
+    stream_offset = extract_replay_task_message_stream_offset(data)
+    if stream_offset is not None:
+        events, unknowns = parse_replay_stream(data, stream_offset)
+        return stream_offset, events, unknowns
+
     best_marker: int | None = None
     best_events: list[dict[str, object]] = []
     best_unknowns: Counter[int] = Counter()
     best_key: tuple[int, int] | None = None
     for marker in replay_stream_candidates(data):
-        events, unknowns = parse_replay_stream(data, marker)
+        events, unknowns = parse_replay_stream(data, marker + 1)
         key = (sum(unknowns.values()), -marker)
         if best_key is None or key < best_key:
             best_key = key
-            best_marker = marker
+            best_marker = marker + 1
             best_events = events
             best_unknowns = unknowns
     return best_marker, best_events, best_unknowns
@@ -281,7 +305,7 @@ def summarize_replays(
                 )
                 lines.append(f"  capture_teams: {mapping}")
         if marker is None:
-            lines.append("  replay_stream: <frame0 checksum not found>")
+            lines.append("  replay_stream: <task/message stream not found>")
             continue
 
         meaningful = [event for event in events if int(event["opcode"]) not in REPLAY_NOISE_EVENTS]
@@ -297,7 +321,7 @@ def summarize_replays(
         ) or "<none>"
         lines.append(
             "  replay_stream: offset={offset} events={events} unknown={unknown} finish_ack={acks} game_end={ends} last_team_event={team}".format(
-                offset=marker + 1,
+                offset=marker,
                 events=len(events),
                 unknown=unknown_text,
                 acks=sum(1 for event in events if int(event["opcode"]) == 0x06),
