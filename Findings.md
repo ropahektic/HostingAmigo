@@ -132,7 +132,7 @@ For multi-team games:
 
 The capture log now also records the family window and score reasons, which makes future debugging much easier.
 
-## Validation results
+## results
 
 The detector was repeatedly validated against labeled captures.
 
@@ -144,35 +144,12 @@ Important milestones:
 - live testing later confirmed correct winner inference in a 1v1 game where slot 2 won;
 - after adding the multi-team fallback, live testing also succeeded in 4-team and 6-team style validation runs, including a successful 6-team winner inference.
 
-## What we now believe with confidence
+## assumptions
 
 - WA decides winners from local team/ally survival state, not from a single obvious remote "winner packet".
 - The network still exposes enough structure near game end to infer the winner reliably.
 - The best practical approach for `Rbot` is to score endgame packet families, not to depend on one raw packet signature.
 - Multi-team games need explicit slot-aware handling; a 1v1-only detector is not enough for broader validation.
 
-## Repository impact
 
-The reusable results of this work are kept in the repository:
 
-- improved live winner inference in `src/wormnetbot/game_host.py`;
-- better replay-analysis support in `scripts/analyze_result_frames.py`;
-- updated project documentation in `README.md` and this file.
-
-The local reverse-engineering inputs are intentionally not included:
-
-- the special WA build with symbols;
-- local text dumps and one-off artifacts that were only used during investigation.
-
-## Remaining work
-
-This is a strong step forward, but not the end of validation.
-
-The main remaining work is to keep testing:
-
-- more schemes and map situations;
-- unusual finishes such as draws or simultaneous deaths;
-- more multi-team outcomes with different slot layouts;
-- any cases where host/client ordering or relay timing changes the endgame window.
-
-At this point, though, `Rbot` is no longer guessing blindly. It has a winner detector built from observed live traffic, replay correlation, and WA's own internal game logic.
