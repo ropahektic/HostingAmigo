@@ -113,4 +113,4 @@ Background draws on an unstripped WA build and `text strings` material kept out 
 
 ## License
 
-This project is released under the MIT License. See `LICENSE`.
+[WTFPL](http://www.wtfpl.net/) version 2. See `LICENSE`.
