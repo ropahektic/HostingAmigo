@@ -8,7 +8,7 @@ The idea of this project is to make competitive worms self contained inside the 
 
 ## Current status
 
-The bot can host Worms Armageddon sessions over WormNET with IRC advertising, a WA-compatible TCP listener, lobby/game relay logic, captures, and winner inference — **but multi-human sessions are not reliable today** (see below).
+The bot can host Worms Armageddon sessions over WormNET with IRC advertising, a WA-compatible TCP listener, lobby/game relay logic, and captures — **but multi-human sessions are not reliable today** (see below).
 
 What works well:
 
@@ -20,7 +20,8 @@ What works well:
 - channel-2 relay modes for loading and gameplay traffic
 - per-session capture logging to `captures/*.jsonl`
 - replay/capture analysis tooling in `scripts/analyze_result_frames.py`
-- live winner inference from endgame packet families where the game reaches a normal finish (validation has focused on **one human** joining the bot-hosted game)
+
+**Winner / match outcome:** still unresolved — see [Winner detection (status)](#winner-detection-status).
 
 ### Important: only one joining client is supported for a full, stable roundtrip
 
@@ -28,7 +29,7 @@ After extensive testing with **more than one real WA client** in the same bot-ho
 
 **As of now, assume the bot only completes a whole game reliably when exactly one human joins the advertised session.** Using multiple humans is experimental and likely to stall or confuse the lobby — not a supported configuration.
 
-The recent work on this project focused on mirroring WA's own local endgame logic closely enough to infer the winner from live channel-2 traffic instead of relying on manual reporting. The reverse-engineering notes and the path from the symbolized WA build to the current detector are documented in `Findings.md`.
+Notes on reverse-engineering (protocol, endgame-shaped packets, tooling) are in `Findings.md`.
 
 ## Quick start
 
@@ -48,16 +49,17 @@ wormnetbot
 
 On Linux, keep `WORMNET_GAME_BIND_HOST=0.0.0.0` so the bot can own `17011` for remote WA clients.
 
-## Winner detection approach
+## Winner detection (status)
 
-Winner inference is based on the end of the live game packet stream, not on lobby metadata.
+Efforts were made to infer the winner from live hosted traffic, but **no dependable method exists yet** beyond weak heuristics. The closest usable hint is **who had the last turn before the session stops** (player/team), which still must not be treated as authoritative match results.
 
-- `captures/*.jsonl` stores raw packet captures from live hosted games.
-- `scripts/analyze_result_frames.py` parses captures and replay task/message streams to compare endgame traffic against known outcomes.
-- `src/wormnetbot/game_host.py` normalizes channel-2 packets into stable packet families and scores recent endgame families to infer the winning slot.
-- For multi-team games, the detector falls back to slot-coded endgame families so that a winning slot can still be attributed when more than two non-host teams played — **when the match actually reaches endgame traffic**. That presumes a session that got past lobby/start; use **one joining client** if you need that outcome to be reachable via this bot host today.
+Supporting tooling (captures, offline analysis):
 
-This work was guided by an unstripped WA build with symbols plus the in-game `text strings` dump, but those local reverse-engineering artifacts are intentionally not part of the repository.
+- `captures/*.jsonl` — raw packets from hosted sessions
+- `scripts/analyze_result_frames.py` — replay/capture analysis helpers
+- `src/wormnetbot/game_host.py` — experimental scoring over late channel-2 patterns (often wrong or inconclusive)
+
+Background draws on an unstripped WA build and `text strings` material kept out of this repo; narrative and experiments live in `Findings.md`.
 
 ## Environment variables
 
@@ -105,6 +107,7 @@ This work was guided by an unstripped WA build with symbols plus the in-game `te
 
 ## Remaining gaps
 
+- **Winner inference:** need a validated signal (today: last-turn hint only; endgame heuristics unreliable).
 - **Multi-human lobby:** reproduce and fix pre-lobby / ready (light bulb) and join–leave edge behaviour so two or more real clients match official WA hosting.
 - Keep widening validation coverage across more game formats, schemes, and edge-case finishes.
 - Improve map/scheme coverage and polish the lobby emulation for the single-client-supported path.
