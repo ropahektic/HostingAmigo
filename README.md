@@ -2,13 +2,13 @@
 
 Standalone WormNET bot for hosting Worms Armageddon games on WormNET.
 
-**Reliable today with one human in the bot’s game.** Multiple real clients in the same session still hit lobby/ready desync; see [Current status](#current-status).
+**Reliable for playing a full match with one human joiner.** Several clients can use the **pre-game lobby** mostly fine, but **starting the actual game** with more than one human fails — see [Current status](#current-status).
 
 The idea of this project is to make competitive worms self contained inside the Bot to minimize user workload when playing and reporting competitive games. The bot will contain the whole environment: ranking, player stats, matchmaking.
 
 ## Current status
 
-The bot can host Worms Armageddon sessions over WormNET with IRC advertising, a WA-compatible TCP listener, lobby/game relay logic, and captures — **but multi-human sessions are not reliable today** (see below).
+The bot can host Worms Armageddon sessions over WormNET with IRC advertising, a WA-compatible TCP listener, lobby/game relay logic, and captures — **but a multi-human match does not successfully leave “Waiting for players” and start** (see below).
 
 What works well:
 
@@ -23,11 +23,9 @@ What works well:
 
 **Winner / match outcome:** still unresolved — see [Winner detection (status)](#winner-detection-status).
 
-### Important: only one joining client is supported for a full, stable roundtrip
+### Important: one human if you want the match to start
 
-After extensive testing with **more than one real WA client** in the same bot-hosted game, the **pre-game lobby** (ready **light bulb**, “waiting for players”, etc.) **desynchronizes**. Symptoms include inconsistent ready indicators: acting on one client (e.g. toggling the bulb) can affect **other** clients’ ready state or bulb UI in ways that do not match a normal WA host. **Team selection tends to stay in sync**; the breakage is mainly **pre-start lobby / ready orchestration**. Edge cases worsen if someone **joins, selects a team, then leaves**, or similar churn.
-
-**As of now, assume the bot only completes a whole game reliably when exactly one human joins the advertised session.** Using multiple humans is experimental and likely to stall or confuse the lobby — not a supported configuration.
+With **more than one real WA client**, the **pre-game lobby** generally behaves acceptably (teams, colours, etc.), aside from **ready / light bulb** oddities. The blocker is **launching into the game**: clients do not handshake and sync the way they would behind a real host, so the session stays stuck on **“Waiting for players”** and never properly starts. **Use a single human joiner when you expect to actually play.**
 
 Notes on reverse-engineering (protocol, endgame-shaped packets, tooling) are in `Findings.md`.
 
@@ -81,7 +79,7 @@ Background draws on an unstripped WA build and `text strings` material kept out 
 - `WORMNET_GAME_TYPE` game type sent to `Game.asp`
 - `WORMNET_GAME_BIND_HOST` local interface used for the WA host listener
 - `WORMNET_GAME_PORT` local WA host port, default `17011`
-- `WORMNET_GAME_C2_RELAY` relay mode: `gameplay` (default, relays channel-2 during loading/gameplay) or `minimal` (narrow tests only). This does **not** fix multi-client lobby desync; use one human client for stable play.
+- `WORMNET_GAME_C2_RELAY` relay mode: `gameplay` (default, relays channel-2 during loading/gameplay) or `minimal` (narrow tests only). Relay settings do **not** fix **multi-human game start** (stuck “Waiting for players”); use one human joiner for a match that actually loads.
 - `WORMNET_WA_START_GAME_VERSION` decimal or `0x…` dword in `0x1C` (default `500` / `0x1F4` for WA 3.8.x)
 - `WORMNET_ENV_FILE` optional override path for the env file
 
@@ -108,9 +106,9 @@ Background draws on an unstripped WA build and `text strings` material kept out 
 ## Remaining gaps
 
 - **Winner inference:** need a validated signal (today: last-turn hint only; endgame heuristics unreliable).
-- **Multi-human lobby:** reproduce and fix pre-lobby / ready (light bulb) and join–leave edge behaviour so two or more real clients match official WA hosting.
+- **Multi-human game start:** after lobby, peers must sync for load/start; with multiple humans this fails (stuck “Waiting for players”). Lobby itself is mostly OK except ready/light bulb quirks.
 - Keep widening validation coverage across more game formats, schemes, and edge-case finishes.
-- Improve map/scheme coverage and polish the lobby emulation for the single-client-supported path.
+- Improve map/scheme coverage and polish lobby emulation and the single-human **into-game** path.
 - Add channel/user access control and other operational safeguards.
 
 ## License
