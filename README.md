@@ -113,4 +113,4 @@ Background draws on an unstripped WA build and `text strings` material kept out 
 
 ## License
 
-[WTFPL](http://www.wtfpl.net/) version 2. See `LICENSE`.
+[CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) (public domain dedication). See `LICENSE`.
