@@ -2,9 +2,7 @@
 
 Standalone WormNET bot for hosting Worms Armageddon games on WormNET.
 
-**Reliable for playing a full match with one human joiner.** Several clients can use the **pre-game lobby** mostly fine, but **starting the actual game** with more than one human fails — see [Current status](#current-status).
-
-The idea of this project is to make competitive worms self contained inside the Bot to minimize user workload when playing and reporting competitive games. The bot will contain the whole environment: ranking, player stats, matchmaking.
+The goal of this project is to make competitive worms self contained inside the Bot to minimize user workload when playing and reporting competitive games. The bot will contain the whole environment: ranking, player stats, matchmaking.
 
 ## Current status
 
@@ -25,9 +23,9 @@ What works well:
 
 ### Important: one human if you want the match to start
 
-With **more than one real WA client**, the **pre-game lobby** generally behaves acceptably (teams, colours, etc.), aside from **ready / light bulb** oddities. The blocker is **launching into the game**: clients do not handshake and sync the way they would behind a real host, so the session stays stuck on **“Waiting for players”** and never properly starts. **Use a single human joiner when you expect to actually play.**
+With **more than one real WA client**, the **pre-game lobby** generally behaves acceptably (teams, colours, etc.), aside from **ready / light bulb** oddities. The blocker is **launching into the game**: clients do not handshake and sync the way they would behind a real host, so the session stays stuck on **“Waiting for players”** and never properly starts.
 
-Notes on reverse-engineering (protocol, endgame-shaped packets, tooling) are in `Findings.md`.
+Personal notes in `Findings.md`.
 
 ## Quick start
 
@@ -49,15 +47,13 @@ On Linux, keep `WORMNET_GAME_BIND_HOST=0.0.0.0` so the bot can own `17011` for r
 
 ## Winner detection (status)
 
-Efforts were made to infer the winner from live hosted traffic, but **no dependable method exists yet** beyond weak heuristics. The closest usable hint is **who had the last turn before the session stops** (player/team), which still must not be treated as authoritative match results.
+Efforts were made to infer the winner from live hosted traffic, but **no dependable method exists yet** beyond weak heuristics. The closest usable hint is **who had the last turn before the session stops**
 
 Supporting tooling (captures, offline analysis):
 
 - `captures/*.jsonl` — raw packets from hosted sessions
 - `scripts/analyze_result_frames.py` — replay/capture analysis helpers
 - `src/wormnetbot/game_host.py` — experimental scoring over late channel-2 patterns (often wrong or inconclusive)
-
-Background draws on an unstripped WA build and `text strings` material kept out of this repo; narrative and experiments live in `Findings.md`.
 
 ## Environment variables
 
@@ -97,11 +93,10 @@ Background draws on an unstripped WA build and `text strings` material kept out 
 
 ## Notes
 
-- Only one hosted game is managed at a time. It's easily expandable to many simultaneously in a future patch.
+- Only one hosted game is managed at a time right now.
 - Captures are written automatically to `captures/` for debugging and protocol analysis.
-- Replay-assisted reverse-engineering tooling lives in `scripts/analyze_result_frames.py`.
+- Replay-assisted tooling lives in `scripts/analyze_result_frames.py`.
 - Some lobby snapshots currently include a synthetic host placeholder team in slot `0`; this is an artifact of the current emulation and should not be treated as a real playable team.
-- Local reverse-engineering inputs such as the symbolized WA binary are kept out of git; the repo only contains the reusable tooling and conclusions.
 
 ## Remaining gaps
 
