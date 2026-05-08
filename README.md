@@ -113,4 +113,4 @@ Background draws on an unstripped WA build and `text strings` material kept out 
 
 ## License
 
-[CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) (public domain dedication). See `LICENSE`.
+[0BSD](https://opensource.org/licenses/0BSD) (zero-clause BSD). Use, modify, and distribute with no conditions beyond the disclaimer in `LICENSE`.
