@@ -1,26 +1,5 @@
-# Findings
 
-This document records the winner-detection work completed after the initial open-source release, starting from the moment we began using a special Worms Armageddon build with symbols and ending with successful live winner parsing from WA game packets inside `Rbot`.
-
-## Goal
-
-The goal was to make `Rbot` determine the winner of a hosted WA game automatically from live network traffic, and to attribute that win to the correct team and player without manual input from users.
-
-The important constraint was that we did not want a made-up heuristic if WA itself already knew the answer. The target became: follow WA's own endgame logic as closely as possible, then identify the network-visible signals that appear when WA reaches that decision.
-
-## Starting point
-
-At the start of this work:
-
-- the bot could already host playable games and capture channel-2 traffic;
-- the original winner detector in `src/wormnetbot/game_host.py` was heuristic and brittle;
-- the question was still open whether WA serialized a dedicated "winner packet" or whether the winner only existed as local game state.
-
-## What changed once we had the symbolized WA build
-
-The symbolized WA build made it possible to stop guessing and inspect real function names and call flow inside the game binary.
-
-The key functions we traced were:
+key functions
 
 - `issue_next_win_message__13Task_TurnGameRi`
 - `comment_public__8GameTaskPPc11DisplayFontPc`
@@ -32,7 +11,6 @@ The key functions we traced were:
 - `set_playing__12GameDatabaseii`
 - `get_playing__12GameDatabasei`
 
-That gave us two crucial answers:
 
 1. WA does compute the winner locally using team survival / ally-group state.
 2. The obvious local winner announcement path is not itself the packet we need to watch on the network.
@@ -66,18 +44,6 @@ The practical result was:
 - use WA's local logic as the conceptual model;
 - learn the repeatable packet patterns that appear when that logic finishes.
 
-## Why the `text strings` dump mattered
-
-The `text strings` file was the bridge between binary symbols and observed in-game behavior.
-
-It let us connect visible announcements and comment-table names, including:
-
-- winner comments (`GAME_TEAM_WIN_COMMENTS`);
-- team death / elimination comments (`GAME_TEAM_DEATH_COMMENTS`);
-- land/water death comments;
-- draw comments.
-
-That made it much easier to understand which internal functions were responsible for which visible game events, and it gave confidence that the reverse-engineered call paths were the right ones.
 
 ## Tooling built to support the analysis
 
