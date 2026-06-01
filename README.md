@@ -23,9 +23,7 @@ What works well:
 
 **Winner / match outcome:** still unresolved — see [Winner detection (status)](#winner-detection-status).
 
-### Important: one human if you want the match to start
 
-With **more than one real WA client**, the **pre-game lobby** generally behaves acceptably (teams, colours, etc.), aside from **ready / light bulb** oddities. The blocker is **launching into the game**: clients do not handshake and sync the way they would behind a real host, so the session stays stuck on **“Waiting for players”** and never properly starts. **Use a single human joiner when you expect to actually play.**
 
 Notes on reverse-engineering (protocol, endgame-shaped packets, tooling) are in `Findings.md`.
 
@@ -103,13 +101,6 @@ Background draws on an unstripped WA build and `text strings` material kept out 
 - Some lobby snapshots currently include a synthetic host placeholder team in slot `0`; this is an artifact of the current emulation and should not be treated as a real playable team.
 - Local reverse-engineering inputs such as the symbolized WA binary are kept out of git; the repo only contains the reusable tooling and conclusions.
 
-## Remaining gaps
-
-- **Winner inference:** need a validated signal (today: last-turn hint only; endgame heuristics unreliable).
-- **Multi-human game start:** after lobby, peers must sync for load/start; with multiple humans this fails (stuck “Waiting for players”). Lobby itself is mostly OK except ready/light bulb quirks.
-- Keep widening validation coverage across more game formats, schemes, and edge-case finishes.
-- Improve map/scheme coverage and polish lobby emulation and the single-human **into-game** path.
-- Add channel/user access control and other operational safeguards.
 
 ## License
 
