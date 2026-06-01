@@ -1,0 +1,114 @@
+[[function]]
+va = 0x004FE130
+name = "ArrowEntity__Constructor"
+
+[[struct]]
+name = "ArrowEntity"
+namespace = "/OpenWA"
+size = 0x168
+rust_path = "openwa_game::entity::arrow::ArrowEntity"
+
+  [[struct.field]]
+  offset = 0x0
+  name = "vtable"
+  type = "ArrowEntityVtable *"
+  size = 0x4
+
+[[vtable]]
+name = "ArrowEntityVtable"
+va = 0x00664198
+size = 20
+parent_vtable = "WorldEntityVtable"
+plate_comment = """
+ArrowEntity vtable — 20 slots (shares WorldEntity's layout). Overrides
+slot 2 (HandleMessage) with the arrow-specific handler; remaining slots
+inherit from WorldEntity via `parent_vtable`.
+"""
+
+  [[vtable.slot]]
+  index = 2
+  name = "handle_message"
+  wa_function = "ArrowEntity__HandleMessage"
+  doc = "HandleMessage — processes arrow messages."
+
+[[function]]
+va = 0x004FE2F0
+name = "ArrowEntity__dtor0_ArrowEntity"
+
+[[function]]
+va = 0x004FE310
+name = "ArrowEntity__init_mask"
+
+[[function]]
+va = 0x004FE410
+name = "ArrowEntity__update_mask"
+
+[[function]]
+va = 0x004FE500
+name = "ArrowEntity__ctor1_ArrowEntity"
+
+[[function]]
+va = 0x004FE550
+name = "ArrowEntity__save"
+
+[[function]]
+va = 0x004FE590
+name = "ArrowEntity__dtor1_ArrowEntity"
+
+[[function]]
+va = 0x004FE650
+name = "ArrowEntity__plot_arrow"
+
+[[function]]
+va = 0x004FE8A0
+name = "ArrowEntity__water_splash"
+
+[[function]]
+va = 0x004FE900
+name = "ArrowEntity__collide"
+
+[[function]]
+va = 0x004FE930
+name = "ArrowEntity__render"
+
+[[function]]
+va = 0x004FE9C0
+name = "ArrowEntity__HandleMessage"
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "ArrowEntity *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "sender"
+  type = "BaseEntity *"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "msg_type"
+  type = "EntityMessage"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "size"
+  type = "uint"
+  storage = "stack:0xC"
+
+  [[function.param]]
+  name = "data"
+  type = "const byte *"
+  storage = "stack:0x10"
+
+[[function]]
+va = 0x004FED10
+name = "ArrowEntity__sub_4FED10"
+
+[[function]]
+va = 0x004FED20
+name = "ArrowEntity__sub_4FED20"

@@ -1,0 +1,240 @@
+[[function]]
+va = 0x0056D2C0
+name = "MouseInput__Destructor"
+calling_convention = "__thiscall"
+custom_storage = true
+plate_comment = """
+MouseInput scalar deleting destructor. Restores the base
+`&PTR_FUN_0066A2F8` vtable into `*this`, then frees the object when
+`flags & 1`. Returns `this`.
+
+`custom_storage = true` so the explicit `this: MouseInput *` carries
+through Ghidra (auto-`this` under DYNAMIC_STORAGE would force `void *`).
+"""
+
+  [function.signature]
+  returns = "MouseInput *"
+
+  [[function.param]]
+  name = "this"
+  type = "MouseInput *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "flags"
+  type = "uint"
+  storage = "stack:0x4"
+
+[[function]]
+va = 0x0056D2E0
+name = "MouseInput__ConsumeDeltaAndButtons"
+calling_convention = "__thiscall"
+custom_storage = true
+plate_comment = """
+Mouse delta+button consumer.
+
+__thiscall(this, *out_dx, *out_dy, *out_buttons):
+  *out_dx = g_GameSession.mouse_delta_x  (+0x78)
+  *out_dy = g_GameSession.mouse_delta_y  (+0x7C)
+  let buttons = g_GameSession.mouse_button_state  (+0x88)
+  *out_buttons = self.button_armed_latch & buttons
+  self.button_armed_latch = self.button_armed_latch | !buttons
+
+A held button only registers once until the next release re-arms its bit.
+Reads — does NOT clear the deltas. Pair with MouseInput__ClearDeltas
+(0x56D340) if the caller needs to consume-and-zero. Pair with
+MouseInput__AckButtonMask (0x56D320) for an alternate AND-only path on
+the same `button_armed_latch`.
+"""
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "MouseInput *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "out_dx"
+  type = "int *"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "out_dy"
+  type = "int *"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "out_buttons"
+  type = "uint *"
+  storage = "stack:0xC"
+
+[[function]]
+va = 0x0056D320
+name = "MouseInput__AckButtonMask"
+calling_convention = "__thiscall"
+custom_storage = true
+plate_comment = """
+Button-mask ACK helper.
+
+__thiscall(this, mask):
+  self.button_armed_latch &= ~(g_GameSession.mouse_button_state & mask)
+
+Clears bits in `button_armed_latch` corresponding to currently-held buttons
+in `mask`. Used to consume a pending click without polling deltas.
+"""
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "MouseInput *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "mask"
+  type = "uint"
+  storage = "stack:0x4"
+
+[[function]]
+va = 0x0056D340
+name = "MouseInput__ClearDeltas"
+calling_convention = "__thiscall"
+custom_storage = true
+plate_comment = """
+Clear mouse delta accumulators.
+
+__thiscall(this):
+  g_GameSession.mouse_delta_x = 0  (+0x78)
+  g_GameSession.mouse_delta_y = 0  (+0x7C)
+
+Standalone reset path. Does NOT touch `button_armed_latch`. Pair with
+MouseInput__ConsumeDeltaAndButtons (0x56D2E0) when a caller needs
+read-then-clear semantics.
+"""
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "MouseInput *"
+  storage = "ECX"
+
+[[function]]
+va = 0x005725B0
+name = "MouseInput__ReleaseAndCenter"
+calling_convention = "__cdecl"
+plate_comment = """
+Releases the cursor grab and clears all input state — the Alt+G "ungrab
+cursor" hotkey handler. Free function operating on g_GameSession; not a
+member of MouseInput despite the name (kept under the MouseInput__
+prefix for grouping with the other mouse-input lifecycle helpers).
+
+  1. ClipCursor(NULL) — release the cursor clip.
+  2. session.mouse_acquired = 0; session.mouse_button_state = 0;
+  3. keyboard.clear_key_states() — zero key_state and prev_state.
+  4. SetCursorPos(cursor_initial.x, cursor_initial.y) — restore.
+  5. FrontendDialog::UpdateCursor(g_InGameFrontendDialog).
+
+Caller: GameSession::WindowProc only (Alt+G key combo with !Ctrl/!Shift
+in fullscreen, action 0x47).
+"""
+
+  [function.signature]
+  returns = "void"
+
+[[function]]
+va = 0x00572620
+name = "MouseInput__PollAndAcquire"
+calling_convention = "__cdecl"
+plate_comment = """
+Re-grabs mouse + keyboard input after focus regain or a fresh game start.
+Free function operating on g_GameSession; not a member of MouseInput
+despite the name (kept under the MouseInput__ prefix for grouping with
+the other mouse-input lifecycle helpers).
+
+  1. GetCursorPos(&session.cursor_initial) — snapshot for later restore.
+  2. cursor_clip_and_recenter() — clip & recenter to the game window.
+  3. session.mouse_acquired = 1.
+  4. Keyboard::PollState(session.keyboard).
+  5. FrontendDialog::UpdateCursor(g_InGameFrontendDialog).
+
+Callers (all WA-side):
+  - Unknown__OnSYSCOMMAND — SC_RESTORE / SC_MAXIMIZE branch
+  - Unknown__OnACTIVATE — WA_ACTIVE/WA_CLICKACTIVE in fullscreen
+  - FUN_004ED701 — focus-restore inner helper
+  - GameSession::WindowProc — fallback when WM_*BUTTONDOWN arrives while
+    mouse_acquired == 0 (first click after alt-tab).
+"""
+
+  [function.signature]
+  returns = "void"
+
+[[struct]]
+name = "MouseInput"
+namespace = "/OpenWA"
+size = 0x28
+rust_path = "openwa_game::input::mouse::MouseInput"
+plate_comment = """
+0x28-byte mouse-input adapter object. Allocated by `GameEngine__InitHardware`
+(0x0056D350) with `button_armed_latch = -1`. Stored at `GameSession+0xB0`
+and forwarded to `GameWorld+0x10`. Only the vtable pointer and
+`button_armed_latch` are touched by the four `MouseInput__*` methods —
+the trailing 0x20 bytes are unused.
+"""
+
+  [[struct.field]]
+  offset = 0x0
+  name = "vtable"
+  type = "MouseInputVtable *"
+  size = 0x4
+
+  [[struct.field]]
+  offset = 0x4
+  name = "button_armed_latch"
+  type = "uint"
+  size = 0x4
+  comment = "Per-button armed latch. Bit set = next press counts; cleared on consume, re-armed on release. Init -1."
+
+[[vtable]]
+name = "MouseInputVtable"
+va = 0x0066A2E4
+size = 5
+plate_comment = """
+Vtable for MouseInput (historically labelled `Palette_vtable_Maybe` in
+Ghidra — nothing to do with graphics). 4 mouse-input slots + a shared
+WorldEntity__vt19 no-op for layout fidelity.
+"""
+
+  [[vtable.slot]]
+  index = 0
+  name = "destructor"
+  wa_function = "MouseInput__Destructor"
+  doc = "Scalar deleting destructor. Writes the base `&PTR_FUN_0066A2F8` vtable into `*this`, then `_free` if `flags & 1`."
+
+  [[vtable.slot]]
+  index = 1
+  name = "consume_delta_and_buttons"
+  wa_function = "MouseInput__ConsumeDeltaAndButtons"
+  doc = "Outputs raw cursor deltas + a debounced button bitmask. A held button only registers once until release re-arms its bit. Does NOT clear deltas — pair with clear_deltas."
+
+  [[vtable.slot]]
+  index = 2
+  name = "ack_button_mask"
+  wa_function = "MouseInput__AckButtonMask"
+  doc = "AND-only ack helper. Clears latch bits for currently-held buttons in `mask`. Use to consume a pending click without polling deltas."
+
+  [[vtable.slot]]
+  index = 3
+  name = "clear_deltas"
+  wa_function = "MouseInput__ClearDeltas"
+  doc = "Zeroes g_GameSession.mouse_delta_x/_y. Does NOT touch the latch. Standalone reset path."
+
+  [[vtable.slot]]
+  index = 4
+  name = "slot_04_noop"
+  wa_function = "WorldEntity__vt19"
+  doc = "Generic base-class no-op stub (0x004AA060) shared with several vtables. Called by `GameEngine__InitHardware` immediately after allocation but has no observable effect."

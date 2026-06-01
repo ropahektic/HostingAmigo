@@ -1,0 +1,135 @@
+[[function]]
+va = 0x00494840
+name = "Mission__GetMissionName"
+
+[[function]]
+va = 0x00494940
+name = "Mission__SetMission"
+
+[[function]]
+va = 0x00494A30
+name = "Mission__GetMissionDesc"
+
+[[function]]
+va = 0x00495590
+name = "Mission__SetAmmo"
+calling_convention = "__stdcall"
+custom_storage = true
+
+  [function.signature]
+  returns = "char"
+
+  [[function.param]]
+  name = "section_name"
+  type = "const char *"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "team_index"
+  type = "int"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "file_ctx"
+  type = "void *"
+  storage = "EDI"
+
+[[function]]
+va = 0x00496F30
+name = "Mission__SetWeapon"
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "char"
+
+  [[function.param]]
+  name = "key_name"
+  type = "const char *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "file_ctx"
+  type = "void *"
+  storage = "EAX"
+
+  [[function.param]]
+  name = "section_name"
+  type = "const char *"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "weapon_id"
+  type = "int"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "team_index"
+  type = "int"
+  storage = "stack:0xC"
+
+[[function]]
+va = 0x00496FB0
+name = "Mission__SetDelay"
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "char"
+
+  [[function.param]]
+  name = "key_name"
+  type = "const char *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "file_ctx"
+  type = "void *"
+  storage = "EAX"
+
+  [[function.param]]
+  name = "section_name"
+  type = "const char *"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "weapon_id"
+  type = "int"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "team_index"
+  type = "int"
+  storage = "stack:0xC"
+
+[[function]]
+va = 0x00497000
+name = "Mission__SetTraining"
+
+[[function]]
+va = 0x004970D0
+name = "Mission__SetBeforeData"
+
+[[function]]
+va = 0x00497290
+name = "Mission__SetAfterData"
+
+[[function]]
+va = 0x00497570
+name = "Mission__GetEvents"
+
+[[function]]
+va = 0x004983E0
+name = "Mission__GetMissionThumb"
+
+[[function]]
+va = 0x004984D0
+name = "Mission__GetMissionImage"
+
+[[function]]
+va = 0x00498600
+name = "Mission__sub_498600"
+
+[[function]]
+va = 0x00498640
+name = "Mission__sub_498640"

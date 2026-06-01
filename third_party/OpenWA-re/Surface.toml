@@ -1,0 +1,170 @@
+[[function]]
+va = 0x00403BF0
+name = "Surface__Blit"
+
+[[function]]
+va = 0x005A23B0
+name = "Surface__Destructor"
+
+# Surface__Unlock / Surface__Lock / Surface__Init have typed signatures in
+# RenderContext.toml — they double as slots on RenderContext's vtable.
+
+[[function]]
+va = 0x005A2C90
+name = "Surface__SetColorKey"
+calling_convention = "__fastcall"
+custom_storage = true
+plate_comment = """
+Surface::SetColorKey (vtable slot 7, 0x5A2C90). Used by
+load_sprite_by_name after init_surface to enable transparency on the
+freshly-allocated frame surface (color key 0, flag 0x10). The result
+code is unused by all known callers.
+"""
+
+  [function.signature]
+  returns = "FastcallResult *"
+
+  [[function.param]]
+  name = "this"
+  type = "Surface *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "result"
+  type = "FastcallResult *"
+  storage = "EDX"
+
+  [[function.param]]
+  name = "color_key"
+  type = "uint"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "flags"
+  type = "uint"
+  storage = "stack:0x8"
+
+[[function]]
+va = 0x005A2D20
+name = "Surface__Free"
+calling_convention = "__fastcall"
+custom_storage = true
+plate_comment = """
+Surface::Release (vtable slot 6, 0x5A2D20). Releases the surface backing
+storage. Pure fastcall — no stack args.
+"""
+
+  [function.signature]
+  returns = "FastcallResult *"
+
+  [[function.param]]
+  name = "this"
+  type = "Surface *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "result"
+  type = "FastcallResult *"
+  storage = "EDX"
+
+[[struct]]
+name = "Surface"
+namespace = "/OpenWA"
+size = 0x14
+rust_path = "openwa_game::render::display::context::Surface"
+plate_comment = """
+Software-framebuffer surface object (0x14 bytes). Created by
+RenderContext::AllocSurface (slot 22, 0x5A2760) — same struct in every
+render mode. The vtable pointer is always SURFACE_VTABLE (0x00677570).
+"""
+
+  [[struct.field]]
+  offset = 0x0
+  name = "vtable"
+  type = "SurfaceVtable *"
+  size = 0x4
+
+  [[struct.field]]
+  offset = 0x4
+  name = "width"
+  type = "int"
+  size = 0x4
+
+  [[struct.field]]
+  offset = 0x8
+  name = "height"
+  type = "int"
+  size = 0x4
+
+  [[struct.field]]
+  offset = 0xC
+  name = "data"
+  type = "byte *"
+  size = 0x4
+
+  [[struct.field]]
+  offset = 0x10
+  name = "color_key_flag"
+  type = "byte"
+  size = 0x1
+
+[[vtable]]
+name = "SurfaceVtable"
+size = 8
+plate_comment = """
+Vtable for `Surface` objects allocated by `RenderContext::alloc_surface`
+(slot 22). All slots use __fastcall(this, *FastcallResult, ...args).
+Every known method writes a constant success code into *result.value;
+the "init failed → retry with bpp=4" pattern in `DisplayGfx::DrawTiledBitmap`
+is therefore defensive — the underlying impl never reports failure.
+
+No VA: the SURFACE_VTABLE address constant is defined in a sibling
+`define_addresses!` block in `openwa-game/src/render/display/context.rs`
+(0x00677570). The codegen omits the `pub const` + `AddrEntry` for this
+vtable so the legacy const remains canonical.
+"""
+
+  [[vtable.slot]]
+  index = 0
+  name = "slot_0"
+  doc = "Unused/destructor placeholder."
+
+  [[vtable.slot]]
+  index = 1
+  name = "slot_1"
+  doc = "Unused placeholder."
+
+  [[vtable.slot]]
+  index = 2
+  name = "slot_2"
+  doc = "Unused placeholder."
+
+  [[vtable.slot]]
+  index = 3
+  name = "lock_surface"
+  wa_function = "Surface__Lock"
+  doc = "Lock surface for direct pixel access. Writes the surface base pointer + row stride."
+
+  [[vtable.slot]]
+  index = 4
+  name = "unlock_surface"
+  wa_function = "Surface__Unlock"
+  doc = "Unlock surface after editing."
+
+  [[vtable.slot]]
+  index = 5
+  name = "init_surface"
+  wa_function = "Surface__Init"
+  doc = "Init/recreate surface storage."
+
+  [[vtable.slot]]
+  index = 6
+  name = "release"
+  wa_function = "Surface__Free"
+  doc = "Release surface backing storage."
+
+  [[vtable.slot]]
+  index = 7
+  name = "set_color_key"
+  wa_function = "Surface__SetColorKey"
+  doc = "Set color-key (transparency)."

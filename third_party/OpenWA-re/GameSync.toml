@@ -1,0 +1,235 @@
+[[function]]
+va = 0x0058E3E0
+name = "GameSync__Constructor_0"
+
+[[function]]
+va = 0x0058E4D0
+name = "GameSync__dtor0_GameSync"
+
+[[function]]
+va = 0x0058E4F0
+name = "GameSync__Constructor_1"
+
+[[function]]
+va = 0x0058E5F0
+name = "GameSync__EnumSessions"
+
+[[function]]
+va = 0x0058E650
+name = "GameSync__EnumPlayers"
+
+[[function]]
+va = 0x0058E6E0
+name = "GameSync__HostSession"
+calling_convention = "__stdcall"
+plate_comment = "Opens the host's listening socket on `conn` (the host GameSync singleton 0x7C0ED4): bind + listen(backlog 5) on the TCP game port, UDP-broadcast presence. 12 stack params, RET 0x30. The 8 cfg dwords are two copies of the protocol GUID {2540C221-6DA8-11D2-BB5E-00A0C9446D67} baked into .rdata (DAT_00649C14..30)."
+
+  [function.signature]
+  returns = "int"
+
+  [[function.param]]
+  name = "conn"
+  type = "void *"
+
+  [[function.param]]
+  name = "game_name"
+  type = "char *"
+
+  [[function.param]]
+  name = "port"
+  type = "int"
+
+  [[function.param]]
+  name = "password"
+  type = "char *"
+
+  [[function.param]]
+  name = "app_guid0"
+  type = "uint"
+
+  [[function.param]]
+  name = "app_guid1"
+  type = "uint"
+
+  [[function.param]]
+  name = "app_guid2"
+  type = "uint"
+
+  [[function.param]]
+  name = "app_guid3"
+  type = "uint"
+
+  [[function.param]]
+  name = "inst_guid0"
+  type = "uint"
+
+  [[function.param]]
+  name = "inst_guid1"
+  type = "uint"
+
+  [[function.param]]
+  name = "inst_guid2"
+  type = "uint"
+
+  [[function.param]]
+  name = "inst_guid3"
+  type = "uint"
+
+[[function]]
+va = 0x0058E9E0
+name = "GameSync__OpenSockets"
+calling_convention = "__stdcall"
+custom_storage = true
+plate_comment = "Creates + binds the transport sockets on `conn` (EAX): the game socket at conn+0x968C0 (transport=1 -> AF_INET/SOCK_STREAM TCP bound INADDR_ANY:port; transport=0 -> AF 6 non-IP) plus, when want_broadcast, the UDP discovery sockets on ports 0x4272/0x4274. `notify_src+0xc` supplies the WSAAsyncSelect HWND (the shared 'Socket Event Window' on the 0x7C0A60 network object). usercall: EAX=conn, 4 stack params, RET 0x10. Returns 1 on success."
+
+  [function.signature]
+  returns = "int"
+
+  [[function.param]]
+  name = "conn"
+  type = "void *"
+  storage = "EAX"
+
+  [[function.param]]
+  name = "notify_src"
+  type = "void *"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "transport"
+  type = "int"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "want_broadcast"
+  type = "int"
+  storage = "stack:0xc"
+
+  [[function.param]]
+  name = "port"
+  type = "int"
+  storage = "stack:0x10"
+
+[[function]]
+va = 0x0058EFD0
+name = "GameSync__sub_58EFD0"
+
+[[function]]
+va = 0x0058F030
+name = "GameSync__sub_58F030"
+
+[[function]]
+va = 0x0058F090
+name = "GameSync__sub_58F090"
+
+[[function]]
+va = 0x0058F0B0
+name = "GameSync__sub_58F0B0"
+
+[[function]]
+va = 0x0058F0E0
+name = "GameSync__CancelHosting"
+
+[[function]]
+va = 0x0058F150
+name = "GameSync__DetectTCP"
+
+[[function]]
+va = 0x0058F270
+name = "GameSync__DetectIPX"
+
+[[function]]
+va = 0x0058F370
+name = "GameSync__BuildAnnounceRecord"
+calling_convention = "__stdcall"
+custom_storage = true
+plate_comment = "Builds the host's own peer announce/identity TLV record (magic 0x697EE15E) into the 0x31-byte buffer at ESI (0x8779F5): version (0x0088E454), port (0x0088DFB0), value 500, machine-id (0x007C0C3C ^ 0xD25899A7), PE-checksum-derived key (^ 0x15E3986B). usercall: ESI=buf, no stack args, RET 0."
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "buf"
+  type = "void *"
+  storage = "ESI"
+
+[[function]]
+va = 0x0058F610
+name = "GameSync__DecodePeerRecord"
+calling_convention = "__stdcall"
+custom_storage = true
+plate_comment = "Decodes a peer announce TLV record (src=EDX, e.g. the host's at 0x8779F5) into the 0x20-byte peer descriptor at ESI (e.g. 0x87D110): id, flags, team-count cap (<=8), port, machine-id key, checksum. usercall: ESI=dst, EDX=src, no stack args, RET 0."
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "dst"
+  type = "void *"
+  storage = "ESI"
+
+  [[function.param]]
+  name = "src"
+  type = "void *"
+  storage = "EDX"
+
+[[function]]
+va = 0x0058F460
+name = "GameSync__sub_58F460"
+
+[[function]]
+va = 0x0058F4C0
+name = "GameSync__sub_58F4C0"
+
+[[function]]
+va = 0x0058F7F0
+name = "GameSync__Reset"
+
+[[function]]
+va = 0x0058F8E0
+name = "GameSync__SendToValid"
+
+[[function]]
+va = 0x0058F960
+name = "GameSync__sub_58F960"
+
+[[function]]
+va = 0x0058F9F0
+name = "GameSync__sub_58F9F0"
+
+[[function]]
+va = 0x0058FA40
+name = "GameSync__JoinSession"
+calling_convention = "__stdcall"
+custom_storage = true
+plate_comment = "Client connect: copies the host-address string (ECX) into conn+0xAFC80, stores the port (EAX) at conn+0xAFCB4, then connects conn's outbound socket (block 3, conn+0x96BF4) via Connection__sub_58D3D0 (AF_INET) or sub_58D4B0 (IPX) per block-3 state. usercall: ECX=ip_str, EAX=port, conn on stack, RET 0x4."
+
+  [function.signature]
+  returns = "int"
+
+  [[function.param]]
+  name = "ip_str"
+  type = "char *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "port"
+  type = "int"
+  storage = "EAX"
+
+  [[function.param]]
+  name = "conn"
+  type = "void *"
+  storage = "stack:0x4"
+
+[[function]]
+va = 0x0058FAB0
+name = "GameSync__ClearCallBacks"
+
+[[function]]
+va = 0x0058FB00
+name = "GameSync__sub_58FB00"
+
+[[function]]
+va = 0x0058FB80
+name = "GameSync__ResetClientConnection"

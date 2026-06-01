@@ -1,0 +1,373 @@
+[[function]]
+va = 0x00526210
+name = "Game__sub_526210"
+
+[[function]]
+va = 0x00526250
+name = "Game__dtor_Game"
+
+[[function]]
+va = 0x00528CD0
+name = "Game__deinitialise"
+
+[[function]]
+va = 0x0052B450
+name = "Game__receive_chat_fifo"
+calling_convention = "__stdcall"
+
+  [function.signature]
+  returns = "uint"
+
+  [[function.param]]
+  name = "this"
+  type = "GameRuntime *"
+
+  [[function.param]]
+  name = "starting_team_idx"
+  type = "int"
+
+  [[function.param]]
+  name = "ring_buffer"
+  type = "void *"
+
+[[function]]
+va = 0x0052B5F0
+name = "Game__next_arg"
+
+[[function]]
+va = 0x0052B670
+name = "Game__name2machine"
+
+[[function]]
+va = 0x0052C140
+name = "Game__process_chat"
+calling_convention = "__stdcall"
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "GameRuntime *"
+
+  [[function.param]]
+  name = "ring_buffer"
+  type = "void *"
+
+[[function]]
+va = 0x0052C9B0
+name = "Game__sub_52C9B0"
+calling_convention = "__cdecl"
+custom_storage = true
+plate_comment = "usercall: ESI = GameRuntime* this. No stack params, plain RET. Polls keyboard for replay-control adjustment keys (0x60-0x63) and updates per-frame counters on the runtime."
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "GameRuntime *"
+  storage = "ESI"
+
+[[function]]
+va = 0x0052D0A0
+name = "Game__FlushPendingLocalLogic_Maybe"
+calling_convention = "__stdcall"
+custom_storage = true
+plate_comment = "Fallback path from update_local_game / update_network_game: zeros ring_buffer_a bookkeeping, queues a couple of synthetic messages, then loops Game__ProcessLogic appending msg 4 (turn-end ack) until the active team's HP-ratio slot drops to 0. Provisional name (_Maybe) — exact semantics still under RE."
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "GameRuntime *"
+  storage = "EAX"
+
+[[function]]
+va = 0x0052D190
+name = "Game__sub_52D190"
+calling_convention = "__stdcall"
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "GameRuntime *"
+
+[[function]]
+va = 0x0052D890
+name = "Game__monitor_outgoing_levels"
+calling_convention = "__stdcall"
+custom_storage = true
+
+  [function.signature]
+  returns = "int"
+
+  [[function.param]]
+  name = "this"
+  type = "GameRuntime *"
+  storage = "EAX"
+
+[[function]]
+va = 0x0052D980
+name = "Game__machines_have_joined_0"
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "int"
+
+  [[function.param]]
+  name = "this"
+  type = "GameRuntime *"
+  storage = "ECX"
+
+[[function]]
+va = 0x0052D9F0
+name = "Game__check_for_ready_messages"
+calling_convention = "__stdcall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "GameRuntime *"
+  storage = "ESI"
+
+[[function]]
+va = 0x0052DAC0
+name = "Game__update_ready_timer"
+calling_convention = "__stdcall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "GameRuntime *"
+  storage = "EAX"
+
+[[function]]
+va = 0x0052DCC0
+name = "Game__update_network_game"
+calling_convention = "__stdcall"
+custom_storage = true
+plate_comment = "Per-tick network-match update: poll ready messages, broadcast scoring updates, drain chat FIFO, drain network ring, then call Game__ProcessLogic. Called from GameRuntime__PollInput in network sessions."
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "GameRuntime *"
+  storage = "EDI"
+
+[[function]]
+va = 0x0052DF40
+name = "Game__sub_52DF40"
+
+[[function]]
+va = 0x0052E000
+name = "Game__sub_52E000"
+
+[[function]]
+va = 0x0052E180
+name = "Game__sub_52E180"
+
+[[function]]
+va = 0x0052E410
+name = "Game__sub_52E410"
+
+[[function]]
+va = 0x0052E4B0
+name = "Game__sub_52E4B0"
+
+[[function]]
+va = 0x0052E5A0
+name = "Game__sub_52E5A0"
+calling_convention = "__stdcall"
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "GameRuntime *"
+
+[[function]]
+va = 0x0052E9B0
+name = "Game__receive_messages"
+calling_convention = "__stdcall"
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "GameRuntime *"
+
+  [[function.param]]
+  name = "machine_index"
+  type = "int"
+
+  [[function.param]]
+  name = "ring_buffer"
+  type = "void *"
+
+[[function]]
+va = 0x0052ED50
+name = "Game__sub_52ED50"
+
+[[function]]
+va = 0x0052EDF0
+name = "Game__sub_52EDF0"
+
+[[function]]
+va = 0x0052F0E0
+name = "Game__sub_52F0E0"
+
+[[function]]
+va = 0x0052F280
+name = "Game__sub_52F280"
+
+[[function]]
+va = 0x0052F3A0
+name = "Game__sub_52F3A0"
+
+[[function]]
+va = 0x0052F800
+name = "Game__update_local_game"
+calling_convention = "__stdcall"
+custom_storage = true
+plate_comment = "Per-tick local/replay-match update: fast-forward shortcut, frame-0 sync-checksum send, optional FlushPendingLocalLogic fallback, process_input, replay-input drain via BlockFifo::PeekMessage + PopHead + DispatchInputMsg, connection-stall counter, then Game__ProcessLogic. Called from GameRuntime__PollInput in offline / replay sessions."
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "GameRuntime *"
+  storage = "EAX"
+
+[[function]]
+va = 0x005305E0
+name = "Game__process_input"
+calling_convention = "__stdcall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "GameRuntime *"
+  storage = "EAX"
+
+[[function]]
+va = 0x0052FC90
+name = "Game__sub_52FC90"
+
+[[function]]
+va = 0x005307A0
+name = "Game__ProcessLogic"
+calling_convention = "__stdcall"
+custom_storage = true
+plate_comment = "Per-tick logic pump: dispatches a frame, then keeps re-dispatching while world.fast_forward_active is set (capped at 50 iterations). Between dispatches it resets the runtime's per-frame state."
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "GameRuntime *"
+  storage = "ESI"
+
+  [[function.param]]
+  name = "msg_fifo"
+  type = "void *"
+  storage = "stack:0x4"
+
+[[function]]
+va = 0x005307F0
+name = "Game__sub_5307F0"
+
+[[function]]
+va = 0x00530890
+name = "Game__sub_530890"
+
+[[function]]
+va = 0x005309E0
+name = "Game__sub_5309E0"
+
+[[function]]
+va = 0x00530A50
+name = "Game__sub_530A50"
+
+[[function]]
+va = 0x005325A0
+name = "Game__ReplayRestore"
+
+[[function]]
+va = 0x00532CA0
+name = "Game__sub_532CA0"
+
+[[function]]
+va = 0x00532F50
+name = "Game__sub_532F50"
+
+[[function]]
+va = 0x00533120
+name = "Game__sub_533120"
+
+[[function]]
+va = 0x00533240
+name = "Game__sub_533240"
+
+[[function]]
+va = 0x00534540
+name = "Game__sub_534540"
+calling_convention = "__stdcall"
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "GameRuntime *"
+
+[[function]]
+va = 0x005361D0
+name = "Game__check_for_gameover"
+
+[[function]]
+va = 0x005363A0
+name = "Game__setup_netclose"
+
+[[function]]
+va = 0x00536620
+name = "Game__sub_536620"
+
+[[function]]
+va = 0x00536760
+name = "Game__sub_536760"
+
+[[function]]
+va = 0x00537130
+name = "AssignWeaponPanelSlots"
+
+[[function]]
+va = 0x00537320
+name = "InitWeaponDefaultsBaseline"
+
+[[function]]
+va = 0x00539100
+name = "InitWeaponDefaultsExtended"
+
+[[function]]
+va = 0x0053CFF0
+name = "Game__unload_weapon_graphics"

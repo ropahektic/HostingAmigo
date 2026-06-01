@@ -1,0 +1,710 @@
+[[function]]
+va = 0x005714B0
+name = "DSSound__LoadEffectWAVs"
+
+[[function]]
+va = 0x00571660
+name = "DSSound__LoadSpeechBank"
+calling_convention = "__stdcall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "ddgw"
+  type = "void *"
+  storage = "EAX"
+
+  [[function.param]]
+  name = "team_index"
+  type = "uint"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "speech_base_path"
+  type = "const char *"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "speech_dir"
+  type = "const char *"
+  storage = "stack:0xC"
+
+[[function]]
+va = 0x00571A70
+name = "DSSound__LoadAllSpeechBanks"
+calling_convention = "__stdcall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "ddgw"
+  type = "void *"
+  storage = "ESI"
+
+[[function]]
+va = 0x00573D50
+name = "DSSound__Constructor"
+
+# ─── Vtable slot impls ──────────────────────────────────────────────────────
+
+[[function]]
+va = 0x00573D30
+name = "DSSound__SubDestructor"
+calling_convention = "__thiscall"
+custom_storage = true
+plate_comment = """
+DSSoundVtable slot 14. Base-class destructor: sets the secondary vtable
+(0x0066AF58), optionally frees the object. Called by slot 0 as part of
+the destructor chain.
+"""
+
+  [function.signature]
+  returns = "DSSound *"
+
+  [[function.param]]
+  name = "this"
+  type = "DSSound *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "flags"
+  type = "byte"
+  storage = "stack:0x4"
+
+[[function]]
+va = 0x00573DB0
+name = "DSSound__Destructor"
+calling_convention = "__thiscall"
+custom_storage = true
+plate_comment = """
+DSSoundVtable slot 0. Primary destructor: releases all DirectSound
+buffers (primary + 8 active channels + 500 template slots), releases
+IDirectSound, then chains to sub_destructor.
+"""
+
+  [function.signature]
+  returns = "DSSound *"
+
+  [[function.param]]
+  name = "this"
+  type = "DSSound *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "flags"
+  type = "byte"
+  storage = "stack:0x4"
+
+[[function]]
+va = 0x00573DD0
+name = "DSSound__Destructor_1"
+
+[[function]]
+va = 0x00573FD0
+name = "DSSound__IsSlotLoaded"
+calling_convention = "__thiscall"
+custom_storage = true
+plate_comment = """
+DSSoundVtable slot 13. Returns whether the sound at `slot_idx` has a
+buffer loaded (`channel_slots[slot_idx] != 0`).
+"""
+
+  [function.signature]
+  returns = "bool"
+
+  [[function.param]]
+  name = "this"
+  type = "DSSound *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "slot_idx"
+  type = "int"
+  storage = "stack:0x4"
+
+[[function]]
+va = 0x00573FF0
+name = "DSSound__LoadWav"
+calling_convention = "__thiscall"
+custom_storage = true
+plate_comment = """
+DSSoundVtable slot 12. Open a WAV file, parse RIFF/WAVE, create a
+DirectSound secondary buffer and store its pointer at
+`channel_slots[slot_idx]`. Returns 1 on success, 0 on failure.
+"""
+
+  [function.signature]
+  returns = "uint"
+
+  [[function.param]]
+  name = "this"
+  type = "DSSound *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "slot_idx"
+  type = "int"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "path"
+  type = "const byte *"
+  storage = "stack:0x8"
+
+[[function]]
+va = 0x00574310
+name = "DSSound__ReleaseChannelBuffers"
+
+[[function]]
+va = 0x00574350
+name = "DSSound__ReleaseSlotBuffers"
+
+[[function]]
+va = 0x00574400
+name = "DSSound__UpdateChannels"
+calling_convention = "__thiscall"
+custom_storage = true
+plate_comment = """
+DSSoundVtable slot 1. Iterates the 8 channel descriptors, releasing
+DirectSound buffers that have finished playing.
+"""
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "DSSound *"
+  storage = "ECX"
+
+[[function]]
+va = 0x00574460
+name = "DSSound__SetFrequencyScale"
+calling_convention = "__thiscall"
+custom_storage = true
+plate_comment = """
+DSSoundVtable slot 2. Set pitch scaling factors `freq_scale_divisor` /
+`freq_scale_multiplier` and adjust each active channel's playback
+frequency (clamped to 200000 Hz).
+"""
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "DSSound *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "divisor"
+  type = "uint"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "multiplier"
+  type = "int"
+  storage = "stack:0x8"
+
+[[function]]
+va = 0x00574730
+name = "DSSound__PlaySound"
+calling_convention = "__thiscall"
+custom_storage = true
+plate_comment = """
+DSSoundVtable slot 3. Play a sound non-pooled. Returns true on success.
+"""
+
+  [function.signature]
+  returns = "bool"
+
+  [[function.param]]
+  name = "this"
+  type = "DSSound *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "slot"
+  type = "SoundId"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "priority"
+  type = "int"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "frequency"
+  type = "Fixed"
+  storage = "stack:0xC"
+
+  [[function.param]]
+  name = "volume"
+  type = "Fixed"
+  storage = "stack:0x10"
+
+  [[function.param]]
+  name = "pan"
+  type = "Fixed"
+  storage = "stack:0x14"
+
+[[function]]
+va = 0x00574770
+name = "DSSound__PlaySoundPooled"
+calling_convention = "__thiscall"
+custom_storage = true
+plate_comment = """
+DSSoundVtable slot 4. Play a sound from the buffer pool. Returns the
+1-based pool id on success, 0 on failure.
+"""
+
+  [function.signature]
+  returns = "int"
+
+  [[function.param]]
+  name = "this"
+  type = "DSSound *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "slot"
+  type = "SoundId"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "priority"
+  type = "int"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "frequency"
+  type = "Fixed"
+  storage = "stack:0xC"
+
+  [[function.param]]
+  name = "volume"
+  type = "Fixed"
+  storage = "stack:0x10"
+
+  [[function.param]]
+  name = "pan"
+  type = "Fixed"
+  storage = "stack:0x14"
+
+[[function]]
+va = 0x005747F0
+name = "DSSound__IsChannelFinished"
+calling_convention = "__thiscall"
+custom_storage = true
+plate_comment = """
+DSSoundVtable slot 9. Returns 0 if the buffer at `pool_id` (1-based)
+is still playing, 1 if finished/error/no-descriptor.
+"""
+
+  [function.signature]
+  returns = "byte"
+
+  [[function.param]]
+  name = "this"
+  type = "DSSound *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "pool_id"
+  type = "int"
+  storage = "stack:0x4"
+
+[[function]]
+va = 0x00574840
+name = "DSSound__StopChannel"
+calling_convention = "__thiscall"
+custom_storage = true
+plate_comment = """
+DSSoundVtable slot 10. Stops a buffer, releases it, and returns the
+pool entry to the free list. Unconditionally returns the pool index even
+if the descriptor was already evicted by `allocate_channel`.
+"""
+
+  [function.signature]
+  returns = "uint"
+
+  [[function.param]]
+  name = "this"
+  type = "DSSound *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "pool_id"
+  type = "int"
+  storage = "stack:0x4"
+
+[[function]]
+va = 0x00574900
+name = "DSSound__SetPan"
+calling_convention = "__thiscall"
+custom_storage = true
+plate_comment = """
+DSSoundVtable slot 5. Set stereo pan on the buffer at `pool_id`
+(1-based, 1..64). `pan` is Fixed16.16, range [-1.0, 1.0]: negative =
+left, positive = right.
+"""
+
+  [function.signature]
+  returns = "uint"
+
+  [[function.param]]
+  name = "this"
+  type = "DSSound *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "pool_id"
+  type = "int"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "pan"
+  type = "Fixed"
+  storage = "stack:0x8"
+
+[[function]]
+va = 0x00574980
+name = "DSSound__SetChannelVolume"
+calling_convention = "__thiscall"
+custom_storage = true
+plate_comment = """
+DSSoundVtable slot 8. Set per-channel volume on the buffer at `pool_id`
+(1-based). `volume` is Fixed16.16 in [0, 1.0].
+"""
+
+  [function.signature]
+  returns = "uint"
+
+  [[function.param]]
+  name = "this"
+  type = "DSSound *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "pool_id"
+  type = "int"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "volume"
+  type = "Fixed"
+  storage = "stack:0x8"
+
+[[function]]
+va = 0x00574A10
+name = "DSSound__SetMasterVolume"
+calling_convention = "__thiscall"
+custom_storage = true
+plate_comment = """
+DSSoundVtable slot 7. Set the master volume and re-apply combined
+volume to every active non-raw-volume channel. `volume` is Fixed16.16
+in [0, 1.0].
+"""
+
+  [function.signature]
+  returns = "uint"
+
+  [[function.param]]
+  name = "this"
+  type = "DSSound *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "volume"
+  type = "Fixed"
+  storage = "stack:0x4"
+
+[[function]]
+va = 0x00574AB0
+name = "DSSound__ReleaseFinished"
+calling_convention = "__thiscall"
+custom_storage = true
+plate_comment = """
+DSSoundVtable slot 11. Like `UpdateChannels` but returns the count of
+buffers released.
+"""
+
+  [function.signature]
+  returns = "int"
+
+  [[function.param]]
+  name = "this"
+  type = "DSSound *"
+  storage = "ECX"
+
+[[function]]
+va = 0x00573E50
+name = "DSSound__InitBuffers"
+
+[[function]]
+va = 0x00573F50
+name = "DSSound__sub_573F50"
+
+[[function]]
+va = 0x00574260
+name = "DSSound__reset_handles"
+
+[[function]]
+va = 0x005742A0
+name = "DSSound__reset_channels"
+
+[[function]]
+va = 0x00574380
+name = "DSSound__sub_574380"
+
+[[function]]
+va = 0x00574500
+name = "DSSound__sub_574500"
+
+# ─── Struct + vtable ────────────────────────────────────────────────────────
+
+[[struct]]
+name = "DSSound"
+namespace = "/OpenWA"
+size = 0xBE0
+rust_path = "openwa_game::audio::dssound::DSSound"
+plate_comment = """
+DirectSound audio subsystem. Holds 8 active channel descriptors, 500
+sound channel slot template buffers, a 64-entry buffer pool, and a
+master volume control.
+"""
+
+  [[struct.field]]
+  offset = 0x0
+  name = "vtable"
+  type = "DSSoundVtable *"
+  size = 0x4
+
+[[vtable]]
+name = "DSSoundVtable"
+va = 0x0066AF20
+size = 24
+plate_comment = """
+DSSound primary vtable (24 slots). Slots 0-14 are class-specific impls;
+slots 15-23 are no-op / returns-0 / returns-1 placeholders inherited
+from the original C++ class hierarchy and never invoked at runtime by
+the stock game code.
+"""
+
+  [[vtable.slot]]
+  index = 0
+  name = "destructor"
+  wa_function = "DSSound__Destructor"
+  doc = "Primary destructor — releases all COM objects and frees memory."
+
+  [[vtable.slot]]
+  index = 1
+  name = "update_channels"
+  wa_function = "DSSound__UpdateChannels"
+  doc = "Iterates 8 descs, releases finished buffers. Called each frame."
+
+  [[vtable.slot]]
+  index = 2
+  name = "set_frequency_scale"
+  wa_function = "DSSound__SetFrequencyScale"
+  doc = "Set pitch scaling and adjust active-channel frequencies."
+
+  [[vtable.slot]]
+  index = 3
+  name = "play_sound"
+  wa_function = "DSSound__PlaySound"
+  doc = "Play a sound non-pooled."
+
+  [[vtable.slot]]
+  index = 4
+  name = "play_sound_pooled"
+  wa_function = "DSSound__PlaySoundPooled"
+  doc = "Play a sound from the buffer pool."
+
+  [[vtable.slot]]
+  index = 5
+  name = "set_pan"
+  wa_function = "DSSound__SetPan"
+  doc = "Set stereo pan on a pooled channel."
+
+  [[vtable.slot]]
+  index = 6
+  name = "stub_6"
+  doc = "Shared no-op slot (.rdata = StubRetZero_Ret8 @ 0x00505430). Never called via vtable on this class."
+
+    [vtable.slot.signature]
+    calling_convention = "__thiscall"
+    returns = "uint"
+
+      [[vtable.slot.signature.param]]
+      name = "this"
+      type = "DSSound *"
+
+  [[vtable.slot]]
+  index = 7
+  name = "set_master_volume"
+  wa_function = "DSSound__SetMasterVolume"
+  doc = "Set master volume; re-apply to all active channels."
+
+  [[vtable.slot]]
+  index = 8
+  name = "set_channel_volume"
+  wa_function = "DSSound__SetChannelVolume"
+  doc = "Set per-channel volume."
+
+  [[vtable.slot]]
+  index = 9
+  name = "is_channel_finished"
+  wa_function = "DSSound__IsChannelFinished"
+  doc = "1 if the pooled buffer has stopped, 0 if still playing."
+
+  [[vtable.slot]]
+  index = 10
+  name = "stop_channel"
+  wa_function = "DSSound__StopChannel"
+  doc = "Stop + release a pooled buffer; return the slot to the free list."
+
+  [[vtable.slot]]
+  index = 11
+  name = "release_finished"
+  wa_function = "DSSound__ReleaseFinished"
+  doc = "Release finished buffers; return the count."
+
+  [[vtable.slot]]
+  index = 12
+  name = "load_wav"
+  wa_function = "DSSound__LoadWav"
+  doc = "Load a WAV into a secondary buffer at `channel_slots[slot_idx]`."
+
+  [[vtable.slot]]
+  index = 13
+  name = "is_slot_loaded"
+  wa_function = "DSSound__IsSlotLoaded"
+  doc = "Returns whether `channel_slots[slot_idx]` is populated."
+
+  [[vtable.slot]]
+  index = 14
+  name = "sub_destructor"
+  wa_function = "DSSound__SubDestructor"
+  doc = "Base-class destructor (sets secondary vtable, optionally frees)."
+
+  [[vtable.slot]]
+  index = 15
+  name = "noop_15"
+  doc = "Shared no-op slot (.rdata = WorldEntity__vt19 @ 0x004AA060). Never called via vtable on this class."
+
+    [vtable.slot.signature]
+    calling_convention = "__thiscall"
+    returns = "void"
+
+      [[vtable.slot.signature.param]]
+      name = "this"
+      type = "DSSound *"
+
+  [[vtable.slot]]
+  index = 16
+  name = "noop_16"
+  doc = "Shared no-op slot (.rdata = Stub_Void_Ret8 @ 0x005931C0). Never called via vtable on this class."
+
+    [vtable.slot.signature]
+    calling_convention = "__thiscall"
+    returns = "void"
+
+      [[vtable.slot.signature.param]]
+      name = "this"
+      type = "DSSound *"
+
+  [[vtable.slot]]
+  index = 17
+  name = "returns_0_17"
+  doc = "Shared no-op slot (.rdata = Stub_RetZero_Ret14 @ 0x00573D20). Never called via vtable on this class."
+
+    [vtable.slot.signature]
+    calling_convention = "__thiscall"
+    returns = "uint"
+
+      [[vtable.slot.signature.param]]
+      name = "this"
+      type = "DSSound *"
+
+  [[vtable.slot]]
+  index = 18
+  name = "returns_0_18"
+  doc = "Shared no-op slot (.rdata = Stub_RetZero_Ret14 @ 0x00573D20). Never called via vtable on this class."
+
+    [vtable.slot.signature]
+    calling_convention = "__thiscall"
+    returns = "uint"
+
+      [[vtable.slot.signature.param]]
+      name = "this"
+      type = "DSSound *"
+
+  [[vtable.slot]]
+  index = 19
+  name = "stub_19"
+  doc = "Shared no-op slot (.rdata = StubRetZero_Ret8 @ 0x00505430). Never called via vtable on this class."
+
+    [vtable.slot.signature]
+    calling_convention = "__thiscall"
+    returns = "uint"
+
+      [[vtable.slot.signature.param]]
+      name = "this"
+      type = "DSSound *"
+
+  [[vtable.slot]]
+  index = 20
+  name = "stub_20"
+  doc = "Shared no-op slot (.rdata = StubRetZero_Ret8 @ 0x00505430). Never called via vtable on this class."
+
+    [vtable.slot.signature]
+    calling_convention = "__thiscall"
+    returns = "uint"
+
+      [[vtable.slot.signature.param]]
+      name = "this"
+      type = "DSSound *"
+
+  [[vtable.slot]]
+  index = 21
+  name = "returns_0_21"
+  doc = "Shared no-op slot (.rdata = GfxHandler__LoadCached @ 0x00571AF0; just returns 0). Never called via vtable on this class."
+
+    [vtable.slot.signature]
+    calling_convention = "__thiscall"
+    returns = "uint"
+
+      [[vtable.slot.signature.param]]
+      name = "this"
+      type = "DSSound *"
+
+  [[vtable.slot]]
+  index = 22
+  name = "stub_22"
+  doc = "Shared no-op slot (.rdata = StubRetZero_Ret8 @ 0x00505430). Never called via vtable on this class."
+
+    [vtable.slot.signature]
+    calling_convention = "__thiscall"
+    returns = "uint"
+
+      [[vtable.slot.signature.param]]
+      name = "this"
+      type = "DSSound *"
+
+  [[vtable.slot]]
+  index = 23
+  name = "returns_1_23"
+  doc = "Shared no-op slot (.rdata = CDXWnd__sub_4260E0 @ 0x004260E0; returns 1). Never called via vtable on this class."
+
+    [vtable.slot.signature]
+    calling_convention = "__thiscall"
+    returns = "uint"
+
+      [[vtable.slot.signature.param]]
+      name = "this"
+      type = "DSSound *"

@@ -1,0 +1,7 @@
+[[function]]
+va = 0x005A63F0
+name = "Options__GetCrashReportURL"
+calling_convention = "__cdecl"
+
+  [function.signature]
+  returns = "byte *"

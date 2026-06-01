@@ -1,0 +1,77 @@
+[[function]]
+va = 0x005193D0
+name = "SpecialImpact"
+
+[[function]]
+va = 0x005197D0
+name = "DrawCrosshairLine"
+calling_convention = "__cdecl"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "entity"
+  type = "const WeaponAimEntity *"
+  storage = "EDI"
+
+[[function]]
+va = 0x00519F60
+name = "CheckBungeeTrailTrigger"
+
+[[function]]
+va = 0x0051A1A0
+name = "StartBungeeTrail"
+
+[[function]]
+va = 0x0051B7F0
+name = "WormEntity__StartFiring"
+calling_convention = "__stdcall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "worm"
+  type = "WormEntity *"
+  storage = "EAX"
+
+[[function]]
+va = 0x0051C3D0
+name = "WeaponRelease"
+calling_convention = "__stdcall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "worm"
+  type = "WormEntity *"
+  storage = "EAX"
+
+  [[function.param]]
+  name = "spawn_x"
+  type = "uint"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "spawn_y"
+  type = "uint"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "aim_dir_x"
+  type = "Fixed"
+  storage = "stack:0xC"
+
+  [[function.param]]
+  name = "aim_dir_y"
+  type = "Fixed"
+  storage = "stack:0x10"
+
+[[function]]
+va = 0x0051EE60
+name = "FireWeapon"

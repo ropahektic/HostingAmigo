@@ -1,0 +1,5 @@
+out_of_scope_reason = "C++ STL statically linked into WA.exe. We won't reimplement the STL."
+
+[[function]]
+va = 0x005370C0
+name = "StdVector__Erase_Maybe"

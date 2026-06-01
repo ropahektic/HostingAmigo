@@ -1,0 +1,391 @@
+out_of_scope_reason = "DirectX rendering path (DDraw / D3D7 / D3D9 / DX UI controls). OpenWA replaces the renderer with a Rust-side softbuffer backend, so this code is out of porting scope."
+
+[[function]]
+va = 0x0059D370
+name = "CompatRenderer__LockPrimaryRead"
+
+[[function]]
+va = 0x0059D390
+name = "CompatRenderer__LockPrimaryWrite"
+
+[[function]]
+va = 0x0059D3B0
+name = "CompatRenderer__UnlockPrimary"
+
+[[function]]
+va = 0x0059D3C0
+name = "CompatRenderer__Constructor_Maybe"
+
+[[function]]
+va = 0x0059D430
+name = "CompatRenderer__Init"
+
+[[function]]
+va = 0x0059D480
+name = "CompatRenderer__ResetState"
+
+[[function]]
+va = 0x0059D4B0
+name = "CompatRenderer__RestoreSurface"
+
+[[function]]
+va = 0x0059D510
+name = "CompatRenderer__GetDisplaySize"
+
+[[function]]
+va = 0x0059D560
+name = "CompatRenderer__EnumDisplayModes"
+
+[[function]]
+va = 0x0059D5F0
+name = "CompatRenderer__SetCooperativeLevel"
+
+[[function]]
+va = 0x0059D6D0
+name = "CompatRenderer__SetDisplayMode"
+
+[[function]]
+va = 0x0059DAD0
+name = "CompatRenderer__Teardown"
+
+[[function]]
+va = 0x0059DB70
+name = "CompatRenderer__Flip"
+
+[[function]]
+va = 0x0059DC80
+name = "CompatRenderer__GetCaps"
+
+[[function]]
+va = 0x0059DCB0
+name = "CompatRenderer__VsyncStub"
+
+[[function]]
+va = 0x0059DCC0
+name = "CompatRenderer__RestoreDisplayDims"
+
+[[function]]
+va = 0x0059DCE0
+name = "CompatRenderer__SetDisplayDims"
+
+[[function]]
+va = 0x0059DD00
+name = "CompatRenderer__BltClearBoth"
+
+[[function]]
+va = 0x0059DD70
+name = "CompatRenderer__BltClearCurrent"
+
+[[function]]
+va = 0x0059DDD0
+name = "CompatRenderer__BltFillRect"
+
+[[function]]
+va = 0x0059DF10
+name = "CompatRenderer__LockOffscreen"
+
+[[function]]
+va = 0x0059E020
+name = "CompatRenderer__UnlockOffscreen"
+
+[[function]]
+va = 0x0059E090
+name = "CompatRenderer__LockOffscreenAlt"
+
+[[function]]
+va = 0x0059E1D0
+name = "CompatRenderer__CreateOffscreenSurface"
+
+[[function]]
+va = 0x0059E3B0
+name = "CompatRenderer__ReleaseOffscreenSurface"
+
+[[function]]
+va = 0x0059E3F0
+name = "CompatRenderer__SetColorKey"
+
+[[function]]
+va = 0x0059E480
+name = "CompatRenderer__GetColorKey"
+
+[[function]]
+va = 0x0059E4D0
+name = "CompatRenderer__BltOffscreen"
+
+[[function]]
+va = 0x0059E5F0
+name = "CompatRenderer__BltFastOffscreen"
+
+[[function]]
+va = 0x0059E780
+name = "CompatRenderer__IsLost"
+
+[[function]]
+va = 0x0059E7B0
+name = "CompatRenderer__OffscreenDestructor"
+
+[[function]]
+va = 0x0059EA00
+name = "CompatRenderer__Present_Windowed"
+calling_convention = "__fastcall"
+
+  [function.signature]
+  returns = "FastcallResult *"
+
+  [[function.param]]
+  name = "this"
+  type = "void *"
+
+  [[function.param]]
+  name = "result"
+  type = "FastcallResult *"
+
+  [[function.param]]
+  name = "fb_ptr"
+  type = "const byte *"
+
+[[function]]
+va = 0x0059EB20
+name = "CompatRenderer__FlipWithPalette"
+
+[[function]]
+va = 0x0059ED90
+name = "CompatRenderer__Present_Windowed_B"
+calling_convention = "__fastcall"
+
+  [function.signature]
+  returns = "FastcallResult *"
+
+  [[function.param]]
+  name = "this"
+  type = "void *"
+
+  [[function.param]]
+  name = "result"
+  type = "FastcallResult *"
+
+  [[function.param]]
+  name = "fb_ptr"
+  type = "const byte *"
+
+[[function]]
+va = 0x005A2080
+name = "CompatRenderer__BltStriped"
+
+[[global]]
+va = 0x00676A90
+name = "CompatRenderer__vtable_Maybe"
+
+[[struct]]
+name = "CompatRenderer"
+namespace = "/OpenWA"
+size = 0x44
+rust_path = "openwa_game::render::ddraw::compat_renderer::CompatRenderer"
+plate_comment = """
+CompatRenderer — DirectDraw/D3D rendering backend (0x44 bytes). Wraps
+IDirectDraw2 and IDirectDrawSurface interfaces for screen presentation.
+Vtable: 0x676A90 (37 slots).
+"""
+
+  [[struct.field]]
+  offset = 0x0
+  name = "vtable"
+  type = "CompatRendererVtable *"
+  size = 0x4
+
+[[vtable]]
+name = "CompatRendererVtable"
+va = 0x00676A90
+size = 37
+plate_comment = """
+CompatRenderer vtable (37 slots, 0x676A90). Slots 0-24 are the primary
+display management surface. Slots 25-36 are the offscreen
+IDirectDrawSurface-style sub-vtable that is **dead** at runtime — see
+the source comment on CompatRendererVtable. All slots are untyped — no
+Rust call site dispatches through this vtable.
+"""
+
+  [[vtable.slot]]
+  index = 0
+  name = "init"
+  doc = "DirectDrawCreate + QueryInterface(IDirectDraw2) (0x59D430)."
+
+  [[vtable.slot]]
+  index = 1
+  name = "set_cooperative_level"
+  doc = "Set cooperative level — fullscreen exclusive or windowed (0x59D5F0)."
+
+  [[vtable.slot]]
+  index = 2
+  name = "reset_state"
+  doc = "Reset state (0x59D480)."
+
+  [[vtable.slot]]
+  index = 3
+  name = "get_display_size"
+  doc = "Get display size from +0x3C/+0x40 (0x59D510)."
+
+  [[vtable.slot]]
+  index = 4
+  name = "enum_display_modes"
+  doc = "IDirectDraw2::EnumDisplayModes (0x59D560)."
+
+  [[vtable.slot]]
+  index = 5
+  name = "slot_05"
+  doc = "Stub (WorldEntity__vt19)."
+
+  [[vtable.slot]]
+  index = 6
+  name = "set_display_mode"
+  doc = "Set display mode + create surfaces (0x59D6D0)."
+
+  [[vtable.slot]]
+  index = 7
+  name = "teardown"
+  doc = "Teardown surfaces, restore display mode (0x59DAD0)."
+
+  [[vtable.slot]]
+  index = 8
+  name = "vsync_stub"
+  doc = "Vsync stub — calls teardown with 0 (0x59DCB0)."
+
+  [[vtable.slot]]
+  index = 9
+  name = "set_display_dims"
+  doc = "Set display dimensions (0x59DCE0)."
+
+  [[vtable.slot]]
+  index = 10
+  name = "restore_display_dims"
+  doc = "Restore display dimensions (0x59DCC0)."
+
+  [[vtable.slot]]
+  index = 11
+  name = "restore_surface"
+  doc = "Restore lost surface (0x59D4B0)."
+
+  [[vtable.slot]]
+  index = 12
+  name = "slot_12"
+  doc = "Present_Windowed (0x59EA00) or _B variant (0x59ED90); replaced at construction time. Reserved for softbuffer hook."
+
+  [[vtable.slot]]
+  index = 13
+  name = "flip"
+  doc = "Flip / present (0x59DB70)."
+
+  [[vtable.slot]]
+  index = 14
+  name = "get_caps"
+  doc = "Get hardware caps (0x59DC80)."
+
+  [[vtable.slot]]
+  index = 15
+  name = "lock_primary_read"
+  doc = "Lock primary surface for read (0x59D370)."
+
+  [[vtable.slot]]
+  index = 16
+  name = "unlock_primary_read"
+  doc = "Unlock primary surface (0x59D3B0)."
+
+  [[vtable.slot]]
+  index = 17
+  name = "lock_primary_write"
+  doc = "Lock primary surface for write (0x59D390)."
+
+  [[vtable.slot]]
+  index = 18
+  name = "unlock_primary_write"
+  doc = "Unlock primary surface (0x59D3B0)."
+
+  [[vtable.slot]]
+  index = 19
+  name = "blt_fill_rect"
+  doc = "Blt filled rect (0x59DDD0)."
+
+  [[vtable.slot]]
+  index = 20
+  name = "blt_clear_both"
+  doc = "Blt clear both surfaces (0x59DD00)."
+
+  [[vtable.slot]]
+  index = 21
+  name = "blt_clear_current"
+  doc = "Blt clear current surface (0x59DD70)."
+
+  [[vtable.slot]]
+  index = 22
+  name = "slot_22"
+  doc = "Stub."
+
+  [[vtable.slot]]
+  index = 23
+  name = "slot_23"
+  doc = "Stub."
+
+  [[vtable.slot]]
+  index = 24
+  name = "blt_striped"
+  doc = "Striped blt helper (0x5A2080)."
+
+  [[vtable.slot]]
+  index = 25
+  name = "offscreen_destructor"
+  doc = "Sub-object destructor (0x59E7B0). Dead."
+
+  [[vtable.slot]]
+  index = 26
+  name = "lock_offscreen"
+  doc = "Lock offscreen surface (0x59DF10). Dead."
+
+  [[vtable.slot]]
+  index = 27
+  name = "unlock_offscreen"
+  doc = "Unlock offscreen surface (0x59E020). Dead."
+
+  [[vtable.slot]]
+  index = 28
+  name = "lock_offscreen_alt"
+  doc = "Lock offscreen variant (0x59E090). Dead."
+
+  [[vtable.slot]]
+  index = 29
+  name = "unlock_offscreen_alt"
+  doc = "Unlock offscreen variant (0x59E020). Dead."
+
+  [[vtable.slot]]
+  index = 30
+  name = "create_offscreen_surface"
+  doc = "Create offscreen plain surface (0x59E1D0). Dead."
+
+  [[vtable.slot]]
+  index = 31
+  name = "release_offscreen_surface"
+  doc = "Release offscreen surface (0x59E3B0). Dead."
+
+  [[vtable.slot]]
+  index = 32
+  name = "set_color_key"
+  doc = "Set color key (0x59E3F0). Dead."
+
+  [[vtable.slot]]
+  index = 33
+  name = "get_color_key"
+  doc = "Get color key (0x59E480). Dead."
+
+  [[vtable.slot]]
+  index = 34
+  name = "is_lost"
+  doc = "Is offscreen surface lost (0x59E780). Dead."
+
+  [[vtable.slot]]
+  index = 35
+  name = "blt_offscreen"
+  doc = "Blt offscreen (0x59E4D0). Dead."
+
+  [[vtable.slot]]
+  index = 36
+  name = "blt_fast_offscreen"
+  doc = "Blt fast offscreen (0x59E5F0). Dead."

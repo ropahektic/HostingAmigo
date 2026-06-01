@@ -1,0 +1,35 @@
+out_of_scope_reason = "Frontend code will not be ported."
+
+[[function]]
+va = 0x0056D9E0
+name = "Worms2Application__wait_for_a_frame"
+
+[[function]]
+va = 0x0056DA60
+name = "Worms2Application__setup_netflush"
+
+[[function]]
+va = 0x0056DAC0
+name = "Worms2Application__network_pending"
+
+[[function]]
+va = 0x0056DB40
+name = "Worms2Application__send_quit"
+
+[[function]]
+va = 0x0056DC10
+name = "Worms2Application__flush_network"
+calling_convention = "__stdcall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "GameSession *"
+  storage = "EDI"
+
+[[function]]
+va = 0x0058C040
+name = "Worms2Application__dtor0_Worms2Application"

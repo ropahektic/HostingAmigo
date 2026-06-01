@@ -1,0 +1,39 @@
+[[function]]
+va = 0x0044BA80
+name = "Theme__GetFileSize"
+calling_convention = "__cdecl"
+
+  [function.signature]
+  returns = "uint"
+
+[[function]]
+va = 0x0044BB20
+name = "Theme__Load"
+calling_convention = "__stdcall"
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "dest"
+  type = "byte *"
+
+[[function]]
+va = 0x0044BBC0
+name = "Theme__Save"
+calling_convention = "__stdcall"
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "buffer"
+  type = "const byte *"
+
+  [[function.param]]
+  name = "size"
+  type = "uint"
+
+[[function]]
+va = 0x00487570
+name = "Theme__ResolveNameFromIndex"

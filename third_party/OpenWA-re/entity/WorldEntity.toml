@@ -1,0 +1,946 @@
+[[function]]
+va = 0x004AA060
+name = "WorldEntity__vt19"
+calling_convention = "__thiscall"
+custom_storage = true
+plate_comment = """
+Generic base-class no-op stub shared by several vtables (MouseInput slot
+4, Keyboard slot 6, CompatRenderer slot 5, DisplayGfx slot 25, …). Single
+RET, no observable side effects — kept for vtable layout fidelity.
+
+`this` typed as `void *` since the same RVA backs slots on otherwise
+unrelated classes; per-vtable specialisation happens at the bind-impl
+call site via an `as _` cast. `custom_storage = true` opts out of
+Ghidra's auto-`this` so we can carry the explicit `void *` type.
+"""
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "void *"
+  storage = "ECX"
+
+[[function]]
+va = 0x004FB580
+name = "WorldEntity__IsMoving"
+
+[[function]]
+va = 0x004FB9D0
+name = "WorldEntity__CheckMoveCollision"
+
+[[function]]
+va = 0x004FE060
+name = "WorldEntity__SetTerminateFlag_Maybe"
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "WorldEntity *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "flag"
+  type = "uint"
+  storage = "stack:0x4"
+
+[[function]]
+va = 0x00500630
+name = "WorldEntity__RestorePhysicsSnapshot_Maybe"
+calling_convention = "__stdcall"
+custom_storage = true
+plate_comment = """
+Restores a WorldEntity's motion + subclass-data snapshot from the global scratch buffer at `G_WORLD_ENTITY_PHYSICS_SNAPSHOT_BUF` (0x007740D8) that the paired `WorldEntity__StepRopePhysics_Maybe` (0x005003D0) spilled there. The four runtime callers (worm/mine/missile/oil_drum HandleMessage case 0x3) all pass their own subclass pointer; the function only touches WorldEntity-level fields, so it is genuinely generic. The original `WormEntity__RestoreKamikazeState_Maybe` name was a guess; the actual semantics are a broad physics-state rollback.
+
+No-op when `world.render_interp_a == 0` (paused or non-render frame).
+"""
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "WorldEntity *"
+  storage = "EAX"
+
+[[function]]
+va = 0x005003D0
+name = "WorldEntity__StepRopePhysics_Maybe"
+calling_convention = "__stdcall"
+custom_storage = true
+plate_comment = """
+Per-frame rope-physics integrator paired with `WorldEntity__RestorePhysicsSnapshot_Maybe` (0x00500630). Spills 0x244 bytes of motion + subclass + rope-segment state into `G_WORLD_ENTITY_PHYSICS_SNAPSHOT_BUF` (so the paired restore can roll it back), then runs gravity, an entity-list rope sweep (when `rope_attached == 0`), or a sub-step projectile sweep with velocity damping by `_field_78` and a worm-angle recompute from the segment list (when `rope_attached != 0`). `mode = 0` runs the full step; `mode != 0` clears `bucket_mask` and skips gravity.
+
+Previously named `WormEntity__StepRopePhysics_Maybe` (from prior RE work) because the only path that touches rope-segment buffers is gated by `rope_attached`, which is set exclusively by `InitWormAttachedRope` — so in practice only worms reach that branch. The function itself, however, reads/writes only WorldEntity-level fields. All four ported runtime callers (worm/mine/missile/oil_drum HandleMessage case 0x3) pass their own subclass pointer, and so do 5 still-WA subclasses (arrow/canister/crate/cross/old-worm).
+"""
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "WorldEntity *"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "mode"
+  type = "uchar"
+  storage = "AL"
+
+[[function]]
+va = 0x004FF9F0
+name = "WorldEntity__ApplyDragMods"
+calling_convention = "__stdcall"
+custom_storage = true
+plate_comment = """
+Per-frame scheme-driven override of the WorldEntity drag-multiplier slots at +0x58 (Fixed, default 1.0) and +0x5C (Fixed, default 0). Bails for Crate / Cross / OilDrum (class_type 0xF, 0x15, 0x1E). Otherwise:
+
+- if `+0x58 == 1.0` (still parent-ctor default), and the X-axis scheme dword `game_info[+0xd9b8]` is non-zero, rewrite to `1.0 - scheme_d9b8` — gated by the companion byte `game_info[+0xd9bc]` for class_type == Worm (0x12).
+- if `+0x5C == 0`, and the Y-axis scheme dword `game_info[+0xd9c0]` is non-zero, rewrite to `scheme_d9c0` — gated by the companion byte `game_info[+0xd9c4]` for class_type == Worm (0x12).
+
+Callers: `WormEntity__HandleMessage` (msg 0x1 FrameStart, rope-attached branch), `WorldEntity__vt8` (vtable slot 8, generic collision callback), `CollisionManager__apply_callback`. Previously misnamed `WormEntity__ApplyDragMods`; the +0x58 / +0x5C slots and the class-type guard set both place this firmly at the WorldEntity tier.
+"""
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "WorldEntity *"
+  storage = "EAX"
+
+[[function]]
+va = 0x00500090
+name = "WorldEntity__AddImpulse"
+calling_convention = "__thiscall"
+custom_storage = true
+plate_comment = """
+WorldEntityVtable slot 17. Divides each axis by mass at `+0x4c`,
+accumulates into `speed_x`/`speed_y`, adds `dz` raw to `+0x98`.
+Bails (returns 0) when `+0x48` is non-zero — the slot doubles as
+HP on receiver subclasses (mines, drums, crosses, score bubbles).
+"""
+
+  [function.signature]
+  returns = "uint"
+
+  [[function.param]]
+  name = "this"
+  type = "WorldEntity *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "impulse_x"
+  type = "Fixed"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "impulse_y"
+  type = "Fixed"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "dz"
+  type = "int"
+  storage = "stack:0xC"
+
+[[function]]
+va = 0x004FE070
+name = "WorldEntity__TryMovePosition"
+calling_convention = "__stdcall"
+custom_storage = true
+
+  [function.signature]
+  returns = "uint"
+
+  [[function.param]]
+  name = "this"
+  type = "WorldEntity *"
+  storage = "ESI"
+
+  [[function.param]]
+  name = "y"
+  type = "Fixed"
+  storage = "EDI"
+
+  [[function.param]]
+  name = "x"
+  type = "Fixed"
+  storage = "stack:0x4"
+
+[[function]]
+va = 0x004FED50
+name = "WorldEntity__Constructor"
+calling_convention = "__stdcall"
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "WorldEntity *"
+
+  [[function.param]]
+  name = "parent"
+  type = "void *"
+
+  [[function.param]]
+  name = "class_type"
+  type = "uint"
+
+  [[function.param]]
+  name = "flag"
+  type = "uint"
+
+[[function]]
+va = 0x004FEF10
+name = "WorldEntity__vt1_Free"
+
+[[function]]
+va = 0x004FF1C0
+name = "WorldEntity__vt0_override"
+
+[[function]]
+va = 0x004FF280
+name = "WorldEntity__vt2_HandleMessage"
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "WorldEntity *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "sender"
+  type = "BaseEntity *"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "msg_type"
+  type = "EntityMessage"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "size"
+  type = "uint"
+  storage = "stack:0xC"
+
+  [[function.param]]
+  name = "data"
+  type = "void *"
+  storage = "stack:0x10"
+
+[[function]]
+va = 0x004FF390
+name = "WorldEntity__ComputeExplosionDamage"
+calling_convention = "__stdcall"
+custom_storage = true
+
+  [function.signature]
+  returns = "int"
+
+  [[function.param]]
+  name = "this"
+  type = "WorldEntity *"
+  storage = "EDI"
+
+  [[function.param]]
+  name = "strength"
+  type = "uint"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "damage"
+  type = "uint"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "pos_x"
+  type = "Fixed"
+  storage = "stack:0xC"
+
+  [[function.param]]
+  name = "pos_y"
+  type = "Fixed"
+  storage = "stack:0x10"
+
+[[function]]
+va = 0x004FF720
+name = "WorldEntity__vt7"
+
+[[function]]
+va = 0x004FFED0
+name = "WorldEntity__vt8"
+calling_convention = "__thiscall"
+
+  [function.signature]
+  returns = "uint"
+
+  [[function.param]]
+  name = "this"
+  type = "void *"
+
+  [[function.param]]
+  name = "other"
+  type = "void *"
+
+  [[function.param]]
+  name = "side_flags"
+  type = "uint"
+
+[[function]]
+va = 0x00501E20
+name = "WorldEntity__vt7"
+
+[[function]]
+va = 0x005262D0
+name = "WorldEntity__InitAllianceData"
+calling_convention = "__cdecl"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "runtime"
+  type = "GameRuntime *"
+  storage = "EAX"
+
+[[function]]
+va = 0x00528510
+name = "WorldEntity__InitTeamScoring"
+calling_convention = "__fastcall"
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "runtime"
+  type = "GameRuntime *"
+
+[[function]]
+va = 0x00528690
+name = "WorldEntity__InitTurnState"
+calling_convention = "__cdecl"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "runtime"
+  type = "GameRuntime *"
+  storage = "EAX"
+
+[[function]]
+va = 0x00545780
+name = "WorldEntity__vt18"
+
+[[function]]
+va = 0x00546680
+name = "WorldEntity__SecondaryVT__GetPosition_Maybe"
+calling_convention = "__thiscall"
+custom_storage = true
+plate_comment = """
+SoundEmitterVtable slot 0. Reads `owner->pos.x/y` (WorldEntity +0x84/+0x88)
+and writes them through the two out-pointers. `this` is the embedded
+SoundEmitter sub-object at WorldEntity+0xE8, not the WorldEntity itself.
+"""
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "SoundEmitter *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "out_x"
+  type = "Fixed *"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "out_y"
+  type = "Fixed *"
+  storage = "stack:0x8"
+
+[[function]]
+va = 0x005466A0
+name = "WorldEntity__SecondaryVT__Slot1"
+calling_convention = "__thiscall"
+custom_storage = true
+plate_comment = """
+SoundEmitterVtable slot 1. Reads `owner->+0x38/+0x3c` into the two
+out-pointers (analogue of slot 0 but pointing at a different pair on the
+owning WorldEntity). Likely a screen-coords / velocity getter; semantics
+unconfirmed.
+"""
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "SoundEmitter *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "out_x"
+  type = "Fixed *"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "out_y"
+  type = "Fixed *"
+  storage = "stack:0x8"
+
+[[function]]
+va = 0x00546CD0
+name = "WorldEntity__IsSoundHandleExpired"
+calling_convention = "__cdecl"
+custom_storage = true
+
+  [function.signature]
+  returns = "uint"
+
+  [[function.param]]
+  name = "this"
+  type = "WorldEntity *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "handle"
+  type = "uint"
+  storage = "EAX"
+
+[[function]]
+va = 0x00546D20
+name = "WorldEntity__ReleaseSoundHandle"
+calling_convention = "__fastcall"
+
+  [function.signature]
+  returns = "uint"
+
+  [[function.param]]
+  name = "this"
+  type = "WorldEntity *"
+
+  [[function.param]]
+  name = "handle"
+  type = "uint"
+
+
+[[function]]
+va = 0x0054B7A0
+name = "WorldEntity__SecondaryVtable_ProcessFrame_Maybe"
+
+[[function]]
+va = 0x00592A50
+name = "WorldEntity__vt16"
+
+[[struct]]
+name = "WorldEntityParentDefaults"
+namespace = "/OpenWA"
+size = 0x4C
+rust_path = "openwa_game::entity::game_entity::WorldEntityParentDefaults"
+plate_comment = """
+Parent-ctor view of WorldEntity's subclass-data range (entity offsets
++0x38..+0x84). `WorldEntity::Constructor` seeds these defaults before
+any subclass-specific ctor runs; subclasses overlay their own typed view
+for fields they care about.
+
+Field names beyond `flag` are tentative — the constants are inferred
+from the seeded default values, not from observed usage.
+"""
+
+  [[struct.field]]
+  offset = 0x00
+  name = "flag"
+  type = "uint"
+  comment = "4th arg to `WorldEntity::Constructor`. Indexes the per-flag collision-helper table at `collision_manager.world + 0x464 + flag*4` (= `world + 0x464 + flag*4`)."
+
+  [[struct.field]]
+  offset = 0x04
+  name = "_field_3c"
+  type = "uint"
+
+  [[struct.field]]
+  offset = 0x08
+  name = "_field_40"
+  type = "uint"
+
+  [[struct.field]]
+  offset = 0x0C
+  name = "_field_44"
+  type = "uint"
+
+  [[struct.field]]
+  offset = 0x10
+  name = "_field_48"
+  type = "uint"
+  comment = "Default 0. Repurposed by mine/drum/cross/score-bubble as the HP slot read by `WorldEntityVtable::add_impulse`."
+
+  [[struct.field]]
+  offset = 0x14
+  name = "_field_4c"
+  type = "Fixed"
+  comment = "Default `1.0`. Divisor in `WorldEntityVtable::add_impulse` — likely inverse-mass."
+
+  [[struct.field]]
+  offset = 0x18
+  name = "_field_50"
+  type = "Fixed"
+  comment = "Default `16.0`."
+
+  [[struct.field]]
+  offset = 0x1C
+  name = "_field_54"
+  type = "Fixed"
+  comment = "Default `~0.8` (`0xCCCC`)."
+
+  [[struct.field]]
+  offset = 0x20
+  name = "_field_58"
+  type = "Fixed"
+  comment = "Default `1.0`."
+
+  [[struct.field]]
+  offset = 0x24
+  name = "_field_5c"
+  type = "uint"
+
+  [[struct.field]]
+  offset = 0x28
+  name = "_field_60"
+  type = "Fixed"
+  comment = "Default `1.0`."
+
+  [[struct.field]]
+  offset = 0x2C
+  name = "_field_64"
+  type = "Fixed"
+  comment = "Default `2.0`."
+
+  [[struct.field]]
+  offset = 0x30
+  name = "_field_68"
+  type = "Fixed"
+  comment = "Default `~0.95` (`0xF333`)."
+
+  [[struct.field]]
+  offset = 0x34
+  name = "_field_6c"
+  type = "uint"
+
+  [[struct.field]]
+  offset = 0x38
+  name = "_field_70"
+  type = "uint"
+
+  [[struct.field]]
+  offset = 0x3C
+  name = "_field_74"
+  type = "uint"
+  comment = "Seeded from `game_info[+0xd780]` by `WorldEntity::Constructor`."
+
+  [[struct.field]]
+  offset = 0x40
+  name = "_field_78"
+  type = "Fixed"
+  comment = "Per-frame velocity-damping Fixed multiplier. Default `~0.995` (`0xFEB8`). Read by `WorldEntity::StepRopePhysics_Maybe` in the rope-attached path."
+
+  [[struct.field]]
+  offset = 0x44
+  name = "_field_7c"
+  type = "Fixed"
+  comment = "Default `~0.6` (`0x9999`)."
+
+  [[struct.field]]
+  offset = 0x48
+  name = "_field_80"
+  type = "Fixed"
+  comment = "Default `~0.23` (`0x3AE1`)."
+
+[[struct]]
+name = "RopeSegment"
+namespace = "/OpenWA"
+size = 0x8
+rust_path = "openwa_game::entity::game_entity::RopeSegment"
+plate_comment = """
+Element of the rope-segment ring at `WorldEntity.rope_segments` on rope-attached worms (allocated by `InitWormAttachedRope`, 64 × 8 bytes). The buffer is also written by `CollisionManager::projectile` (per-segment contact handling) and summed in `WorldEntity::StepRopePhysics_Maybe` to recompute the entity's angle.
+"""
+
+  [[struct.field]]
+  offset = 0x0
+  name = "_field_0"
+  type = "int"
+  comment = "Per-segment contact-direction marker. `projectile` writes ±1 (sign of the integrator step) on contact and 0 on free-run; only known reader is `projectile` itself (used to detect rope wrap-around)."
+
+  [[struct.field]]
+  offset = 0x4
+  name = "angle"
+  type = "int"
+  comment = "Per-segment angular offset (16.16 phase, summed by `sub_4FD360` and `StepRopePhysics_Maybe` to derive a cumulative angle). Stored as a raw int because the segment loop uses wrapping integer arithmetic before the final `(sum - 0x8000) & 0xFFFF` mask."
+
+[[struct]]
+name = "EntityPhysicsSnapshot"
+namespace = "/OpenWA"
+size = 0x244
+rust_path = "openwa_game::entity::game_entity::EntityPhysicsSnapshot"
+plate_comment = """
+Layout of the global 0x244-byte scratch buffer at `G_WORLD_ENTITY_PHYSICS_SNAPSHOT_BUF` (0x007740D8). `WorldEntity::StepRopePhysics_Maybe` (0x005003D0) writes every field from the live entity at the start of each sub-frame tick; `WorldEntity::RestorePhysicsSnapshot_Maybe` (0x00500630) reads every field back into a (possibly different) entity at the end.
+
+Field names mirror their source/destination entity offsets (`sub_60` ← `entity+0x60`, etc.). The subclass-data slots' semantic types vary by subclass overlay — under `WorldEntityParentDefaults` they're `_field_60` (Fixed), `_field_5c` (uint), `_field_58` (Fixed), `_field_6c` (uint), `_field_70` (uint).
+"""
+
+  [[struct.field]]
+  offset = 0x0
+  name = "sub_60"
+  type = "Fixed"
+  comment = "← `entity+0x60`."
+
+  [[struct.field]]
+  offset = 0x4
+  name = "sub_5c"
+  type = "uint"
+  comment = "← `entity+0x5C`."
+
+  [[struct.field]]
+  offset = 0x8
+  name = "sub_58"
+  type = "Fixed"
+  comment = "← `entity+0x58`."
+
+  [[struct.field]]
+  offset = 0xC
+  name = "sub_6c"
+  type = "uint"
+  comment = "← `entity+0x6C`."
+
+  [[struct.field]]
+  offset = 0x10
+  name = "sub_70"
+  type = "uint"
+  comment = "← `entity+0x70`."
+
+  [[struct.field]]
+  offset = 0x14
+  name = "field_bc"
+  type = "uint"
+  comment = "← `entity+0xBC` (`rope_attached`)."
+
+  [[struct.field]]
+  offset = 0x18
+  name = "bucket_mask"
+  type = "uint"
+  comment = "← `entity+0x34` (`bucket_mask`)."
+
+  [[struct.field]]
+  offset = 0x1C
+  name = "rope_segments"
+  type = "RopeSegment[64]"
+  type_namespace = "/OpenWA"
+  comment = "← copy of the ring at `*entity.rope_segments` (null on non-rope entities, which leave this block untouched). 64 segments × 8 bytes = 0x200 bytes."
+
+  [[struct.field]]
+  offset = 0x21C
+  name = "pos_x"
+  type = "Fixed"
+  comment = "← `entity+0x84` (`pos.x`)."
+
+  [[struct.field]]
+  offset = 0x220
+  name = "pos_y"
+  type = "Fixed"
+  comment = "← `entity+0x88` (`pos.y`)."
+
+  [[struct.field]]
+  offset = 0x224
+  name = "angle"
+  type = "Fixed"
+  comment = "← `entity+0x8C` (`angle`)."
+
+  [[struct.field]]
+  offset = 0x228
+  name = "speed_x"
+  type = "Fixed"
+  comment = "← `entity+0x90` (`speed_x`)."
+
+  [[struct.field]]
+  offset = 0x22C
+  name = "speed_y"
+  type = "Fixed"
+  comment = "← `entity+0x94` (`speed_y`)."
+
+  [[struct.field]]
+  offset = 0x230
+  name = "field_98"
+  type = "Fixed"
+  comment = "← `entity+0x98` (`_field_98`)."
+
+  [[struct.field]]
+  offset = 0x234
+  name = "field_ac"
+  type = "int"
+  comment = "← `entity+0xAC` (`_field_ac`)."
+
+  [[struct.field]]
+  offset = 0x238
+  name = "field_b8"
+  type = "int"
+  comment = "← `entity+0xB8` (`_field_b8`)."
+
+  [[struct.field]]
+  offset = 0x23C
+  name = "field_c8"
+  type = "uint"
+  comment = "← `entity+0xC8` (`_field_c8`)."
+
+  [[struct.field]]
+  offset = 0x240
+  name = "field_d0"
+  type = "int"
+  comment = "← `entity+0xD0` (`rope_segment_count`)."
+
+[[struct]]
+name = "WorldEntity"
+namespace = "/OpenWA"
+size = 0xFC
+rust_path = "openwa_game::entity::game_entity::WorldEntity"
+
+  [[struct.field]]
+  offset = 0x0
+  name = "vtable"
+  type = "WorldEntityVtable *"
+  type_namespace = "/OpenWA"
+  size = 0x4
+  comment = "Pointer to WorldEntityVtable. Added by `openwa-re retype-entity-vtables`."
+
+  [[struct.field]]
+  offset = 0x30
+  name = "contact_face"
+  type = "uint"
+  comment = "Seeded with the `class_type` ctor arg (mines=10, etc.). Subclasses repurpose as a low-5-bits trigger-class index for collision/proximity gating."
+
+  [[struct.field]]
+  offset = 0x34
+  name = "bucket_mask"
+  type = "uint"
+  comment = "Collision-bucket bitmask. Bit N set = scan bucket N during move-collision."
+
+  [[struct.field]]
+  offset = 0x38
+  name = "parent_defaults"
+  type = "WorldEntityParentDefaults"
+  type_namespace = "/OpenWA"
+  comment = "Parent-ctor view of subclass-data range. Subclasses overlay their own typed view (e.g. MissileSubclassData) over the same bytes."
+
+  [[struct.field]]
+  offset = 0x84
+  name = "pos_x"
+  type = "Fixed"
+
+  [[struct.field]]
+  offset = 0x88
+  name = "pos_y"
+  type = "Fixed"
+  comment = "Default `0xFC000000` (Fixed -1024) — every entity is repositioned before render, so the default is effectively a poison value."
+
+  [[struct.field]]
+  offset = 0x8C
+  name = "angle"
+  type = "Fixed"
+
+  [[struct.field]]
+  offset = 0x90
+  name = "speed_x"
+  type = "Fixed"
+
+  [[struct.field]]
+  offset = 0x94
+  name = "speed_y"
+  type = "Fixed"
+
+  [[struct.field]]
+  offset = 0x98
+  name = "_field_98"
+  type = "Fixed"
+  comment = "Mutated by `WorldEntityVtable::add_impulse` (dz axis). MineEntity::Render multiplies this by `GameWorld::render_interp_a` and adds `angle` for the render-time angle."
+
+  [[struct.field]]
+  offset = 0x9C
+  name = "_field_9c"
+  type = "Fixed"
+  comment = "Default `0x3333` (~0.2)."
+
+  [[struct.field]]
+  offset = 0xA0
+  name = "_field_a0"
+  type = "Fixed"
+  comment = "Default `0x4CCC` (~0.3)."
+
+  [[struct.field]]
+  offset = 0xA4
+  name = "_field_a4"
+  type = "uint"
+  comment = "Damage-halving + state-pick suppressor read by WormEntity's damage paths."
+
+  [[struct.field]]
+  offset = 0xA8
+  name = "_field_a8"
+  type = "Fixed"
+  comment = "Default `0x10000` (1.0)."
+
+  [[struct.field]]
+  offset = 0xAC
+  name = "_field_ac"
+  type = "int"
+  comment = "Counter clamped to 0 by `try_move_position` on successful commit."
+
+  [[struct.field]]
+  offset = 0xB0
+  name = "_field_b0"
+  type = "int"
+  comment = "Contributes to `is_moving` predicate."
+
+  [[struct.field]]
+  offset = 0xB4
+  name = "_field_b4"
+  type = "int"
+  comment = "Contributes to `is_moving` predicate."
+
+  [[struct.field]]
+  offset = 0xB8
+  name = "_field_b8"
+  type = "int"
+  comment = "Contributes to `is_moving` predicate."
+
+  [[struct.field]]
+  offset = 0xBC
+  name = "rope_attached"
+  type = "uint"
+  comment = "Rope-attached flag (1 = attached, 0 = not). Sole writer of the non-zero value is `InitWormAttachedRope` (0x005008D0); the WorldEntity destructor and `CrateEntity::vmethod_15` clear it when freeing `rope_segments`. On WormEntity it also gates the Jump (msg 0x24) input-restriction path — when the per-worm input-lock flag at +0x12A is non-zero the jump fires only while this slot is also zero (consistent with 'can't jump while on a rope')."
+
+  [[struct.field]]
+  offset = 0xC0
+  name = "rope_anchor_x"
+  type = "Fixed"
+  comment = "Rope anchor X (terrain endpoint of ninja/bungee rope). Set by `InitWormAttachedRope`; read by `WormEntity::DrawAttachedRope`. Meaningless when `rope_attached == 0`."
+
+  [[struct.field]]
+  offset = 0xC4
+  name = "rope_anchor_y"
+  type = "Fixed"
+  comment = "Rope anchor Y (terrain endpoint of ninja/bungee rope). Set by `InitWormAttachedRope`; read by `WormEntity::DrawAttachedRope`. Meaningless when `rope_attached == 0`."
+
+  [[struct.field]]
+  offset = 0xC8
+  name = "_field_c8"
+  type = "uint"
+  comment = "Snapshot slot saved/restored by WorldEntity::StepRopePhysics_Maybe (0x005003D0) / RestoreKamikazeState_Maybe (0x00500630) via the static scratch buffer at 0x0077430C. Purpose TBD."
+
+  [[struct.field]]
+  offset = 0xCC
+  name = "_field_cc"
+  type = "Fixed"
+  comment = "Per-entity explosion-knockback scale. Default `1.0`."
+
+  [[struct.field]]
+  offset = 0xD0
+  name = "rope_segment_count"
+  type = "int"
+  comment = "Segment count for the `rope_segments` buffer on a rope-attached worm. Seeded by `InitWormAttachedRope` as `(rope_length / 8) + 1`, capped at 64; saved/restored alongside `rope_segments` by `StepRopePhysics_Maybe` / `RestorePhysicsSnapshot_Maybe` via the static scratch buffer at 0x00774318."
+
+  [[struct.field]]
+  offset = 0xD4
+  name = "damage_accum"
+  type = "int"
+  comment = "Per-entity damage accumulator. `WorldEntity::HandleMessage` (msg=0x1c Explosion) adds falloff-adjusted damage here."
+
+  [[struct.field]]
+  offset = 0xD8
+  name = "_field_d8"
+  type = "byte"
+  comment = "Byte-write zeroed by `WorldEntity::Constructor`."
+
+  [[struct.field]]
+  offset = 0xD9
+  name = "_field_d9"
+  type = "byte"
+  comment = "Byte-write zeroed by `WorldEntity::Constructor`."
+
+  [[struct.field]]
+  offset = 0xDC
+  name = "collision_helper"
+  type = "void *"
+  comment = "Per-entity collision-shape helper. Seeded from `world + 0x464 + flag*4` via the CollisionManager back-pointer. Read by `WorldEntity::check_move_collision`."
+
+  [[struct.field]]
+  offset = 0xE0
+  name = "sound_handle"
+  type = "uint"
+  comment = "Owned sound-emitter handle, 0 when no sound is held. Cleared each frame by `WorldEntity::HandleMessage` (msg=0x02 FrameFinish) once the sound finishes."
+
+  [[struct.field]]
+  offset = 0xE4
+  name = "rope_segments"
+  type = "RopeSegment *"
+  comment = "64-element RopeSegment ring allocated by InitWormAttachedRope (0x005008D0) when a worm grabs a rope (ninja or bungee); null otherwise. Lifetime gated by `rope_attached`; the WorldEntity destructor `WA_Free`s this iff `rope_attached != 0`. Saved/restored together with `rope_segment_count` by StepRopePhysics_Maybe / RestorePhysicsSnapshot_Maybe."
+
+  [[struct.field]]
+  offset = 0xE8
+  name = "sound_emitter"
+  type = "SoundEmitter"
+  type_namespace = "/OpenWA"
+  comment = "Embedded sound-emitter sub-object (MSVC multiple inheritance)."
+
+[[vtable]]
+name = "WorldEntityVtable"
+va = 0x006641F8
+size = 20
+parent_vtable = "BaseEntityVtable"
+plate_comment = """
+20-slot vtable shared by every WorldEntity derivative — subclass vtables
+(e.g. WormEntityVtable) layer their own overrides on top of the same
+shape. Only slots dispatched from Rust are spelled out; the rest fall
+through to `_slot_N: usize` placeholders.
+
+The first 7 slots are inherited from BaseEntityVtable (WriteReplayState,
+Free, HandleMessage, stubs, ProcessChildren, ProcessFrame); slots 7+
+extend with WorldEntity-specific methods. Subclasses (WormEntity,
+MineEntity, MissileEntity, OilDrumEntity, etc.) override individual
+slots without changing the size.
+"""
+
+  [[vtable.slot]]
+  index = 10
+  name = "on_land_slide"
+  doc = "OnLandSlide — secondary landing / slide-physics callback. Called by `WorldEntity::StepRopePhysics_Maybe` on the colliding entity after each `projectile` sub-step that returned a hit. Polymorphic across subclasses (WormEntity overrides at 0x0050D820 with `WormEntity__OnLandSlide`)."
+
+    [vtable.slot.signature]
+    calling_convention = "__thiscall"
+    returns = "void"
+
+      [[vtable.slot.signature.param]]
+      name = "this"
+      type = "WorldEntity *"
+
+      [[vtable.slot.signature.param]]
+      name = "hit_entity"
+      type = "WorldEntity *"
+
+  [[vtable.slot]]
+  index = 17
+  name = "add_impulse"
+  wa_function = "WorldEntity__AddImpulse"
+  doc = "AddImpulse — divides each axis by mass at `+0x4c`, accumulates into `speed_x`/`speed_y`, adds `dz` raw to `+0x98`. Bails (returns 0) when `+0x48` is non-zero — the slot doubles as HP on receiver subclasses."

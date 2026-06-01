@@ -1,0 +1,145 @@
+[[function]]
+va = 0x0054F370
+name = "FilterEntity__Subscribe"
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "FilterEntity *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "msg_id"
+  type = "uint"
+  storage = "stack:0x4"
+
+[[function]]
+va = 0x0054F390
+name = "FilterEntity__SubscribeAll"
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "FilterEntity *"
+  storage = "ECX"
+
+[[function]]
+va = 0x0054F3D0
+name = "FilterEntity__Constructor"
+calling_convention = "__stdcall"
+custom_storage = true
+
+  [function.signature]
+  returns = "FilterEntity *"
+
+  [[function.param]]
+  name = "this"
+  type = "FilterEntity *"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "parent"
+  type = "BaseEntity *"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "init_val_1c"
+  type = "uint"
+  storage = "ECX"
+
+[[function]]
+va = 0x0054F4A0
+name = "FilterEntity__HandleMessage"
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "FilterEntity *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "sender"
+  type = "BaseEntity *"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "msg_type"
+  type = "EntityMessage"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "size"
+  type = "uint"
+  storage = "stack:0xC"
+
+  [[function.param]]
+  name = "data"
+  type = "const byte *"
+  storage = "stack:0x10"
+
+[[function]]
+va = 0x0054F380
+name = "FilterEntity__disable_message"
+
+[[function]]
+va = 0x0054F3B0
+name = "FilterEntity__disable"
+
+[[function]]
+va = 0x0054F450
+name = "FilterEntity__save"
+
+[[struct]]
+name = "FilterEntity"
+namespace = "/OpenWA"
+size = 0xB4
+rust_path = "openwa_game::entity::filter::FilterEntity"
+
+  [[struct.field]]
+  offset = 0x0
+  name = "vtable"
+  type = "FilterEntityVtable *"
+  type_namespace = "/OpenWA"
+  size = 0x4
+  comment = "Pointer to FilterEntityVtable. Added by `openwa-re retype-entity-vtables`."
+
+[[vtable]]
+name = "FilterEntityVtable"
+va = 0x00669DAC
+size = 12
+parent_vtable = "BaseEntityVtable"
+plate_comment = """
+FilterEntity vtable — 12 slots. Extends BaseEntity (7-slot) with a subscription-
+gated HandleMessage (slot 2) plus per-message Subscribe (slot 8) and
+SubscribeAll (slot 7) overrides.
+"""
+
+  [[vtable.slot]]
+  index = 2
+  name = "handle_message"
+  wa_function = "FilterEntity__HandleMessage"
+  doc = "HandleMessage — checks subscription table, forwards matching messages."
+
+  [[vtable.slot]]
+  index = 7
+  name = "subscribe_all"
+  wa_function = "FilterEntity__SubscribeAll"
+  doc = "SubscribeAll — sets all 100 subscription table entries to 1."
+
+  [[vtable.slot]]
+  index = 8
+  name = "subscribe"
+  wa_function = "FilterEntity__Subscribe"
+  doc = "Subscribe — sets subscription_table[msg_id] = 1."

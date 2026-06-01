@@ -1,0 +1,58 @@
+[[function]]
+va = 0x005B29E0
+name = "Sprite_LZSS_Decode"
+plate_comment = """
+Sprite_LZSS_Decode — LZSS-style decompressor with palette LUT remapping.
+
+Stdcall: (dst: *u8, src: *u8, lut: *u8). RET 0xc. PUSHAD/POPAD wraps the body so all caller registers are preserved.
+
+Format (per source byte):
+  - bit 7 clear (literal byte b): emit lut[b], advance src by 1.
+  - bit 7 set (control word):
+      - high byte (current src[0]) bits 3..6 = length-1 (1..15), bits 0..2 + src[1] = back-distance offset (0..0x7ff). Emit (length+1) bytes copied from dst-distance, advance src by 2.
+      - if length nibble == 0: extended form. src[2] = length-18. Emit (src[2]+18) bytes copied from dst-distance, advance src by 3.
+      - if length nibble == 0 AND distance == 0: terminator, exit loop.
+
+Callers: IMG_Decode (0x4F625E), FUN_0048EE32 (0x48F017), Sprite__GetFrameForBlit (0x4FAE71), SpriteBank__GetFrameForBlit (0x4F987C).
+"""
+
+[[function]]
+va = 0x005B2AAD
+name = "BlitMasked_Subtractive"
+
+[[function]]
+va = 0x005B2B05
+name = "BlitMasked_Additive"
+
+[[function]]
+va = 0x005B2B5D
+name = "BlitColorTable_Forward"
+
+[[function]]
+va = 0x005B2B92
+name = "BlitColorTable_Reverse"
+
+[[function]]
+va = 0x005B2BEB
+name = "RemapPixelsThroughLut"
+
+[[function]]
+va = 0x005B2C32
+name = "BlitColorTableLUT_Forward"
+
+[[function]]
+va = 0x005B3263
+name = "BlitColorTableLUT_Tail"
+
+[[function]]
+va = 0x005B32C3
+name = "BlitColorTableLUT_Reverse"
+
+[[function]]
+va = 0x005B332A
+name = "BlitCopy_8bpp"
+
+[[function]]
+va = 0x005B3501
+name = "FixedDiv16_16"
+

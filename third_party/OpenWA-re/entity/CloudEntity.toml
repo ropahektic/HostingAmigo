@@ -1,0 +1,118 @@
+[[function]]
+va = 0x00546990
+name = "CloudEntity__Free"
+
+[[function]]
+va = 0x005482E0
+name = "CloudEntity__Constructor"
+
+[[function]]
+va = 0x00548370
+name = "CloudEntity__ReadReplayState"
+
+[[function]]
+va = 0x00548430
+name = "CloudEntity__WriteReplayState"
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "CloudEntity *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "stream"
+  type = "byte *"
+  storage = "stack:0x4"
+
+[[function]]
+va = 0x005484C0
+name = "CloudEntity__HandleMessage"
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "CloudEntity *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "sender"
+  type = "BaseEntity *"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "msg_type"
+  type = "EntityMessage"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "size"
+  type = "uint"
+  storage = "stack:0xC"
+
+  [[function.param]]
+  name = "data"
+  type = "const byte *"
+  storage = "stack:0x10"
+
+[[function]]
+va = 0x00548770
+name = "CloudEntity__vt8"
+
+[[function]]
+va = 0x00548940
+name = "CloudEntity__ProcessFrame"
+
+[[function]]
+va = 0x0054B770
+name = "CloudEntity__vt9"
+
+[[struct]]
+name = "CloudEntity"
+namespace = "/OpenWA"
+size = 0x74
+rust_path = "openwa_game::entity::cloud::CloudEntity"
+plate_comment = """
+Airstrike / weather cloud entity. Extends BaseEntity directly (not
+WorldEntity). Drifts horizontally with wind, scrolls on a parallax layer,
+and renders as a single sprite. Allocation: 0x74 bytes; only 0x54 bytes
+initialized.
+"""
+
+  [[struct.field]]
+  offset = 0x0
+  name = "vtable"
+  type = "CloudEntityVtable *"
+  size = 0x4
+
+[[vtable]]
+name = "CloudEntityVtable"
+va = 0x00669D38
+size = 7
+parent_vtable = "BaseEntityVtable"
+plate_comment = """
+CloudEntity vtable — 7 slots. Same base shape as BaseEntity; overrides
+slots 0 (WriteReplayState) and 2 (HandleMessage). Does NOT override
+ProcessFrame (slot 6) — all update logic is in HandleMessage, responding
+to the FrameFinish message.
+"""
+
+  [[vtable.slot]]
+  index = 0
+  name = "write_replay_state"
+  wa_function = "CloudEntity__WriteReplayState"
+  doc = "WriteReplayState — serializes cloud state to replay stream."
+
+  [[vtable.slot]]
+  index = 2
+  name = "handle_message"
+  wa_function = "CloudEntity__HandleMessage"
+  doc = "HandleMessage — processes cloud messages (wind updates, render)."

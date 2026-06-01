@@ -1,0 +1,1455 @@
+out_of_scope_reason = "MSVC C runtime statically linked into WA.exe."
+
+[[function]]
+va = 0x005EA9C0
+name = "__get_lc_time"
+
+# --- Ghidra-merged CRT helpers (orphan import) ---
+
+[[function]]
+va = 0x005D0DB9
+name = "__calloc_impl"
+
+[[function]]
+va = 0x005D1032
+name = "__invoke_watson"
+
+[[function]]
+va = 0x005D12F1
+name = "__snprintf_s"
+
+[[function]]
+va = 0x005D1526
+name = "__vsnprintf_helper"
+
+[[function]]
+va = 0x005D15F0
+name = "__vsprintf_s_l"
+
+[[function]]
+va = 0x005D1691
+name = "__vsnprintf_s_l"
+
+[[function]]
+va = 0x005D1885
+name = "__mbsicmp_l"
+
+[[function]]
+va = 0x005D1A9F
+name = "__mbsicmp"
+
+[[function]]
+va = 0x005D1AB2
+name = "__mbscmp_l"
+
+[[function]]
+va = 0x005D1BCE
+name = "__mbscmp"
+
+[[function]]
+va = 0x005D1BE1
+name = "__ismbcspace_l"
+
+[[function]]
+va = 0x005D1CA3
+name = "__ismbcspace"
+
+[[function]]
+va = 0x005D1CB1
+name = "__mbsinc"
+
+[[function]]
+va = 0x005D1DDA
+name = "__onexit"
+
+[[function]]
+va = 0x005D1E28
+name = "__mbschr_l"
+
+[[function]]
+va = 0x005D1EE2
+name = "__mbschr"
+
+[[function]]
+va = 0x005D1EF5
+name = "__ArrayUnwind"
+
+[[function]]
+va = 0x005D201B
+name = "__mbsstr_l"
+
+[[function]]
+va = 0x005D215A
+name = "__mbsstr"
+
+[[function]]
+va = 0x005D216D
+name = "__mbspbrk_l"
+
+[[function]]
+va = 0x005D2237
+name = "__mbspbrk"
+
+[[function]]
+va = 0x005D22FD
+name = "__amsg_exit"
+
+[[function]]
+va = 0x005D2347
+name = "___crtExitProcess"
+
+[[function]]
+va = 0x005D2386
+name = "__initterm_e"
+
+[[function]]
+va = 0x005D23A6
+name = "__get_osplatform"
+
+[[function]]
+va = 0x005D23DD
+name = "__get_winmajor"
+
+[[function]]
+va = 0x005D2419
+name = "__cinit"
+
+[[function]]
+va = 0x005D259E
+name = "__exit"
+
+[[function]]
+va = 0x005D25AF
+name = "__cexit"
+
+[[function]]
+va = 0x005D25CD
+name = "__init_pointers"
+
+[[function]]
+va = 0x005D2902
+name = "__time64"
+
+[[function]]
+va = 0x005D2A33
+name = "__chdir"
+
+[[function]]
+va = 0x005D2B56
+name = "___time64_t_from_ft"
+
+[[function]]
+va = 0x005D2BBC
+name = "__findfirst64i32"
+
+[[function]]
+va = 0x005D2CEC
+name = "__findnext64i32"
+
+[[function]]
+va = 0x005D2E1B
+name = "___ascii_stricmp"
+
+[[function]]
+va = 0x005D2E50
+name = "__stricmp_l"
+
+[[function]]
+va = 0x005D2F23
+name = "__stricmp"
+
+[[function]]
+va = 0x005D31AD
+name = "__fsopen"
+
+[[function]]
+va = 0x005D3284
+name = "__gmtime64_s"
+
+[[function]]
+va = 0x005D34C0
+name = "__gmtime64"
+
+[[function]]
+va = 0x005D3614
+name = "__flush"
+
+[[function]]
+va = 0x005D3676
+name = "__fflush_nolock"
+
+[[function]]
+va = 0x005D381D
+name = "__fseek_nolock"
+
+[[function]]
+va = 0x005D3D1D
+name = "__ftell_nolock"
+
+[[function]]
+va = 0x005D454C
+name = "__strnicmp_l"
+
+[[function]]
+va = 0x005D463C
+name = "__strnicmp"
+
+[[function]]
+va = 0x005D4698
+name = "__mbsrchr_l"
+
+[[function]]
+va = 0x005D4758
+name = "__mbsrchr"
+
+[[function]]
+va = 0x005D4D51
+name = "__strtoi64"
+
+[[function]]
+va = 0x005D4D7A
+name = "__strtoui64"
+
+[[function]]
+va = 0x005D5155
+name = "__fileno"
+
+[[function]]
+va = 0x005D5270
+name = "__mbsupr_s_l"
+
+[[function]]
+va = 0x005D5386
+name = "__make__time64_t"
+
+[[function]]
+va = 0x005D5639
+name = "__mktime64"
+
+[[function]]
+va = 0x005D5646
+name = "__strdup"
+
+[[function]]
+va = 0x005D5696
+name = "__isupper_l"
+
+[[function]]
+va = 0x005D570E
+name = "__islower_l"
+
+[[function]]
+va = 0x005D5786
+name = "__isdigit_l"
+
+[[function]]
+va = 0x005D57FE
+name = "__isxdigit_l"
+
+[[function]]
+va = 0x005D587D
+name = "__isspace_l"
+
+[[function]]
+va = 0x005D58F5
+name = "__isalnum_l"
+
+[[function]]
+va = 0x005D5974
+name = "__mbslwr_s_l"
+
+[[function]]
+va = 0x005D5A8A
+name = "__freea"
+
+[[function]]
+va = 0x005D6381
+name = "__Strftime_l"
+
+[[function]]
+va = 0x005D660B
+name = "__toupper_l"
+
+[[function]]
+va = 0x005D674A
+name = "__memicmp_l"
+
+[[function]]
+va = 0x005D681D
+name = "__memicmp"
+
+[[function]]
+va = 0x005D6ABC
+name = "__itoa"
+
+[[function]]
+va = 0x005D6B63
+name = "__get_sys_err_msg"
+
+[[function]]
+va = 0x005D6E35
+name = "__strlwr_s_l"
+
+[[function]]
+va = 0x005D6E67
+name = "__strlwr"
+
+[[function]]
+va = 0x005D705E
+name = "__freopen_helper"
+
+[[function]]
+va = 0x005D715B
+name = "__fputchar"
+
+[[function]]
+va = 0x005D7175
+name = "__set_osfhnd"
+
+[[function]]
+va = 0x005D71F2
+name = "__free_osfhnd"
+
+[[function]]
+va = 0x005D7273
+name = "__get_osfhandle"
+
+[[function]]
+va = 0x005D72E4
+name = "___lock_fhandle"
+
+[[function]]
+va = 0x005D7384
+name = "__unlock_fhandle"
+
+[[function]]
+va = 0x005D73A6
+name = "__alloc_osfhnd"
+
+[[function]]
+va = 0x005D7B37
+name = "__copysign"
+
+[[function]]
+va = 0x005D7B5D
+name = "__scalb"
+
+[[function]]
+va = 0x005D7B73
+name = "__fpclass"
+
+[[function]]
+va = 0x005D7C07
+name = "__fullpath"
+
+[[function]]
+va = 0x005D7D0F
+name = "__gmtime32_s"
+
+[[function]]
+va = 0x005D7E3C
+name = "___getgmtimebuf"
+
+[[function]]
+va = 0x005D7E84
+name = "__gmtime32"
+
+[[function]]
+va = 0x005D8129
+name = "__tolower_l"
+
+[[function]]
+va = 0x005D83A7
+name = "__ungetc_nolock"
+
+[[function]]
+va = 0x005D85A2
+name = "__snprintf"
+
+[[function]]
+va = 0x005D898C
+name = "___tmainCRTStartup"
+
+[[function]]
+va = 0x005D8C87
+name = "__CxxThrowException@8"
+
+[[function]]
+va = 0x005D8FBF
+name = "__CreateFrameInfo"
+
+[[function]]
+va = 0x005D8FE7
+name = "__IsExceptionObjectToBeDestroyed"
+
+[[function]]
+va = 0x005D9008
+name = "__FindAndUnlinkFrame"
+
+[[function]]
+va = 0x005D90B4
+name = "__global_unwind2"
+
+[[function]]
+va = 0x005D9119
+name = "__local_unwind2"
+
+[[function]]
+va = 0x005D91C0
+name = "__NLG_Notify1"
+
+[[function]]
+va = 0x005D91C9
+name = "__NLG_Notify"
+
+[[function]]
+va = 0x005D920B
+name = "__cfltcvt_init"
+
+[[function]]
+va = 0x005D926B
+name = "__fpmath"
+
+[[function]]
+va = 0x005D93E0
+name = "__ftol"
+
+[[function]]
+va = 0x005D9540
+name = "__alloca_probe"
+
+[[function]]
+va = 0x005D956B
+name = "__security_check_cookie"
+
+[[function]]
+va = 0x005D957A
+name = "__EH_prolog3"
+
+[[function]]
+va = 0x005D95AD
+name = "__EH_prolog3_catch"
+
+[[function]]
+va = 0x005D95E3
+name = "__EH_prolog3_GS"
+
+[[function]]
+va = 0x005D9619
+name = "__EH_epilog3"
+
+[[function]]
+va = 0x005D963C
+name = "__mbsnbcpy_s"
+
+[[function]]
+va = 0x005D9760
+name = "__except_handler4"
+
+[[function]]
+va = 0x005D9900
+name = "__alloca_probe_16"
+
+[[function]]
+va = 0x005D9916
+name = "__alloca_probe_8"
+
+[[function]]
+va = 0x005D99AC
+name = "__SEH_prolog4"
+
+[[function]]
+va = 0x005D99F1
+name = "__SEH_epilog4"
+
+[[function]]
+va = 0x005DB085
+name = "__mbsnbcmp_l"
+
+[[function]]
+va = 0x005DB1EE
+name = "__mbsnbcmp"
+
+[[function]]
+va = 0x005DB205
+name = "__mbsspn_l"
+
+[[function]]
+va = 0x005DB2CA
+name = "__mbsspn"
+
+[[function]]
+va = 0x005DB2DD
+name = "__mbscspn_l"
+
+[[function]]
+va = 0x005DB3A2
+name = "__mbscspn"
+
+[[function]]
+va = 0x005DB3B5
+name = "__expand"
+
+[[function]]
+va = 0x005DB4B3
+name = "__msize"
+
+[[function]]
+va = 0x005DB610
+name = "__allmul"
+
+[[function]]
+va = 0x005DB650
+name = "__alldiv"
+
+[[function]]
+va = 0x005DB74B
+name = "__ismbblead_l"
+
+[[function]]
+va = 0x005DB760
+name = "__ismbblead"
+
+[[function]]
+va = 0x005DB7AE
+name = "__callnewh"
+
+[[function]]
+va = 0x005DB7D0
+name = "__mtinitlocks"
+
+[[function]]
+va = 0x005DB819
+name = "__mtdeletelocks"
+
+[[function]]
+va = 0x005DB883
+name = "__mtinitlocknum"
+
+[[function]]
+va = 0x005DB946
+name = "__lock"
+
+[[function]]
+va = 0x005DB977
+name = "___heap_select"
+
+[[function]]
+va = 0x005DB9D2
+name = "__heap_init"
+
+[[function]]
+va = 0x005DBA2C
+name = "___sbh_heap_init"
+
+[[function]]
+va = 0x005DBA9F
+name = "___sbh_free_block"
+
+[[function]]
+va = 0x005DBDB3
+name = "___sbh_alloc_new_region"
+
+[[function]]
+va = 0x005DBE63
+name = "___sbh_alloc_new_group"
+
+[[function]]
+va = 0x005DBF69
+name = "___sbh_resize_block"
+
+[[function]]
+va = 0x005DC248
+name = "___sbh_alloc_block"
+
+[[function]]
+va = 0x005DCA35
+name = "__FF_MSGBANNER"
+
+[[function]]
+va = 0x005DCB50
+name = "__encoded_null"
+
+[[function]]
+va = 0x005DCC02
+name = "__mtterm"
+
+[[function]]
+va = 0x005DCD75
+name = "__getptd"
+
+[[function]]
+va = 0x005DCEB1
+name = "__mtinit"
+
+[[function]]
+va = 0x005DD035
+name = "__flsbuf"
+
+[[function]]
+va = 0x005DE88D
+name = "___updatetmbcinfo"
+
+[[function]]
+va = 0x005DEB84
+name = "__setmbcp"
+
+[[function]]
+va = 0x005DED1E
+name = "___initmbctable"
+
+[[function]]
+va = 0x005DED3C
+name = "___freetlocinfo"
+
+[[function]]
+va = 0x005DEE7C
+name = "___addlocaleref"
+
+[[function]]
+va = 0x005DEF02
+name = "___removelocaleref"
+
+[[function]]
+va = 0x005DEF8E
+name = "__copytlocinfo_nolock"
+
+[[function]]
+va = 0x005DEFB2
+name = "__updatetlocinfoEx_nolock"
+
+[[function]]
+va = 0x005DEFF0
+name = "___updatetlocinfo"
+
+[[function]]
+va = 0x005DF0B9
+name = "__free_locale"
+
+[[function]]
+va = 0x005DF14F
+name = "__strcats"
+
+[[function]]
+va = 0x005DF18D
+name = "___lc_strtolc"
+
+[[function]]
+va = 0x005DF2B6
+name = "___lc_lctostr"
+
+[[function]]
+va = 0x005DF321
+name = "__setlocale_get_all"
+
+[[function]]
+va = 0x005DF492
+name = "__expandlocale"
+
+[[function]]
+va = 0x005DF666
+name = "__setlocale_set_cat"
+
+[[function]]
+va = 0x005DF95C
+name = "__setlocale_nolock"
+
+[[function]]
+va = 0x005DFC9A
+name = "__crtLCMapStringA_stat"
+
+[[function]]
+va = 0x005E003C
+name = "___crtLCMapStringA"
+
+[[function]]
+va = 0x005E007F
+name = "__isctype_l"
+
+[[function]]
+va = 0x005E0135
+name = "__crtGetStringTypeA_stat"
+
+[[function]]
+va = 0x005E02ED
+name = "___crtGetStringTypeA"
+
+[[function]]
+va = 0x005E032D
+name = "__malloc_crt"
+
+[[function]]
+va = 0x005E036D
+name = "__calloc_crt"
+
+[[function]]
+va = 0x005E03B5
+name = "__realloc_crt"
+
+[[function]]
+va = 0x005E0400
+name = "__recalloc_crt"
+
+[[function]]
+va = 0x005E04D3
+name = "__initp_eh_hooks"
+
+[[function]]
+va = 0x005E04E4
+name = "__RTC_Initialize"
+
+[[function]]
+va = 0x005E052C
+name = "__initp_misc_cfltcvt_tab"
+
+[[function]]
+va = 0x005E0550
+name = "__ValidateImageBase"
+
+[[function]]
+va = 0x005E0580
+name = "__FindPESection"
+
+[[function]]
+va = 0x005E05D0
+name = "__IsNonwritableInCurrentImage"
+
+[[function]]
+va = 0x005E07E9
+name = "__initp_misc_winsig"
+
+[[function]]
+va = 0x005E0836
+name = "___get_sigabrt"
+
+[[function]]
+va = 0x005E09FD
+name = "___getlocaleinfo"
+
+[[function]]
+va = 0x005E0B6B
+name = "___crtInitCritSecNoSpinCount@8"
+
+[[function]]
+va = 0x005E0B7B
+name = "___crtInitCritSecAndSpinCount"
+
+[[function]]
+va = 0x005E117E
+name = "__isindst_nolock"
+
+[[function]]
+va = 0x005E132C
+name = "___tzset"
+
+[[function]]
+va = 0x005E137B
+name = "__isindst"
+
+[[function]]
+va = 0x005E13BC
+name = "__get_daylight"
+
+[[function]]
+va = 0x005E13F0
+name = "__get_dstbias"
+
+[[function]]
+va = 0x005E1424
+name = "__get_timezone"
+
+[[function]]
+va = 0x005E1470
+name = "__allrem"
+
+[[function]]
+va = 0x005E1530
+name = "__aulldiv"
+
+[[function]]
+va = 0x005E3043
+name = "__mbctoupper"
+
+[[function]]
+va = 0x005E368C
+name = "__local_unwind4"
+
+[[function]]
+va = 0x005E3762
+name = "__seh_longjmp_unwind4@4"
+
+[[function]]
+va = 0x005E37DF
+name = "__write_nolock"
+
+[[function]]
+va = 0x005E3DA5
+name = "__write"
+
+[[function]]
+va = 0x005E3E81
+name = "__commit"
+
+[[function]]
+va = 0x005E3F62
+name = "__lseek_nolock"
+
+[[function]]
+va = 0x005E3FD4
+name = "__lseek"
+
+[[function]]
+va = 0x005E40B0
+name = "__close_nolock"
+
+[[function]]
+va = 0x005E4144
+name = "__close"
+
+[[function]]
+va = 0x005E4211
+name = "__freebuf"
+
+[[function]]
+va = 0x005E423D
+name = "___libm_error_support"
+
+[[function]]
+va = 0x005E4501
+name = "__ceil_default"
+
+[[function]]
+va = 0x005E45D2
+name = "__ioinit"
+
+[[function]]
+va = 0x005E4899
+name = "__VEC_memcpy"
+
+[[function]]
+va = 0x005E497C
+name = "__filbuf"
+
+[[function]]
+va = 0x005E5160
+name = "___ascii_strnicmp"
+
+[[function]]
+va = 0x005E51D0
+name = "__fltin2"
+
+[[function]]
+va = 0x005E5280
+name = "__aulldvrm"
+
+[[function]]
+va = 0x005E53B4
+name = "__lseeki64_nolock"
+
+[[function]]
+va = 0x005E5437
+name = "__lseeki64"
+
+[[function]]
+va = 0x005E556A
+name = "__isleadbyte_l"
+
+[[function]]
+va = 0x005E55B0
+name = "___ascii_memicmp"
+
+[[function]]
+va = 0x005E5609
+name = "__rt_probe_read4@4"
+
+[[function]]
+va = 0x005E5654
+name = "__stbuf"
+
+[[function]]
+va = 0x005E56EA
+name = "__ftbuf"
+
+[[function]]
+va = 0x005E5F4A
+name = "__sopen_s"
+
+[[function]]
+va = 0x005E678E
+name = "__wsopen_s"
+
+[[function]]
+va = 0x005E695A
+name = "__set_exp"
+
+[[function]]
+va = 0x005E6984
+name = "__sptype"
+
+[[function]]
+va = 0x005E6A8E
+name = "__raise_exc_ex"
+
+[[function]]
+va = 0x005E6D68
+name = "__raise_exc"
+
+[[function]]
+va = 0x005E6D89
+name = "__handle_exc"
+
+[[function]]
+va = 0x005E6F6A
+name = "__set_errno_from_matherr"
+
+[[function]]
+va = 0x005E6F92
+name = "__errcode"
+
+[[function]]
+va = 0x005E6FBF
+name = "__umatherr"
+
+[[function]]
+va = 0x005E705D
+name = "__handle_qnan1"
+
+[[function]]
+va = 0x005E70B0
+name = "__handle_qnan2"
+
+[[function]]
+va = 0x005E710F
+name = "__except1"
+
+[[function]]
+va = 0x005E71C9
+name = "__except2"
+
+[[function]]
+va = 0x005E7295
+name = "__statfp"
+
+[[function]]
+va = 0x005E72A0
+name = "__clrfp"
+
+[[function]]
+va = 0x005E72AC
+name = "__ctrlfp"
+
+[[function]]
+va = 0x005E7329
+name = "___set_fpsr_sse2"
+
+[[function]]
+va = 0x005E739B
+name = "__validdrive"
+
+[[function]]
+va = 0x005E73D2
+name = "__getdcwd_nolock"
+
+[[function]]
+va = 0x005E7507
+name = "__getcwd"
+
+[[function]]
+va = 0x005E7550
+name = "__fseeki64_nolock"
+
+[[function]]
+va = 0x005E75E9
+name = "__fseeki64"
+
+[[function]]
+va = 0x005E7638
+name = "__getbuf"
+
+[[function]]
+va = 0x005E7958
+name = "__ftelli64"
+
+[[function]]
+va = 0x005E79ED
+name = "__wincmdln"
+
+[[function]]
+va = 0x005E7A4A
+name = "__setenvp"
+
+[[function]]
+va = 0x005E7CBD
+name = "__setargv"
+
+[[function]]
+va = 0x005E7D76
+name = "___crtGetEnvironmentStringsA"
+
+[[function]]
+va = 0x005E7EAB
+name = "___security_init_cookie"
+
+[[function]]
+va = 0x005E7F6C
+name = "___TypeMatch"
+
+[[function]]
+va = 0x005E800C
+name = "___FrameUnwindToState"
+
+[[function]]
+va = 0x005E8132
+name = "___DestructExceptionObject"
+
+[[function]]
+va = 0x005E8186
+name = "___AdjustPointer"
+
+[[function]]
+va = 0x005E841C
+name = "___BuildCatchObjectHelper"
+
+[[function]]
+va = 0x005E859B
+name = "___BuildCatchObject"
+
+[[function]]
+va = 0x005E8AF8
+name = "___InternalCxxFrameHandler"
+
+[[function]]
+va = 0x005E8BE0
+name = "__CallSettingFrame@12"
+
+[[function]]
+va = 0x005E8C2C
+name = "__forcdecpt_l"
+
+[[function]]
+va = 0x005E8C9D
+name = "__cropzeros_l"
+
+[[function]]
+va = 0x005E8D33
+name = "__fassign_l"
+
+[[function]]
+va = 0x005E8D8A
+name = "__shift"
+
+[[function]]
+va = 0x005E8DC3
+name = "__cftoe2_l"
+
+[[function]]
+va = 0x005E8F30
+name = "__cftoe_l"
+
+[[function]]
+va = 0x005E8FFE
+name = "__cftoe"
+
+[[function]]
+va = 0x005E901C
+name = "__cftoa_l"
+
+[[function]]
+va = 0x005E938D
+name = "__cftof2_l"
+
+[[function]]
+va = 0x005E9482
+name = "__cftof_l"
+
+[[function]]
+va = 0x005E953B
+name = "__cftog_l"
+
+[[function]]
+va = 0x005E9633
+name = "__cfltcvt_l"
+
+[[function]]
+va = 0x005E96B9
+name = "__cfltcvt"
+
+[[function]]
+va = 0x005E96DA
+name = "__setdefaultprecision"
+
+[[function]]
+va = 0x005E9703
+name = "__ms_p5_test_fdiv"
+
+[[function]]
+va = 0x005E973F
+name = "__ms_p5_mp_test_fdiv"
+
+[[function]]
+va = 0x005E9CD0
+name = "__trandisp1"
+
+[[function]]
+va = 0x005E9D37
+name = "__trandisp2"
+
+[[function]]
+va = 0x005E9EB7
+name = "__startOneArgErrorHandling"
+
+[[function]]
+va = 0x005E9F45
+name = "__fload_withFB"
+
+[[function]]
+va = 0x005E9FAB
+name = "__math_exit"
+
+[[function]]
+va = 0x005EA08C
+name = "__floor_default"
+
+[[function]]
+va = 0x005EA15D
+name = "___report_gsfailure"
+
+[[function]]
+va = 0x005EA261
+name = "__mbsnbcpy_s_l"
+
+[[function]]
+va = 0x005EA4C5
+name = "__VEC_memzero"
+
+[[function]]
+va = 0x005EA763
+name = "__set_error_mode"
+
+[[function]]
+va = 0x005EA7A9
+name = "__isatty"
+
+[[function]]
+va = 0x005EA81D
+name = "__wctomb_s_l"
+
+[[function]]
+va = 0x005EA997
+name = "___pctype_func"
+
+[[function]]
+va = 0x005EADD9
+name = "___free_lc_time"
+
+[[function]]
+va = 0x005EAF69
+name = "___init_time"
+
+[[function]]
+va = 0x005EAFDC
+name = "___free_lconv_num"
+
+[[function]]
+va = 0x005EB01C
+name = "___init_numeric"
+
+[[function]]
+va = 0x005EB1E4
+name = "___free_lconv_mon"
+
+[[function]]
+va = 0x005EB26D
+name = "___init_monetary"
+
+[[function]]
+va = 0x005EB531
+name = "___init_ctype"
+
+[[function]]
+va = 0x005EB8C6
+name = "____lc_codepage_func"
+
+[[function]]
+va = 0x005EB8EC
+name = "____lc_handle_func"
+
+[[function]]
+va = 0x005EBE8D
+name = "___get_qualified_locale"
+
+[[function]]
+va = 0x005EC070
+name = "___ansicp"
+
+[[function]]
+va = 0x005EC0B7
+name = "___convertcp"
+
+[[function]]
+va = 0x005EC272
+name = "__crtGetLocaleInfoW_stat"
+
+[[function]]
+va = 0x005EC3AD
+name = "___crtGetLocaleInfoW"
+
+[[function]]
+va = 0x005EC3E8
+name = "__crtGetLocaleInfoA_stat"
+
+[[function]]
+va = 0x005EC525
+name = "___crtGetLocaleInfoA"
+
+[[function]]
+va = 0x005EC560
+name = "__getenv_helper_nolock"
+
+[[function]]
+va = 0x005EC5E1
+name = "__mbtowc_l"
+
+[[function]]
+va = 0x005EC70B
+name = "__putwch_nolock"
+
+[[function]]
+va = 0x005EC81D
+name = "__get_sse2_info"
+
+[[function]]
+va = 0x005EC88A
+name = "__frnd"
+
+[[function]]
+va = 0x005EC89B
+name = "__ld12tod"
+
+[[function]]
+va = 0x005ECDDD
+name = "__ld12tof"
+
+[[function]]
+va = 0x005ED9DF
+name = "__iswctype_l"
+
+[[function]]
+va = 0x005EDA61
+name = "__chsize_nolock"
+
+[[function]]
+va = 0x005EDC15
+name = "__setmode_nolock"
+
+[[function]]
+va = 0x005EDD05
+name = "__getdrive"
+
+[[function]]
+va = 0x005EDF24
+name = "__fptostr"
+
+[[function]]
+va = 0x005EDFE1
+name = "___dtold"
+
+[[function]]
+va = 0x005EE09C
+name = "__fltout2"
+
+[[function]]
+va = 0x005EE130
+name = "__alldvrm"
+
+[[function]]
+va = 0x005EE210
+name = "__aullshr"
+
+[[function]]
+va = 0x005EE22F
+name = "__controlfp_s"
+
+[[function]]
+va = 0x005EE299
+name = "__87except"
+
+[[function]]
+va = 0x005EE470
+name = "__itoa_s"
+
+[[function]]
+va = 0x005EE498
+name = "__mbsnbicoll_l"
+
+[[function]]
+va = 0x005EE584
+name = "__mbsnbicoll"
+
+[[function]]
+va = 0x005EE59B
+name = "___wtomb_environ"
+
+[[function]]
+va = 0x005EE630
+name = "___initconout"
+
+[[function]]
+va = 0x005EE67C
+name = "___mtold12"
+
+[[function]]
+va = 0x005EE848
+name = "__crtGetStringTypeW_stat"
+
+[[function]]
+va = 0x005EEA6C
+name = "___crtGetStringTypeW"
+
+[[function]]
+va = 0x005EF370
+name = "__hw_cw"
+
+[[function]]
+va = 0x005EF3FE
+name = "___hw_cw_sse2"
+
+[[function]]
+va = 0x005EF49E
+name = "__control87"
+
+[[function]]
+va = 0x005EF7A1
+name = "__crtCompareStringA_stat"
+
+[[function]]
+va = 0x005EFB2A
+name = "___crtCompareStringA"
+
+[[function]]
+va = 0x005EFB6A
+name = "__strnicoll_l"
+
+[[function]]
+va = 0x005F01FE
+name = "__Deletegloballocale"
+
+[[function]]
+va = 0x005F02CF
+name = "__Fac_tidy"
+
+[[function]]
+va = 0x005F055B
+name = "__Tolower"
+
+[[function]]
+va = 0x005F066A
+name = "__Getctype"
+
+[[function]]
+va = 0x005F0755
+name = "__Stofx"
+
+[[function]]
+va = 0x005F0775
+name = "__Getcvt"
+
+[[function]]
+va = 0x005F086E
+name = "__Stolx"
+
+[[function]]
+va = 0x005F0916
+name = "__Toupper"
+
+[[function]]
+va = 0x005F0A2A
+name = "__Stoulx"
+
+[[function]]
+va = 0x00605088
+name = "__wcstombs_l_helper"
+
+[[function]]
+va = 0x006052CE
+name = "__wcstombs_s_l"
+
+[[function]]
+va = 0x0060539D
+name = "__wfsopen"
+
+[[function]]
+va = 0x00605463
+name = "__mbstowcs_l_helper"
+
+[[function]]
+va = 0x006055EB
+name = "__mbstowcs_s_l"
+
+[[function]]
+va = 0x006056FF
+name = "__wopenfile"
+
+[[function]]
+va = 0x0060598B
+name = "__wcsicmp_l"
+
+[[function]]
+va = 0x00605A9A
+name = "__wcsicmp"
+
+[[function]]
+va = 0x00605B60
+name = "__towlower_l"
+
+[[function]]
+va = 0x00605C0D
+name = "__crtLCMapStringW_stat"
+
+[[function]]
+va = 0x00605E6E
+name = "___crtLCMapStringW"
+
+[[function]]
+va = 0x00605EAE
+name = "___delayLoadHelper2@8"
+
+[[function]]
+va = 0x006061F2
+name = "__seh_longjmp_unwind@4"
+
+[[function]]
+va = 0x006062CC
+name = "__setjmp3"
+
+[[function]]
+va = 0x00606730
+name = "__allshr"
+
+[[function]]
+va = 0x00606760
+name = "__aullrem"
+
+[[function]]
+va = 0x00606960
+name = "__ValidateEH3RN"
+
+[[function]]
+va = 0x00607D00
+name = "__d_inttype"
+
+[[function]]
+va = 0x006081AE
+name = "__cintrindisp1"
+
+[[function]]
+va = 0x006081EB
+name = "__ctrandisp2"
+
+[[function]]
+va = 0x00608381
+name = "__ctrandisp1"
+
+[[function]]
+va = 0x006083B4
+name = "__fload"

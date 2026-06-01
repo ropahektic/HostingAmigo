@@ -1,0 +1,5 @@
+out_of_scope_reason = "Frontend code will not be ported."
+
+[[global]]
+va = 0x0064D6C0
+name = "FrontendWeaponEditor__vtable_Maybe"

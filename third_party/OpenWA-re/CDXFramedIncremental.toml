@@ -1,0 +1,9 @@
+out_of_scope_reason = "Frontend code will not be ported."
+
+[[function]]
+va = 0x004CFAA0
+name = "CDXFramedIncremental__LoadBorderBitmap"
+
+[[function]]
+va = 0x004CFC40
+name = "CDXFramedIncremental__LoadFromFolder"

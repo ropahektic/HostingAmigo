@@ -1,0 +1,70 @@
+[[function]]
+va = 0x00550890
+name = "GirderEntity__Constructor"
+calling_convention = "__stdcall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "void *"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "parent"
+  type = "void *"
+  storage = "EAX"
+
+  [[function.param]]
+  name = "fp_0"
+  type = "uint"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "fp_1"
+  type = "uint"
+  storage = "stack:0xC"
+
+  [[function.param]]
+  name = "fp_2"
+  type = "uint"
+  storage = "stack:0x10"
+
+  [[function.param]]
+  name = "fp_3"
+  type = "uint"
+  storage = "stack:0x14"
+
+  [[function.param]]
+  name = "fp_4"
+  type = "uint"
+  storage = "stack:0x18"
+
+  [[function.param]]
+  name = "fp_5"
+  type = "uint"
+  storage = "stack:0x1C"
+
+  [[function.param]]
+  name = "fp_6"
+  type = "uint"
+  storage = "stack:0x20"
+
+  [[function.param]]
+  name = "local_struct"
+  type = "const void *"
+  storage = "stack:0x24"
+
+[[function]]
+va = 0x00550920
+name = "GirderEntity__ctor1_GirderEntity"
+
+[[function]]
+va = 0x00550A70
+name = "GirderEntity__check_for_target"
+
+[[function]]
+va = 0x00550D00
+name = "GirderEntity__message"

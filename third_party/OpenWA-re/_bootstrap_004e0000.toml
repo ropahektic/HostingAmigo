@@ -1,0 +1,32 @@
+[[function]]
+va = 0x004E31E0
+name = "StopAllWavPlayers_2"
+
+[[function]]
+va = 0x004E3490
+name = "ParseReplayPosition"
+calling_convention = "__stdcall"
+
+  [function.signature]
+  returns = "int"
+
+  [[function.param]]
+  name = "input"
+  type = "const byte *"
+
+
+[[function]]
+va = 0x004EBE00
+name = "MouseModeEnterWindowed_Maybe"
+
+[[function]]
+va = 0x004EC050
+name = "DInputMouseAcquire_Maybe"
+
+[[function]]
+va = 0x004EC0D0
+name = "MouseCursorRecenterOnWindow_Maybe"
+
+[[function]]
+va = 0x004EC470
+name = "MouseCursorSnapToScreenCenter_Maybe"

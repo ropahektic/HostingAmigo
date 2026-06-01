@@ -1,0 +1,9 @@
+out_of_scope_reason = "DirectX rendering path (DDraw / D3D7 / D3D9 / DX UI controls). OpenWA replaces the renderer with a Rust-side softbuffer backend, so this code is out of porting scope."
+
+[[function]]
+va = 0x005A0850
+name = "OpenGLCPU__Constructor"
+
+[[global]]
+va = 0x006774C0
+name = "OpenGLCPU__vtable"

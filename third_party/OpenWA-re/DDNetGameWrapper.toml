@@ -1,0 +1,78 @@
+[[function]]
+va = 0x0056D1F0
+name = "DDNetGameWrapper__Constructor"
+
+[[function]]
+va = 0x0056D240
+name = "DDNetGameWrapper__Destructor"
+
+[[function]]
+va = 0x0056D2A0
+name = "DDNetGameWrapper__ScalarDeletingDestructor"
+
+[[function]]
+va = 0x0056FAF0
+name = "DDNetGameWrapper__SendGameState"
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "void *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "buf"
+  type = "byte *"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "a"
+  type = "uint"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "b"
+  type = "uint"
+  storage = "stack:0xC"
+
+[[function]]
+va = 0x005713C0
+name = "DDNetGameWrapper__LoadResourceList"
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "GameRuntime *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "arg1"
+  type = "uint"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "arg2"
+  type = "uint"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "base_path"
+  type = "char *"
+  storage = "stack:0xC"
+
+  [[function.param]]
+  name = "resource_list"
+  type = "int *"
+  storage = "stack:0x10"
+
+[[global]]
+va = 0x0066A2DC
+name = "DDNetGameWrapper__vtable_Maybe"

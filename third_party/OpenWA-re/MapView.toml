@@ -1,0 +1,56 @@
+[[function]]
+va = 0x00447E80
+name = "MapView__Constructor"
+
+[[function]]
+va = 0x00449B60
+name = "MapView__CopyInfo"
+calling_convention = "__stdcall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "void *"
+  storage = "ESI"
+
+[[function]]
+va = 0x0044A9A0
+name = "MapView__Load"
+
+[[function]]
+va = 0x0044B250
+name = "MapView__OpenEditorAndReload"
+
+[[function]]
+va = 0x0044B540
+name = "MapView__ValidateForGenerate_Maybe"
+
+[[struct]]
+name = "MapView"
+namespace = "/OpenWA"
+size = 0x29628
+rust_path = "openwa_game::frontend::map_view::MapView"
+
+  [[struct.field]]
+  offset = 0x0
+  name = "vtable"
+  type = "MapViewVtable *"
+  size = 0x4
+
+[[vtable]]
+name = "MapViewVtable"
+va = 0x0064FC60
+size = 2
+plate_comment = """
+MapView vtable (partial — only the destructor slot is known by name). Slot 0
+is the CWnd-inherited base-class slot; slot 1 is the scalar deleting
+destructor (function address not yet pinned down).
+"""
+
+  [[vtable.slot]]
+  index = 1
+  name = "destructor"
+  doc = "Scalar deleting destructor — frees the object if `free_flag & 1`. Function VA TBD."

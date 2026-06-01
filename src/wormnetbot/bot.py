@@ -63,6 +63,10 @@ class WormNetBot:
             LOGGER.info("Detected winner from endgame frames: %s", winner)
         LOGGER.info("Cleared finished game session after all players left")
 
+    async def _handle_winner_inferred(self, summary: str) -> None:
+        # Early signal: inferred as soon as endgame packets reveal it.
+        LOGGER.info("Winner inferred at endgame: %s", summary)
+
     async def run_forever(self) -> None:
         while True:
             runner: asyncio.Task | None = None
@@ -134,6 +138,19 @@ class WormNetBot:
             return
         await handler(sender, reply_target, reply_private, args)
 
+
+    async def _stop_active_session(self, *, reason: str = "") -> bool:
+        """Stop WA TCP host and clear session pointer. Returns True if one was running."""
+        session = self.active_session
+        if session is None:
+            return False
+        with contextlib.suppress(Exception):
+            await session.stop()
+        self.active_session = None
+        if reason:
+            LOGGER.info("Stopped WA host session: %s", reason)
+        return True
+
     async def _cmd_help(self, sender: str | None, reply_target: str, reply_private: bool, args: list[str]) -> None:
         await self._reply(
             reply_target,
@@ -161,11 +178,22 @@ class WormNetBot:
                 private=reply_private,
             )
             return
+        if self.active_session is not None:
+            await self._stop_active_session(reason="!jost replacing stale WA host")
+            await self._reply(
+                reply_target,
+                (
+                    f"Previous WA host on port {self.config.game_port} was still open "
+                    "(a client may still have been connected after the last game). Released it; starting a new lobby."
+                ),
+                private=reply_private,
+            )
         scheme = args[0]
         game_name = " ".join(args[1:]).strip() or None
-        session = GameSession(self.config, scheme)
+        session = GameSession(self.config, scheme, session_owner_nickname=sender)
         session.on_game_started = self._handle_session_started
         session.on_game_ended = self._handle_session_ended
+        session.on_winner_inferred = self._handle_winner_inferred
         try:
             await session.start()
             hosted = await asyncio.to_thread(self.game_advertiser.create_game, sender, scheme, game_name)
@@ -185,23 +213,33 @@ class WormNetBot:
         )
 
     async def _cmd_close(self, sender: str | None, reply_target: str, reply_private: bool, args: list[str]) -> None:
-        if self.active_game is None:
-            await self._reply(reply_target, "No active game advertisement to close.", private=reply_private)
+        if self.active_game is None and self.active_session is None:
+            await self._reply(reply_target, "No active game or WA host to close.", private=reply_private)
             return
-        closing = self.active_game
-        closing_session = self.active_session
-        try:
-            await asyncio.to_thread(self.game_advertiser.close_game, closing.game_id)
-        except Exception as exc:
-            LOGGER.warning("Close command failed: %s", exc)
-            await self._reply(reply_target, f"Close failed: {exc}", private=reply_private)
-            return
-        if closing_session is not None:
-            with contextlib.suppress(Exception):
-                await closing_session.stop()
-        self.active_game = None
-        self.active_session = None
-        await self._reply(reply_target, f"Closed game advertisement id={closing.game_id}.", private=reply_private)
+        closed_ad = False
+        ad_id = None
+        if self.active_game is not None:
+            closing = self.active_game
+            try:
+                await asyncio.to_thread(self.game_advertiser.close_game, closing.game_id)
+                closed_ad = True
+                ad_id = closing.game_id
+            except Exception as exc:
+                LOGGER.warning("Close command failed: %s", exc)
+                await self._reply(reply_target, f"Close failed: {exc}", private=reply_private)
+                return
+            self.active_game = None
+        had_session = await self._stop_active_session(reason="!close")
+        parts: list[str] = []
+        if closed_ad and ad_id is not None:
+            parts.append(f"Closed WormNET ad id={ad_id}")
+        if had_session:
+            parts.append(f"Released WA host on port {self.config.game_port}")
+        await self._reply(
+            reply_target,
+            ". ".join(parts) + "." if parts else "Nothing to close.",
+            private=reply_private,
+        )
 
     async def _cmd_ready(self, sender: str | None, reply_target: str, reply_private: bool, args: list[str]) -> None:
         if self.active_session is None:
@@ -249,10 +287,17 @@ class WormNetBot:
             await self._reply(reply_target, "No active hosted lobby to start.", private=reply_private)
             return
         try:
-            await self.active_session.start_game()
+            started = await self.active_session.start_game()
         except Exception as exc:
             LOGGER.warning("Start command failed: %s", exc)
             await self._reply(reply_target, f"Start failed: {exc}", private=reply_private)
+            return
+        if not started:
+            await self._reply(
+                reply_target,
+                "Start skipped: game already running, no WA clients in the lobby, or not everyone is ready there.",
+                private=reply_private,
+            )
             return
         await self._reply(reply_target, "Sent start-game packet to connected players.", private=reply_private)
 

@@ -1,0 +1,200 @@
+[[function]]
+va = 0x0058BC10
+name = "Music__Constructor"
+calling_convention = "__stdcall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "Music *"
+  storage = "ESI"
+
+  [[function.param]]
+  name = "ids"
+  type = "uint"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "path_ptr"
+  type = "const byte *"
+  storage = "stack:0x8"
+
+[[function]]
+va = 0x0058BC60
+name = "Music__ScalarDeletingDtor"
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "Music *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "flags"
+  type = "uint"
+  storage = "stack:0x4"
+
+[[function]]
+va = 0x0058BC80
+name = "Music__Destructor"
+
+[[function]]
+va = 0x0058BCE0
+name = "Music__StopAndCleanup"
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "Music *"
+  storage = "ECX"
+
+[[function]]
+va = 0x0058BD20
+name = "Music__PlayTrack"
+
+[[function]]
+va = 0x0058BE70
+name = "Music__StartMusic"
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "Music *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "track_id"
+  type = "uint"
+  storage = "stack:0x4"
+
+[[function]]
+va = 0x0058BE90
+name = "Music__SetPlaylist"
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "Music *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "tracks"
+  type = "const uint *"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "count"
+  type = "uint"
+  storage = "stack:0x8"
+
+[[function]]
+va = 0x0058BEE0
+name = "Music__AdvanceTrack"
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "Music *"
+  storage = "ECX"
+
+[[function]]
+va = 0x0058BF40
+name = "Music__SetVolume"
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "Music *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "volume"
+  type = "Fixed"
+  storage = "stack:0x4"
+
+[[struct]]
+name = "Music"
+namespace = "/OpenWA"
+size = 0x354
+rust_path = "openwa_game::audio::music::Music"
+
+  [[struct.field]]
+  offset = 0x0
+  name = "vtable"
+  type = "MusicVtable *"
+  size = 0x4
+
+[[vtable]]
+name = "MusicVtable"
+va = 0x0066B3E0
+size = 6
+plate_comment = """
+Music vtable — 6 slots at 0x0066B3E0.
+
+Slot order verified by reading vtable data from binary:
+  +0x00: 0x58BC60  +0x04: 0x58BEE0  +0x08: 0x58BF40
+  +0x0C: 0x58BE70  +0x10: 0x58BE90  +0x14: 0x58BCE0
+"""
+
+  [[vtable.slot]]
+  index = 0
+  name = "vt_scalar_deleting_dtor"
+  wa_function = "Music__ScalarDeletingDtor"
+  doc = "Scalar deleting destructor (0x58BC60)."
+
+  [[vtable.slot]]
+  index = 1
+  name = "vt_advance_track"
+  wa_function = "Music__AdvanceTrack"
+  doc = "Advance to next track in playlist (0x58BEE0)."
+
+  [[vtable.slot]]
+  index = 2
+  name = "vt_set_volume"
+  wa_function = "Music__SetVolume"
+  doc = "Set music volume (0x58BF40). Volume is Fixed 16.16."
+
+  [[vtable.slot]]
+  index = 3
+  name = "vt_start_music"
+  wa_function = "Music__StartMusic"
+  doc = "Start a specific music track looping (0x58BE70)."
+
+  [[vtable.slot]]
+  index = 4
+  name = "vt_set_playlist"
+  wa_function = "Music__SetPlaylist"
+  doc = "Copy tracks into playlist and start first (0x58BE90)."
+
+  [[vtable.slot]]
+  index = 5
+  name = "vt_stop_and_cleanup"
+  wa_function = "Music__StopAndCleanup"
+  doc = "Stop playback and clean up (0x58BCE0)."

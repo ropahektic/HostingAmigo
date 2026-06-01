@@ -1,0 +1,108 @@
+[[function]]
+va = 0x004F9330
+name = "BufferObject__AllocSlot"
+
+[[function]]
+va = 0x00541130
+name = "BufferObject__PushMessage"
+calling_convention = "__stdcall"
+custom_storage = true
+
+  [function.signature]
+  returns = "int"
+
+  [[function.param]]
+  name = "this"
+  type = "BufferObject *"
+  storage = "EAX"
+
+  [[function.param]]
+  name = "payload_size"
+  type = "uint"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "kind"
+  type = "int"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "payload"
+  type = "void *"
+  storage = "stack:0x8"
+
+[[function]]
+va = 0x00541100
+name = "BufferObject__ClassifyInputMsg"
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "uint"
+
+  [[function.param]]
+  name = "this"
+  type = "BufferObject *"
+  storage = "ECX"
+
+[[struct]]
+name = "BufferObject"
+namespace = "/OpenWA"
+size = 0x28
+rust_path = "openwa_game::engine::buffer_object::BufferObject"
+plate_comment = """
+Partial view of `BufferObject` — fields covering the ring/queue cursors
+(used by `classify_input_msg`, `alloc_slot`) and the three save slots at
++0x1C/+0x20/+0x24 used by drain-then-restore scans
+(`WormEntity::DrainInputBuffer`). Trailing fields past +0x28 are unknown.
+"""
+
+  [[struct.field]]
+  offset = 0x0
+  name = "ring_start"
+  type = "byte *"
+
+  [[struct.field]]
+  offset = 0x4
+  name = "capacity"
+  type = "uint"
+
+  [[struct.field]]
+  offset = 0x8
+  name = "tail_offset"
+  type = "uint"
+
+  [[struct.field]]
+  offset = 0xC
+  name = "read_offset"
+  type = "uint"
+
+  [[struct.field]]
+  offset = 0x10
+  name = "tail_node"
+  type = "void *"
+
+  [[struct.field]]
+  offset = 0x14
+  name = "queue_head"
+  type = "void *"
+
+  [[struct.field]]
+  offset = 0x18
+  name = "queue_count"
+  type = "int"
+
+  [[struct.field]]
+  offset = 0x1C
+  name = "save_read_offset"
+  type = "uint"
+
+  [[struct.field]]
+  offset = 0x20
+  name = "save_queue_head"
+  type = "void *"
+
+  [[struct.field]]
+  offset = 0x24
+  name = "save_queue_count"
+  type = "int"

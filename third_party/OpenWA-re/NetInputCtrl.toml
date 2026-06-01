@@ -1,0 +1,202 @@
+[[function]]
+va = 0x0053DD50
+name = "NetInputCtrl__InitTeamInputs"
+calling_convention = "__stdcall"
+custom_storage = true
+
+  [function.signature]
+  returns = "uint"
+
+  [[function.param]]
+  name = "input_ctrl"
+  type = "NetInputCtrl *"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "team_configs"
+  type = "void *"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "num_teams"
+  type = "uint"
+  storage = "stack:0xC"
+
+  [[function.param]]
+  name = "self_peer_idx"
+  type = "int"
+  storage = "stack:0x10"
+
+  [[function.param]]
+  name = "game_version"
+  type = "int"
+  storage = "ECX"
+
+[[function]]
+va = 0x0058C0D0
+name = "NetInputCtrl__Init"
+calling_convention = "__stdcall"
+custom_storage = true
+
+  [function.signature]
+  returns = "uint"
+
+  [[function.param]]
+  name = "team_configs"
+  type = "void *"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "peer_connections"
+  type = "PeerState * *"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "peer_connection_count"
+  type = "int"
+  storage = "stack:0xC"
+
+  [[function.param]]
+  name = "game_version"
+  type = "int"
+  storage = "stack:0x10"
+
+  [[function.param]]
+  name = "this"
+  type = "NetInputCtrl *"
+  storage = "ESI"
+
+  [[function.param]]
+  name = "self_peer_idx"
+  type = "int"
+  storage = "EAX"
+
+  [[function.param]]
+  name = "num_teams"
+  type = "uint"
+  storage = "ECX"
+
+[[struct]]
+name = "NetInputCtrl"
+namespace = "/OpenWA"
+size = 0x1800
+rust_path = "openwa_game::input::controller::NetInputCtrl"
+plate_comment = "Network multiplayer input subsystem + per-game NetSession (WS_GameNet). GameSession+0xB8. Layout mirrors openwa_game::input::controller::NetInputCtrl."
+
+  [[struct.field]]
+  offset = 0x0
+  name = "vtable"
+  type = "NetInputCtrlVtable *"
+  size = 0x4
+
+  [[struct.field]]
+  offset = 0x8
+  name = "num_teams"
+  type = "int"
+
+  [[struct.field]]
+  offset = 0xC
+  name = "self_peer_idx"
+  type = "int"
+  comment = "This machine's own peer index (host=0). Send/recv handlers branch on it."
+
+  [[struct.field]]
+  offset = 0x14
+  name = "game_version"
+  type = "int"
+
+  [[struct.field]]
+  offset = 0x1C
+  name = "send_countdown"
+  type = "int"
+  comment = "Periodic-send countdown; reset to 0x32 by WS_GameNet__update."
+
+  [[struct.field]]
+  offset = 0x20
+  name = "input_ring"
+  type = "void *"
+  comment = "Outgoing message ring (InputBuffer-shaped). send_block drains its node list."
+
+  [[struct.field]]
+  offset = 0x56C
+  name = "send_staging"
+  type = "byte[0x400]"
+  comment = "Outgoing message accumulator; compress src / decompress dst."
+
+  [[struct.field]]
+  offset = 0x96C
+  name = "wire_scratch"
+  type = "byte[0x408]"
+  comment = "Compressed wire block (1-byte header) for send and recv."
+
+  [[struct.field]]
+  offset = 0xD74
+  name = "staging_capacity"
+  type = "uint"
+
+  [[struct.field]]
+  offset = 0xE80
+  name = "timer_elapsed"
+  type = "uint[2]"
+  comment = "Last-sampled net-frame timer (lo, hi)."
+
+  [[struct.field]]
+  offset = 0xE88
+  name = "timer_baseline"
+  type = "uint[2]"
+  comment = "Net-frame timer baseline (lo, hi); init -1/-1."
+
+  [[struct.field]]
+  offset = 0xE90
+  name = "outgoing_pending_flag"
+  type = "uint"
+  comment = "Set 1 by WS_GameNet__SubmitMessageBuffer when there is outgoing input this frame."
+
+  [[struct.field]]
+  offset = 0xECC
+  name = "peer_playing"
+  type = "int[13]"
+  comment = ">0 active; -2 (written by WS_GameNet__PeerTimeout) = timed out; <=0 ⇒ team auto-forfeited."
+
+  [[struct.field]]
+  offset = 0xF00
+  name = "peer_connections"
+  type = "void *[12]"
+  comment = "Pointers to active MsgConnection peer slots (g_PeerStates / the outbound block)."
+
+  [[struct.field]]
+  offset = 0xF30
+  name = "peer_connection_count"
+  type = "int"
+
+  [[struct.field]]
+  offset = 0x1738
+  name = "peer_last_seq"
+  type = "int[13]"
+  comment = "Per-peer last-received sequence; ReceivePacket computes delta then stores seq+1."
+
+  [[struct.field]]
+  offset = 0x176C
+  name = "peer_recv_countdown"
+  type = "int[13]"
+  comment = "Decremented each net-frame in WS_GameNet__update; 0 ⇒ WS_GameNet__PeerTimeout."
+
+  [[struct.field]]
+  offset = 0x17A0
+  name = "peer_disconnect_reason"
+  type = "int[12]"
+  comment = "Reason passed to WS_GameNet__PeerTimeout when peer_recv_countdown expires."
+
+[[vtable]]
+name = "NetInputCtrlVtable"
+va = 0x0066B3FC
+size = 1
+plate_comment = """
+NetInputCtrl vtable — 1 slot (scalar deleting destructor). Sits at
+0x0066B3FC, immediately after `GameSessionVtable` at 0x0066B3F8.
+"""
+
+  [[vtable.slot]]
+  index = 0
+  name = "destructor"
+  doc = "Scalar deleting destructor — frees the object if `flags & 1`."

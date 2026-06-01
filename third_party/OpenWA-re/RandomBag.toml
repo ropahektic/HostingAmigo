@@ -1,0 +1,23 @@
+[[function]]
+va = 0x00541CC0
+name = "RandomBag__draw"
+calling_convention = "__thiscall"
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "bag"
+  type = "void *"
+
+  [[function.param]]
+  name = "rng_value"
+  type = "uint"
+
+  [[function.param]]
+  name = "out"
+  type = "uint *"
+
+[[function]]
+va = 0x00541D20
+name = "RandomBag__refill_if_empty"

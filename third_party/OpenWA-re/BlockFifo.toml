@@ -1,0 +1,67 @@
+[[function]]
+va = 0x004F9290
+name = "BlockFifo__consume"
+
+[[function]]
+va = 0x004F9300
+name = "BlockFifo__get_usage"
+
+[[function]]
+va = 0x004F93A0
+name = "BlockFifo__copy_messages"
+calling_convention = "__stdcall"
+custom_storage = true
+plate_comment = "Drains all queued blocks from `src` (singly-linked block list) into `dst` ring buffer. Returns 1 on copy, 0 if dst would overflow."
+
+  [function.signature]
+  returns = "int"
+
+  [[function.param]]
+  name = "src"
+  type = "void *"
+  storage = "EAX"
+
+  [[function.param]]
+  name = "dst"
+  type = "void *"
+  storage = "ESI"
+
+[[function]]
+va = 0x004FA820
+name = "BlockFifo__PopHead_Maybe"
+calling_convention = "__stdcall"
+custom_storage = true
+plate_comment = "Unlinks the head block of `this` BlockFifo (head = head->next, count--; resets bookkeeping when empty). Returns 1 on pop, 0 on empty. Pairs with BlockFifo__PeekMessage_Maybe. Provisional name."
+
+  [function.signature]
+  returns = "int"
+
+  [[function.param]]
+  name = "this"
+  type = "void *"
+  storage = "EAX"
+
+[[function]]
+va = 0x005410B0
+name = "BlockFifo__PeekMessage_Maybe"
+calling_convention = "__fastcall"
+plate_comment = "Reads (but does not unlink) the head block of `this` BlockFifo: copies `*size` (payload size minus 4-byte kind header), `*kind` (message type), and up to 0x40c bytes of payload into `payload_out`. Returns 1 on success, 0 on empty / oversized. Pairs with BlockFifo__PopHead_Maybe. Provisional name."
+
+  [function.signature]
+  returns = "int"
+
+  [[function.param]]
+  name = "this"
+  type = "void *"
+
+  [[function.param]]
+  name = "size_out"
+  type = "uint *"
+
+  [[function.param]]
+  name = "kind_out"
+  type = "uint *"
+
+  [[function.param]]
+  name = "payload_out"
+  type = "void *"

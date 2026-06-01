@@ -1,0 +1,399 @@
+out_of_scope_reason = "Frontend code will not be ported."
+
+[[function]]
+va = 0x004E3BD0
+name = "CWormsApp__Constructor"
+
+[[function]]
+va = 0x004E3E90
+name = "CWormsApp__ScalarDeletingDestructor"
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void *"
+
+  [[function.param]]
+  name = "this"
+  type = "void *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "flags"
+  type = "byte"
+  storage = "stack:0x4"
+
+[[function]]
+va = 0x004E43C0
+name = "CWormsApp__Destructor"
+
+[[function]]
+va = 0x004EB730
+name = "CWormsApp__DoMessageBox"
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "int"
+
+  [[function.param]]
+  name = "this"
+  type = "void *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "text"
+  type = "char *"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "type"
+  type = "uint"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "help_context"
+  type = "uint"
+  storage = "stack:0xC"
+
+[[function]]
+va = 0x004EC810
+name = "CWormsApp__PreTranslateMessage"
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "int"
+
+  [[function.param]]
+  name = "this"
+  type = "void *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "pMsg"
+  type = "tagMSG *"
+  storage = "stack:0x4"
+
+[[function]]
+va = 0x005A23F0
+name = "CWormsApp__ClearFrameBuffer"
+calling_convention = "__fastcall"
+custom_storage = true
+
+  [function.signature]
+  returns = "FastcallResult *"
+
+  [[function.param]]
+  name = "this"
+  type = "RenderContext *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "result"
+  type = "FastcallResult *"
+  storage = "EDX"
+
+[[function]]
+va = 0x005A2420
+name = "CWormsApp__ClearFrameBuffer_Indirect"
+calling_convention = "__fastcall"
+custom_storage = true
+
+  [function.signature]
+  returns = "FastcallResult *"
+
+  [[function.param]]
+  name = "this"
+  type = "RenderContext *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "result"
+  type = "FastcallResult *"
+  storage = "EDX"
+
+[[function]]
+va = 0x005A24A0
+name = "CWormsApp__ReleaseFrameBuffer"
+calling_convention = "__fastcall"
+custom_storage = true
+
+  [function.signature]
+  returns = "FastcallResult *"
+
+  [[function.param]]
+  name = "this"
+  type = "RenderContext *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "result"
+  type = "FastcallResult *"
+  storage = "EDX"
+
+  [[function.param]]
+  name = "p2"
+  type = "int"
+  storage = "stack:0x4"
+
+[[function]]
+va = 0x005A2530
+name = "CWormsApp__LockFrameBuffer"
+calling_convention = "__fastcall"
+custom_storage = true
+
+  [function.signature]
+  returns = "FastcallResult *"
+
+  [[function.param]]
+  name = "this"
+  type = "RenderContext *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "result"
+  type = "FastcallResult *"
+  storage = "EDX"
+
+  [[function.param]]
+  name = "p2"
+  type = "uint"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "p3"
+  type = "uint"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "p4"
+  type = "uint"
+  storage = "stack:0xC"
+
+  [[function.param]]
+  name = "p5"
+  type = "uint"
+  storage = "stack:0x10"
+
+[[function]]
+va = 0x005A25C0
+name = "CWormsApp__FillRect"
+calling_convention = "__fastcall"
+custom_storage = true
+
+  [function.signature]
+  returns = "FastcallResult *"
+
+  [[function.param]]
+  name = "this"
+  type = "RenderContext *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "result"
+  type = "FastcallResult *"
+  storage = "EDX"
+
+  [[function.param]]
+  name = "x"
+  type = "int"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "y"
+  type = "int"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "width"
+  type = "int"
+  storage = "stack:0xC"
+
+  [[function.param]]
+  name = "height"
+  type = "int"
+  storage = "stack:0x10"
+
+  [[function.param]]
+  name = "fill_value"
+  type = "uint"
+  storage = "stack:0x14"
+
+[[function]]
+va = 0x005A2660
+name = "CWormsApp__GetFrameBufferDims"
+calling_convention = "__fastcall"
+custom_storage = true
+
+  [function.signature]
+  returns = "FastcallResult *"
+
+  [[function.param]]
+  name = "this"
+  type = "RenderContext *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "result"
+  type = "FastcallResult *"
+  storage = "EDX"
+
+  [[function.param]]
+  name = "out"
+  type = "uint *"
+  storage = "stack:0x4"
+
+[[function]]
+va = 0x005A2690
+name = "CWormsApp__LockSurface"
+calling_convention = "__fastcall"
+custom_storage = true
+plate_comment = """
+CWormsApp::LockSurface (0x5A2690). Used by RenderContext vtable slots
+15 and 17 (read- and write-locks). Writes the framebuffer pointer to
+*out_data and the stride to *out_stride.
+"""
+
+  [function.signature]
+  returns = "FastcallResult *"
+
+  [[function.param]]
+  name = "this"
+  type = "RenderContext *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "result"
+  type = "FastcallResult *"
+  storage = "EDX"
+
+  [[function.param]]
+  name = "out_data"
+  type = "byte **"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "out_stride"
+  type = "uint *"
+  storage = "stack:0x8"
+
+[[function]]
+va = 0x005A26C0
+name = "CWormsApp__GetRendererSurface"
+calling_convention = "__fastcall"
+custom_storage = true
+
+  [function.signature]
+  returns = "FastcallResult *"
+
+  [[function.param]]
+  name = "this"
+  type = "RenderContext *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "result"
+  type = "FastcallResult *"
+  storage = "EDX"
+
+[[function]]
+va = 0x005A2700
+name = "CWormsApp__FlipSurface"
+calling_convention = "__fastcall"
+custom_storage = true
+
+  [function.signature]
+  returns = "FastcallResult *"
+
+  [[function.param]]
+  name = "this"
+  type = "RenderContext *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "result"
+  type = "FastcallResult *"
+  storage = "EDX"
+
+[[function]]
+va = 0x005A2720
+name = "CWormsApp__AllocErrorResult"
+calling_convention = "__fastcall"
+custom_storage = true
+
+  [function.signature]
+  returns = "FastcallResult *"
+
+  [[function.param]]
+  name = "this"
+  type = "RenderContext *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "result"
+  type = "FastcallResult *"
+  storage = "EDX"
+
+  [[function.param]]
+  name = "p2"
+  type = "uint"
+  storage = "stack:0x4"
+
+[[function]]
+va = 0x005A2A40
+name = "CWormsApp__BlitToFrameBuffer"
+calling_convention = "__fastcall"
+custom_storage = true
+
+  [function.signature]
+  returns = "FastcallResult *"
+
+  [[function.param]]
+  name = "this"
+  type = "RenderContext *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "result"
+  type = "FastcallResult *"
+  storage = "EDX"
+
+  [[function.param]]
+  name = "surface"
+  type = "byte *"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "y_offset"
+  type = "int"
+  storage = "stack:0x8"
+
+[[global]]
+va = 0x00662C90
+name = "CWormsApp__vtable"
+
+[[struct]]
+name = "CWormsApp"
+namespace = "/OpenWA"
+size = 0xA8
+
+  [[struct.field]]
+  offset = 0x0
+  name = "vtable"
+  type = "pointer"
+  size = 0x4
+  comment = "CWormsApp__vtable (0x662C90)"
+
+  [[struct.field]]
+  offset = 0x4
+  name = "_unknown_04"
+  type = "byte[160]"
+  size = 0xA0
+
+  [[struct.field]]
+  offset = 0xA4
+  name = "vtable2"
+  type = "pointer"
+  size = 0x4
+  comment = "Secondary vtable (PTR_LAB_00662d48)"

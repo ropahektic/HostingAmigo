@@ -1,0 +1,104 @@
+[[function]]
+va = 0x004FAA80
+name = "Sprite__Destructor"
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "Sprite *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "flags"
+  type = "uint"
+  storage = "stack:0x4"
+
+[[function]]
+va = 0x004FAD30
+name = "Sprite__GetFrameForBlit"
+plate_comment = "Sprite__GetFrameForBlit — usercall ESI=this(Sprite*). Looks up an animation frame in a Sprite, computes/clamps the frame index from the animation value, fetches its bounding box from the frame table at this+0x28, and lazily decompresses the surface via FUN_004FA950 if not yet cached. Called from DisplayGfx::GetSpriteFrameForBlit (slot 33, 0x5237C0) for the sprite_ptrs path."
+
+[[function]]
+va = 0x004FAEC0
+name = "Sprite__GetInfo"
+
+[[function]]
+va = 0x00565D60
+name = "Sprite__GetUnderwaterVariant"
+calling_convention = "__fastcall"
+plate_comment = "Sparse jump-table remap of an in-air sprite ID (low 16 bits) to its underwater/drowning variant. The high 16 bits (transform flags) are preserved verbatim; only the index is rewritten when a mapping exists, otherwise the input is returned unchanged. Free helper (no Sprite* this) — called by every entity render path that has a submerged sprite (mines, missiles, oil drums, arrows, crosses, canisters, crates)."
+
+  [function.signature]
+  returns = "uint"
+
+  [[function.param]]
+  name = "sprite"
+  type = "uint"
+
+[[struct]]
+name = "Sprite"
+namespace = "/OpenWA"
+size = 0x70
+rust_path = "openwa_game::render::sprite::Sprite"
+
+  [[struct.field]]
+  offset = 0x0
+  name = "vtable"
+  type = "SpriteVtable *"
+  size = 0x4
+
+[[vtable]]
+name = "SpriteVtable"
+va = 0x0066418C
+size = 8
+plate_comment = """
+Sprite vtable (0x66418C, 8 slots). Slot 0 = Sprite::Destructor, slot 1 =
+FrameCache eviction callback. Slots 2-5 are class-specific helpers and
+slots 6-7 are the shared BaseEntity stub (0x5613D0). All untyped — no
+Rust call site dispatches through these slots.
+"""
+
+  [[vtable.slot]]
+  index = 0
+  name = "destructor"
+  wa_function = "Sprite__Destructor"
+  doc = "Sprite::Destructor (0x4FAA80)."
+
+  [[vtable.slot]]
+  index = 1
+  name = "on_subframe_evicted"
+  doc = "FrameCache eviction callback (0x4FAAD0). Clears subframe_cache_table[idx].decoded_ptr."
+
+  [[vtable.slot]]
+  index = 2
+  name = "slot_2"
+  doc = "Unknown (0x4FB5C0)."
+
+  [[vtable.slot]]
+  index = 3
+  name = "slot_3"
+  doc = "Unknown (0x4FE550)."
+
+  [[vtable.slot]]
+  index = 4
+  name = "slot_4"
+  doc = "Unknown (0x4FE2F0)."
+
+  [[vtable.slot]]
+  index = 5
+  name = "slot_5"
+  doc = "Unknown (0x4FE9C0)."
+
+  [[vtable.slot]]
+  index = 6
+  name = "slot_6"
+  doc = "BaseEntity common stub (0x5613D0)."
+
+  [[vtable.slot]]
+  index = 7
+  name = "slot_7"
+  doc = "BaseEntity common stub (0x5613D0)."

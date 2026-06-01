@@ -1,0 +1,1642 @@
+[[function]]
+va = 0x004FAF00
+name = "DisplayGfx__ConstructTextbox"
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "Textbox *"
+
+  [[function.param]]
+  name = "this"
+  type = "DisplayGfx *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "buf"
+  type = "Textbox *"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "anchor"
+  type = "int"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "kind"
+  type = "int"
+  storage = "stack:0xC"
+
+[[function]]
+va = 0x00523310
+name = "DisplayGfx__LoadSpriteEx"
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "int"
+
+  [[function.param]]
+  name = "this"
+  type = "DisplayGfx *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "mode"
+  type = "int"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "id"
+  type = "int"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "p4"
+  type = "uint"
+  storage = "stack:0xC"
+
+  [[function.param]]
+  name = "count"
+  type = "int"
+  storage = "stack:0x10"
+
+  [[function.param]]
+  name = "p6"
+  type = "uint"
+  storage = "stack:0x14"
+
+  [[function.param]]
+  name = "p7"
+  type = "uint"
+  storage = "stack:0x18"
+
+[[function]]
+va = 0x00523500
+name = "DisplayGfx__GetSpriteInfo"
+calling_convention = "__thiscall"
+custom_storage = true
+plate_comment = "DisplayGfx::GetSpriteInfo (vtable slot 6, 0x523500). Returns the static \"sprite\" string on success or 0 on failure. Writes sprite data/flags/width to output pointers."
+
+  [function.signature]
+  returns = "uint"
+
+  [[function.param]]
+  name = "this"
+  type = "DisplayGfx *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "layer"
+  type = "int"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "out_data"
+  type = "uint *"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "out_flags"
+  type = "uint *"
+  storage = "stack:0xC"
+
+  [[function.param]]
+  name = "out_width"
+  type = "uint *"
+  storage = "stack:0x10"
+
+[[function]]
+va = 0x00523560
+name = "DisplayGfx__LoadFont"
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "uint"
+
+  [[function.param]]
+  name = "this"
+  type = "DisplayGfx *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "mode"
+  type = "uint"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "font_id"
+  type = "int"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "gfx_dir"
+  type = "GfxDir *"
+  storage = "stack:0xC"
+
+  [[function.param]]
+  name = "filename"
+  type = "const char *"
+  storage = "stack:0x10"
+
+[[function]]
+va = 0x00523620
+name = "DisplayGfx__LoadFontExtension"
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "uint"
+
+  [[function.param]]
+  name = "this"
+  type = "DisplayGfx *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "font_id"
+  type = "int"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "path"
+  type = "const char *"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "char_map"
+  type = "const char *"
+  storage = "stack:0xC"
+
+  [[function.param]]
+  name = "palette_value"
+  type = "uint"
+  storage = "stack:0x10"
+
+  [[function.param]]
+  name = "flag"
+  type = "int"
+  storage = "stack:0x14"
+
+[[function]]
+va = 0x00523690
+name = "DisplayGfx__SetFontPalette"
+calling_convention = "__thiscall"
+custom_storage = true
+plate_comment = "DisplayGfx::SetFontPalette (vtable slot 36). Misleadingly named — see Font__SetPalette (0x4F9F20) for what it actually does. Just looks up font_table[font_index] and forwards to Font__SetPalette. Called once during GameWorld::LoadFonts to extend the digital font with derived '.' and ';' glyphs. Ported as openwa-core display::vtable::set_font_palette."
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "DisplayGfx *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "font_count"
+  type = "uint"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "palette_value"
+  type = "uint"
+  storage = "stack:0x8"
+
+[[function]]
+va = 0x005236B0
+name = "DisplayGfx__DrawTextOnBitmap"
+calling_convention = "__thiscall"
+custom_storage = true
+plate_comment = "DisplayGfx::DrawTextOnBitmap (vtable slot 7). Validates font_id (low 16 bits, 1..=31, slot non-null), then forwards to BitmapFont__DrawText (0x4FA4E0) with font_id high 16 bits as flags. Reached only by SetTextboxText (0x4FB070) → in-game text bitmaps. Ported as openwa-core display::vtable::draw_text_on_bitmap."
+
+  [function.signature]
+  returns = "int"
+
+  [[function.param]]
+  name = "this"
+  type = "DisplayGfx *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "font_id"
+  type = "int"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "bitmap"
+  type = "const DisplayBitGrid *"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "pen_x"
+  type = "int"
+  storage = "stack:0xC"
+
+  [[function.param]]
+  name = "pen_y"
+  type = "int"
+  storage = "stack:0x10"
+
+  [[function.param]]
+  name = "msg"
+  type = "const char *"
+  storage = "stack:0x14"
+
+  [[function.param]]
+  name = "out_pen_x"
+  type = "int *"
+  storage = "stack:0x18"
+
+  [[function.param]]
+  name = "out_width"
+  type = "int *"
+  storage = "stack:0x1C"
+
+[[function]]
+va = 0x00523710
+name = "DisplayGfx__MeasureText"
+calling_convention = "__thiscall"
+custom_storage = true
+plate_comment = """
+DisplayGfx::MeasureText (vtable slot 10, 0x523710). Computes text width
+and line height for `text` rendered in the given font slot. Writes
+results via `out_total` and `out_line_height`; returns 1 on success, 0
+if font_id is invalid.
+"""
+
+  [function.signature]
+  returns = "uint"
+
+  [[function.param]]
+  name = "this"
+  type = "DisplayGfx *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "font_id"
+  type = "int"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "text"
+  type = "const char *"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "out_total"
+  type = "int *"
+  storage = "stack:0xC"
+
+  [[function.param]]
+  name = "out_line_height"
+  type = "int *"
+  storage = "stack:0x10"
+
+[[function]]
+va = 0x00523750
+name = "DisplayGfx__GetFontMetric"
+calling_convention = "__thiscall"
+custom_storage = true
+plate_comment = "DisplayGfx::GetFontMetric (vtable slot 9, 0x523750). Queries character metrics from the font object."
+
+  [function.signature]
+  returns = "uint"
+
+  [[function.param]]
+  name = "this"
+  type = "DisplayGfx *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "font_id"
+  type = "int"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "char_code"
+  type = "uint"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "out_1"
+  type = "uint *"
+  storage = "stack:0xC"
+
+  [[function.param]]
+  name = "out_2"
+  type = "uint *"
+  storage = "stack:0x10"
+
+[[function]]
+va = 0x00523790
+name = "DisplayGfx__GetFontInfo"
+calling_convention = "__thiscall"
+custom_storage = true
+plate_comment = "DisplayGfx::GetFontInfo (vtable slot 8, 0x523790). Reads two signed shorts from the font object."
+
+  [function.signature]
+  returns = "uint"
+
+  [[function.param]]
+  name = "this"
+  type = "DisplayGfx *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "font_id"
+  type = "int"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "out_1"
+  type = "uint *"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "out_2"
+  type = "uint *"
+  storage = "stack:0xC"
+
+[[function]]
+va = 0x005237C0
+name = "DisplayGfx__GetSpriteFrameForBlit"
+calling_convention = "__thiscall"
+custom_storage = true
+plate_comment = "DisplayGfx::GetSpriteFrameForBlit (vtable slot 33, 0x5237C0). Resolves a sprite ID + animation value into a renderable frame: dispatches to Sprite__GetFrameForBlit or SpriteBank__GetFrameForBlit, which look up the frame's bounding box and lazily decompress its surface. Returns DisplayBitGrid *. Hot-path — called every frame from BlitSprite (slot 19) for every sprite."
+
+  [function.signature]
+  returns = "DisplayBitGrid *"
+
+  [[function.param]]
+  name = "this"
+  type = "DisplayGfx *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "sprite_id"
+  type = "uint"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "anim_value"
+  type = "uint"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "out_w"
+  type = "int *"
+  storage = "stack:0xC"
+
+  [[function.param]]
+  name = "out_h"
+  type = "int *"
+  storage = "stack:0x10"
+
+  [[function.param]]
+  name = "out_left"
+  type = "int *"
+  storage = "stack:0x14"
+
+  [[function.param]]
+  name = "out_top"
+  type = "int *"
+  storage = "stack:0x18"
+
+  [[function.param]]
+  name = "out_right"
+  type = "int *"
+  storage = "stack:0x1C"
+
+  [[function.param]]
+  name = "out_bottom"
+  type = "int *"
+  storage = "stack:0x20"
+
+  [[function.param]]
+  name = "out_anim_frac"
+  type = "uint *"
+  storage = "stack:0x24"
+
+[[function]]
+va = 0x00523E90
+name = "DisplayGfx__Constructor_Maybe"
+
+[[function]]
+va = 0x005401E0
+name = "DisplayGfx__Constructor_Maybe"
+
+[[function]]
+va = 0x00563FC0
+name = "DisplayGfx__ConstructFull"
+
+[[function]]
+va = 0x00569C10
+name = "DisplayGfx__Constructor_Maybe"
+
+[[function]]
+va = 0x00569CE0
+name = "DisplayGfx__Destructor"
+calling_convention = "__thiscall"
+custom_storage = true
+plate_comment = "DisplayGfx::Destructor (vtable slot 0, 0x569CE0). Scalar deleting destructor thunk."
+
+  [function.signature]
+  returns = "DisplayGfx *"
+
+  [[function.param]]
+  name = "this"
+  type = "DisplayGfx *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "flags"
+  type = "uint"
+  storage = "stack:0x4"
+
+[[function]]
+va = 0x00569D00
+name = "DisplayGfx__Init"
+calling_convention = "__stdcall"
+custom_storage = true
+
+  [function.signature]
+  returns = "int"
+
+  [[function.param]]
+  name = "this"
+  type = "DisplayGfx *"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "hwnd"
+  type = "void *"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "width"
+  type = "uint"
+  storage = "stack:0xC"
+
+  [[function.param]]
+  name = "flags"
+  type = "uint"
+  storage = "stack:0x10"
+
+  [[function.param]]
+  name = "height"
+  type = "uint"
+  storage = "ECX"
+
+[[function]]
+va = 0x0056A010
+name = "DisplayGfx__DestructorImpl"
+plate_comment = """
+DisplayGfx::DestructorImpl — fastcall on ECX = DisplayGfx*. The actual cleanup body, called from the vtable[0] thunk at 0x569CE0. Wrapped in C++ SEH (sets ExceptionList).
+
+Cleanup steps (in order):
+  1. Rebind vtable to &DisplayGfx__vtable (0x66A218 — the DisplayBase parent vtable).
+  2. If display_initialized (+0x3540) is non-zero:
+     a. DisplayGfx::FreeLayerSpriteTable (0x56A280) — iterate sprite_table[1..0x3FF] at +0x3DD4 and free each LayerSprite + its frame_array.
+     b. If tile_bitmap_sets[1] (+0x4DD8) is non-null: TileBitmapSet::Destructor (0x569BC0) on it, then _free the TileBitmapSet itself.
+     c. Iterate the CBitmap* vector at +0x3580..+0x358C (bitmap_ptr/end/cap) and for each non-null entry call vtable[6](release) then vtable[0](1) (destructor + free).
+     d. Call vtable[3](1) on layer_2 (+0x3DA4), layer_1 (+0x3DA0), layer_0 (+0x3D9C) — three render-context BitGrids.
+     e. Iterate the FramePostProcessHook* std::vector at +0x24DF8 (start@+4, end@+8, cap@+0xC) and call vtable[0](1) on each entry.
+     f. Call g_DisplayGfx->vtable[7](1) — backend release.
+  3. Free the FramePostProcessHook std::vector data buffer (+0x24DFC) and clear the three vec pointers.
+  4. Rebind the embedded BitGrid at +0x3DA8 to &BitGrid__vtable, then if its external_buffer flag (+0x3DAC) is 0, free the data buffer (+0x3DB0).
+  5. Free the CBitmap vector data buffer (+0x3580) and clear all three vec pointers.
+  6. Call DisplayBase::Destructor (parent class).
+  7. Restore ExceptionList.
+"""
+
+[[function]]
+va = 0x0056A280
+name = "DisplayGfx__FreeLayerSpriteTable"
+plate_comment = """
+DisplayGfx::FreeLayerSpriteTable — iterates DisplayGfx::sprite_table[1..1024] (the bitmap-sprite array at this+0x3DD4) and for each non-null LayerSprite*:
+  1. If sprite->frame_array (+0x6c) is non-null, run a vector destructor over the LayerSpriteFrame array (count is stored at frame_array[-4]) calling LayerSpriteFrame::Destructor on each entry, then free the count-prefixed allocation.
+  2. Free the LayerSprite object itself.
+  3. Clear the slot to null.
+
+Iterates indices 1..0x400 (skips index 0). Called only from DisplayGfx::DestructorImpl (0x56A010).
+"""
+
+[[function]]
+va = 0x0056A2F0
+name = "DisplayGfx__FreeLayerSprite"
+
+[[function]]
+va = 0x0056A330
+name = "DisplayGfx__FlushRenderLock"
+
+[[function]]
+va = 0x0056A370
+name = "DisplayGfx__AcquireRenderLock"
+
+[[function]]
+va = 0x0056A460
+name = "DisplayGfx__GetDimensions"
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "DisplayGfx *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "out_w"
+  type = "uint *"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "out_h"
+  type = "uint *"
+  storage = "stack:0x8"
+
+[[function]]
+va = 0x0056A480
+name = "DisplayGfx__IsSpriteLoaded"
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "uint"
+
+  [[function.param]]
+  name = "this"
+  type = "DisplayGfx *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "id"
+  type = "int"
+  storage = "stack:0x4"
+
+[[function]]
+va = 0x0056A4C0
+name = "DisplayGfx__LoadSpriteByLayer"
+calling_convention = "__thiscall"
+custom_storage = true
+plate_comment = "DisplayGfx::LoadSpriteByLayer (vtable slot 37, 0x56A4C0)."
+
+  [function.signature]
+  returns = "int"
+
+  [[function.param]]
+  name = "this"
+  type = "DisplayGfx *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "layer"
+  type = "uint"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "id"
+  type = "uint"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "gfx"
+  type = "GfxDir *"
+  storage = "stack:0xC"
+
+  [[function.param]]
+  name = "name"
+  type = "const char *"
+  storage = "stack:0x10"
+
+[[function]]
+va = 0x0056A580
+name = "DisplayGfx__FlushRender"
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "DisplayGfx *"
+  storage = "ECX"
+
+[[function]]
+va = 0x0056A5D0
+name = "DisplayGfx__SetLayerVisibility"
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "DisplayGfx *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "layer"
+  type = "int"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "visible"
+  type = "int"
+  storage = "stack:0x8"
+
+[[function]]
+va = 0x0056A610
+name = "DisplayGfx__UpdatePalette"
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "DisplayGfx *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "palette_ctx"
+  type = "PaletteContext *"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "commit"
+  type = "int"
+  storage = "stack:0x8"
+
+[[function]]
+va = 0x0056A700
+name = "DisplayGfx__BlitBitmapClipped"
+
+[[function]]
+va = 0x0056A7D0
+name = "DisplayGfx__BlitBitmapTiled"
+
+[[function]]
+va = 0x0056AEA0
+name = "DisplayGfx__BlitWithColorTable"
+
+[[function]]
+va = 0x0056AEF0
+name = "DisplayGfx__BlitStippled"
+calling_convention = "__stdcall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "void *"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "dst_x"
+  type = "uint"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "dst_y"
+  type = "int"
+  storage = "stack:0xC"
+
+  [[function.param]]
+  name = "width"
+  type = "int"
+  storage = "stack:0x10"
+
+  [[function.param]]
+  name = "sprite"
+  type = "DisplayBitGrid *"
+  storage = "stack:0x14"
+
+  [[function.param]]
+  name = "src_x"
+  type = "int"
+  storage = "stack:0x18"
+
+  [[function.param]]
+  name = "src_y"
+  type = "int"
+  storage = "stack:0x1C"
+
+  [[function.param]]
+  name = "stipple_mode"
+  type = "uint"
+  storage = "stack:0x20"
+
+  [[function.param]]
+  name = "height"
+  type = "int"
+  storage = "EAX"
+
+[[function]]
+va = 0x0056AFB0
+name = "DisplayGfx__BlitNormal"
+
+[[function]]
+va = 0x0056B000
+name = "DisplayGfx__BlitTiled"
+
+[[function]]
+va = 0x0056B080
+name = "DisplayGfx__BlitSprite"
+calling_convention = "__thiscall"
+custom_storage = true
+plate_comment = "DisplayGfx::BlitSprite (vtable slot 19, 0x56B080). sprite is a SpriteOp encoding sprite ID + flags. anim_value drives palette/animation."
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "DisplayGfx *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "x"
+  type = "Fixed"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "y"
+  type = "Fixed"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "sprite"
+  type = "SpriteOp"
+  storage = "stack:0xC"
+
+  [[function.param]]
+  name = "anim_value"
+  type = "Fixed"
+  storage = "stack:0x10"
+
+[[function]]
+va = 0x0056B660
+name = "DisplayGfx__DrawScaledSprite"
+calling_convention = "__thiscall"
+custom_storage = true
+plate_comment = "DisplayGfx::DrawScaledSprite (vtable slot 20, 0x56B660). Fixed-point world coords. sprite is a source DisplayBitGrid pointer."
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "DisplayGfx *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "x"
+  type = "Fixed"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "y"
+  type = "Fixed"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "sprite"
+  type = "DisplayBitGrid *"
+  storage = "stack:0xC"
+
+  [[function.param]]
+  name = "src_x"
+  type = "int"
+  storage = "stack:0x10"
+
+  [[function.param]]
+  name = "src_y"
+  type = "int"
+  storage = "stack:0x14"
+
+  [[function.param]]
+  name = "src_w"
+  type = "int"
+  storage = "stack:0x18"
+
+  [[function.param]]
+  name = "src_h"
+  type = "int"
+  storage = "stack:0x1C"
+
+  [[function.param]]
+  name = "flags"
+  type = "uint"
+  storage = "stack:0x20"
+
+[[function]]
+va = 0x0056B7C0
+name = "DisplayGfx__DrawViaCallback"
+calling_convention = "__thiscall"
+custom_storage = true
+plate_comment = "DisplayGfx::DrawViaCallback (vtable slot 21, 0x56B7C0). Calls vtable[2] on the object with camera-adjusted coords. Fixed-point coords."
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "DisplayGfx *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "x"
+  type = "Fixed"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "y"
+  type = "Fixed"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "obj"
+  type = "byte *"
+  storage = "stack:0xC"
+
+  [[function.param]]
+  name = "p5"
+  type = "uint"
+  storage = "stack:0x10"
+
+  [[function.param]]
+  name = "p6"
+  type = "uint"
+  storage = "stack:0x14"
+
+[[function]]
+va = 0x0056B810
+name = "DisplayGfx__FillRect"
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "DisplayGfx *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "x1"
+  type = "int"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "y1"
+  type = "int"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "x2"
+  type = "int"
+  storage = "stack:0xC"
+
+  [[function.param]]
+  name = "y2"
+  type = "int"
+  storage = "stack:0x10"
+
+  [[function.param]]
+  name = "color"
+  type = "uint"
+  storage = "stack:0x14"
+
+[[function]]
+va = 0x0056B8C0
+name = "DisplayGfx__DrawTiledBitmap"
+calling_convention = "__thiscall"
+custom_storage = true
+plate_comment = "DisplayGfx::DrawTiledBitmap (vtable slot 11, 0x56B8C0). Three-phase tile-cached landscape blit. Source is a TiledBitmapSource descriptor."
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "DisplayGfx *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "dest_x"
+  type = "int"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "dest_y"
+  type = "int"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "source"
+  type = "const TiledBitmapSource *"
+  storage = "stack:0xC"
+
+[[function]]
+va = 0x0056BCC0
+name = "DisplayGfx__DrawPolyline"
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "DisplayGfx *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "points"
+  type = "int *"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "count"
+  type = "int"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "color"
+  type = "uint"
+  storage = "stack:0xC"
+
+[[function]]
+va = 0x0056BD50
+name = "DisplayGfx__DrawLineClipped"
+calling_convention = "__thiscall"
+custom_storage = true
+plate_comment = "DisplayGfx::DrawLineClipped (vtable slot 14, 0x56BD50). Fixed-point coords."
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "DisplayGfx *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "x1"
+  type = "Fixed"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "y1"
+  type = "Fixed"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "x2"
+  type = "Fixed"
+  storage = "stack:0xC"
+
+  [[function.param]]
+  name = "y2"
+  type = "Fixed"
+  storage = "stack:0x10"
+
+  [[function.param]]
+  name = "color"
+  type = "uint"
+  storage = "stack:0x14"
+
+[[function]]
+va = 0x0056BDB0
+name = "DisplayGfx__DrawLine"
+calling_convention = "__thiscall"
+custom_storage = true
+plate_comment = "DisplayGfx::DrawLine (vtable slot 13, 0x56BDB0). Fixed-point input; camera is applied as `camera * 0x10000 + coord`."
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "DisplayGfx *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "x1"
+  type = "Fixed"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "y1"
+  type = "Fixed"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "x2"
+  type = "Fixed"
+  storage = "stack:0xC"
+
+  [[function.param]]
+  name = "y2"
+  type = "Fixed"
+  storage = "stack:0x10"
+
+  [[function.param]]
+  name = "color1"
+  type = "uint"
+  storage = "stack:0x14"
+
+  [[function.param]]
+  name = "color2"
+  type = "uint"
+  storage = "stack:0x18"
+
+[[function]]
+va = 0x0056BE10
+name = "DisplayGfx__DrawPixelStrip"
+calling_convention = "__thiscall"
+custom_storage = true
+plate_comment = "DisplayGfx::DrawPixelStrip (vtable slot 15, 0x56BE10). Draws count+1 pixels at (x,y), stepping by (dx,dy). Fixed-point coords."
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "DisplayGfx *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "x"
+  type = "Fixed"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "y"
+  type = "Fixed"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "dx"
+  type = "Fixed"
+  storage = "stack:0xC"
+
+  [[function.param]]
+  name = "dy"
+  type = "Fixed"
+  storage = "stack:0x10"
+
+  [[function.param]]
+  name = "count"
+  type = "int"
+  storage = "stack:0x14"
+
+  [[function.param]]
+  name = "color"
+  type = "uint"
+  storage = "stack:0x18"
+
+[[function]]
+va = 0x0056BE80
+name = "DisplayGfx__DrawCrosshair"
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "DisplayGfx *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "x"
+  type = "int"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "y"
+  type = "int"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "color_fg"
+  type = "uint"
+  storage = "stack:0xC"
+
+  [[function.param]]
+  name = "color_bg"
+  type = "uint"
+  storage = "stack:0x10"
+
+[[function]]
+va = 0x0056BFD0
+name = "DisplayGfx__DrawOutlinedPixel"
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "DisplayGfx *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "x"
+  type = "int"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "y"
+  type = "int"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "color_fg"
+  type = "uint"
+  storage = "stack:0xC"
+
+  [[function.param]]
+  name = "color_bg"
+  type = "int"
+  storage = "stack:0x10"
+
+[[function]]
+va = 0x0056C5A0
+name = "DisplayGfx__DrawTiledTerrain"
+calling_convention = "__thiscall"
+custom_storage = true
+plate_comment = "DisplayGfx::DrawTiledTerrain (vtable slot 22, 0x56C5A0). Tiles bitmaps from a grid config with camera offset."
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "DisplayGfx *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "x"
+  type = "Fixed"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "y"
+  type = "Fixed"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "count"
+  type = "int"
+  storage = "stack:0xC"
+
+  [[function.param]]
+  name = "flags"
+  type = "uint"
+  storage = "stack:0x10"
+
+[[function]]
+va = 0x0056C2E0
+name = "DisplayGfx__sub_56C2E0"
+
+[[function]]
+va = 0x0056C330
+name = "DisplayGfx__CommitLayerRect"
+calling_convention = "__thiscall"
+custom_storage = true
+plate_comment = """
+DisplayGfx::CommitLayerRect (vtable slot 39, 0x56C330). Walks the tile
+grid covering [x1..x2] × [y1..y2], allocates any missing DDraw surfaces
+via g_DisplayGfx, and copies the layer's pixel data into each affected
+tile. Currently gated on layer == 1 — any other value is a no-op.
+
+Sole non-test caller is Landscape::flush_dirty_rects, which drains its
+queue of terrain-modification rects through this slot.
+"""
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "DisplayGfx *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "layer"
+  type = "uint"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "x1"
+  type = "int"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "y1"
+  type = "int"
+  storage = "stack:0xC"
+
+  [[function.param]]
+  name = "x2"
+  type = "int"
+  storage = "stack:0x10"
+
+  [[function.param]]
+  name = "y2"
+  type = "int"
+  storage = "stack:0x14"
+
+[[function]]
+va = 0x0056CC40
+name = "DisplayGfx__SetCameraOffset"
+calling_convention = "__thiscall"
+custom_storage = true
+plate_comment = "DisplayGfx::SetCameraOffset (vtable slot 27, 0x56CC40). Fixed-point input; internally >> 16 to pixel integers stored in camera_x/y."
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "DisplayGfx *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "x"
+  type = "Fixed"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "y"
+  type = "Fixed"
+  storage = "stack:0x8"
+
+[[function]]
+va = 0x0056CC60
+name = "DisplayGfx__SetClipRect"
+calling_convention = "__thiscall"
+custom_storage = true
+plate_comment = "DisplayGfx::SetClipRect (vtable slot 28, 0x56CC60). Fixed-point input; internally >> 16 to pixel integers, clamped to display dimensions."
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "DisplayGfx *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "x1"
+  type = "Fixed"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "y1"
+  type = "Fixed"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "x2"
+  type = "Fixed"
+  storage = "stack:0xC"
+
+  [[function.param]]
+  name = "y2"
+  type = "Fixed"
+  storage = "stack:0x10"
+
+[[function]]
+va = 0x0056CD20
+name = "DisplayGfx__PaletteCommit"
+calling_convention = "__stdcall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "DisplayGfx *"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "dirty_min"
+  type = "uint"
+  storage = "EAX"
+
+  [[function.param]]
+  name = "dirty_max"
+  type = "uint"
+  storage = "EDX"
+
+[[function]]
+va = 0x0056CDB0
+name = "DisplayGfx__DispatchFramePostProcessHooks"
+plate_comment = """
+DisplayGfx::DispatchFramePostProcessHooks — usercall on DisplayGfx*. Iterates the std::vector at this+0x24DF8 of FramePostProcessHook* (one per registered hook), in two phases:
+
+  Phase 1 (poll): for each entry, call vtable[1]() (= GetCaptureRequest); track the max non-zero return value.
+
+  Phase 2 (dispatch): if any entry returned non-zero, call DisplayGfx::AcquireRenderLock, then re-iterate and for each entry whose vtable[1]() is non-zero, call vtable[2](this->layer_0). Slot 2 receives the rendered frame as a DisplayBitGrid* and is expected to read pixels out of it.
+
+Called once per frame from RenderFrame_Maybe (0x56E06C). The shipping game registers exactly one entry — the PNG screenshot writer with vtable 0x66A2C4.
+"""
+
+[[function]]
+va = 0x0056CF50
+name = "DisplayGfx__sub_56CF50"
+
+[[function]]
+va = 0x005703E0
+name = "DisplayGfx__InitTeamPaletteDisplayObjects"
+
+[[function]]
+va = 0x005733B0
+name = "DisplayGfx__LoadSpriteByName"
+
+[[function]]
+va = 0x00573C50
+name = "DisplayGfx__GetBitmapSpriteInfo"
+
+[[struct]]
+name = "DisplayGfx"
+namespace = "/OpenWA"
+size = 0x24E28
+rust_path = "openwa_game::render::display::gfx::DisplayGfx"
+
+  [[struct.field]]
+  offset = 0x0
+  name = "vtable"
+  type = "DisplayGfxVtable *"
+  size = 0x4
+  comment = "DisplayGfx vtable (0x66A218)."
+
+[[global]]
+va = 0x00664144
+name = "DisplayGfx__vtable"
+
+[[global]]
+va = 0x006A9020
+name = "G_TEXTBOX_FONT_ID_TABLE"
+comment = "Flat int32 table indexed by `font_index + style_index*10`. Each entry is the font_id passed to DisplayGfx vtable slot 7 (draw_text_on_bitmap). Consumed by SetTextboxText (0x004FB070)."
+
+[[global]]
+va = 0x006A9038
+name = "G_TEXTBOX_STYLE_TABLE"
+comment = "`style_index`-indexed table (stride 0x28). Slot 0 of each entry is the font_id consumed by `Textbox::construct` (DisplayGfx slot 8 / get_font_info)."
+
+[[vtable]]
+name = "DisplayGfxVtable"
+va = 0x0066A218
+size = 40
+plate_comment = """
+DisplayGfx vtable (40 slots, 0x66A218). Subclasses DisplayBase. Slots 2,
+3, 25, 29 are stubs (WorldEntity no-ops). Slot 38 unused.
+
+Coordinate conventions:
+- Methods that add `camera * 0x10000` take Fixed (16.16) coordinates.
+- Methods that add `camera` directly take pixel-integer coordinates.
+"""
+
+  [[vtable.slot]]
+  index = 0
+  name = "destructor"
+  wa_function = "DisplayGfx__Destructor"
+  doc = "Scalar deleting destructor thunk (0x569CE0). Wired via vtable_replace! → display_gfx_destructor."
+
+  [[vtable.slot]]
+  index = 1
+  name = "get_dimensions"
+  wa_function = "DisplayGfx__GetDimensions"
+  doc = "Get display dimensions in pixels (0x56A460)."
+
+  [[vtable.slot]]
+  index = 2
+  name = "slot_02_noop"
+  wa_function = "WorldEntity__vt19"
+  doc = "Noop stub (0x4AA060, shared with other classes' unused vtable slots)."
+
+  [[vtable.slot]]
+  index = 4
+  name = "set_layer_color"
+  wa_function = "DisplayGfx__SetLayerColor"
+  doc = "Set layer color (0x5231E0)."
+
+  [[vtable.slot]]
+  index = 5
+  name = "set_active_layer"
+  wa_function = "DisplayGfx__SetActiveLayer"
+  doc = "Set active layer, returns layer context ptr (0x523270)."
+
+  [[vtable.slot]]
+  index = 6
+  name = "get_sprite_info"
+  wa_function = "DisplayGfx__GetSpriteInfo"
+  doc = "Get sprite info by layer and id (0x523500)."
+
+  [[vtable.slot]]
+  index = 7
+  name = "draw_text_on_bitmap"
+  wa_function = "DisplayGfx__DrawTextOnBitmap"
+  doc = "Draw bitmap text onto a BitGrid surface (0x5236B0)."
+
+  [[vtable.slot]]
+  index = 8
+  name = "get_font_info"
+  wa_function = "DisplayGfx__GetFontInfo"
+  doc = "Get font info for a font slot (0x523790)."
+
+  [[vtable.slot]]
+  index = 9
+  name = "get_font_metric"
+  wa_function = "DisplayGfx__GetFontMetric"
+  doc = "Get font metric for a character (0x523750)."
+
+  [[vtable.slot]]
+  index = 10
+  name = "measure_text"
+  wa_function = "DisplayGfx__MeasureText"
+  doc = "Measure text width (0x523710)."
+
+  [[vtable.slot]]
+  index = 11
+  name = "draw_tiled_bitmap"
+  wa_function = "DisplayGfx__DrawTiledBitmap"
+  doc = "Three-phase tile-cached landscape blit (0x56B8C0)."
+
+  [[vtable.slot]]
+  index = 12
+  name = "draw_polyline"
+  wa_function = "DisplayGfx__DrawPolyline"
+  doc = "Draw polyline with camera offset (0x56BCC0)."
+
+  [[vtable.slot]]
+  index = 13
+  name = "draw_line"
+  wa_function = "DisplayGfx__DrawLine"
+  doc = "Draw line with camera offset (0x56BDB0). Fixed-point coords."
+
+  [[vtable.slot]]
+  index = 14
+  name = "draw_line_clipped"
+  wa_function = "DisplayGfx__DrawLineClipped"
+  doc = "Draw line with camera offset and clip (0x56BD50). Fixed-point coords."
+
+  [[vtable.slot]]
+  index = 15
+  name = "draw_pixel_strip"
+  wa_function = "DisplayGfx__DrawPixelStrip"
+  doc = "Draw repeated pixels along a vector (0x56BE10). Fixed-point coords."
+
+  [[vtable.slot]]
+  index = 16
+  name = "draw_crosshair"
+  wa_function = "DisplayGfx__DrawCrosshair"
+  doc = "Draw crosshair pattern (0x56BE80). Pixel-integer coords."
+
+  [[vtable.slot]]
+  index = 17
+  name = "draw_outlined_pixel"
+  wa_function = "DisplayGfx__DrawOutlinedPixel"
+  doc = "Draw outlined pixel — center + 4 cardinal neighbors (0x56BFD0). Pixel-integer coords."
+
+  [[vtable.slot]]
+  index = 18
+  name = "fill_rect"
+  wa_function = "DisplayGfx__FillRect"
+  doc = "Fill rectangle with camera offset and clipping (0x56B810). Pixel-integer coords."
+
+  [[vtable.slot]]
+  index = 19
+  name = "blit_sprite"
+  wa_function = "DisplayGfx__BlitSprite"
+  doc = "Blit sprite to display (0x56B080). Fixed-point coords."
+
+  [[vtable.slot]]
+  index = 20
+  name = "draw_scaled_sprite"
+  wa_function = "DisplayGfx__DrawScaledSprite"
+  doc = "Draw scaled/rotated sprite (0x56B660). Fixed-point coords."
+
+  [[vtable.slot]]
+  index = 21
+  name = "draw_via_callback"
+  wa_function = "DisplayGfx__DrawViaCallback"
+  doc = "Draw via object callback (0x56B7C0). Fixed-point coords."
+
+  [[vtable.slot]]
+  index = 22
+  name = "draw_tiled_terrain"
+  wa_function = "DisplayGfx__DrawTiledTerrain"
+  doc = "Draw tiled terrain (0x56C5A0). Fixed-point coords."
+
+  [[vtable.slot]]
+  index = 23
+  name = "set_layer_visibility"
+  wa_function = "DisplayGfx__SetLayerVisibility"
+  doc = "Set layer visibility (0x56A5D0)."
+
+  [[vtable.slot]]
+  index = 24
+  name = "update_palette"
+  wa_function = "DisplayGfx__UpdatePalette"
+  doc = "Update palette from PaletteContext (0x56A610)."
+
+  [[vtable.slot]]
+  index = 25
+  name = "slot_25_stub"
+  doc = "Stub (WorldEntity__vt19)."
+
+  [[vtable.slot]]
+  index = 26
+  name = "flush_render"
+  wa_function = "DisplayGfx__FlushRender"
+  doc = "Flush pending render state (0x56A580)."
+
+  [[vtable.slot]]
+  index = 27
+  name = "set_camera_offset"
+  wa_function = "DisplayGfx__SetCameraOffset"
+  doc = "Set camera offset (0x56CC40). Fixed-point input."
+
+  [[vtable.slot]]
+  index = 28
+  name = "set_clip_rect"
+  wa_function = "DisplayGfx__SetClipRect"
+  doc = "Set clip rectangle (0x56CC60). Fixed-point input."
+
+  [[vtable.slot]]
+  index = 29
+  name = "slot_29_stub"
+  doc = "Stub (WorldEntity__vt18)."
+
+  [[vtable.slot]]
+  index = 30
+  name = "load_sprite_ex"
+  wa_function = "DisplayGfx__LoadSpriteEx"
+  doc = "Load sprite with extended params (0x523310)."
+
+  [[vtable.slot]]
+  index = 31
+  name = "load_sprite"
+  wa_function = "DisplayGfx__LoadSprite"
+  doc = "Load sprite into layer (0x523400)."
+
+  [[vtable.slot]]
+  index = 32
+  name = "is_sprite_loaded"
+  wa_function = "DisplayGfx__IsSpriteLoaded"
+  doc = "Check if a sprite ID is loaded (0x56A480)."
+
+  [[vtable.slot]]
+  index = 33
+  name = "get_sprite_frame_for_blit"
+  wa_function = "DisplayGfx__GetSpriteFrameForBlit"
+  doc = "Look up a sprite frame's surface and metadata for blitting (0x5237C0)."
+
+  [[vtable.slot]]
+  index = 34
+  name = "load_font"
+  wa_function = "DisplayGfx__LoadFont"
+  doc = "Load .fnt bitmap font into a font slot (0x523560)."
+
+  [[vtable.slot]]
+  index = 35
+  name = "load_font_extension"
+  wa_function = "DisplayGfx__LoadFontExtension"
+  doc = "Load .fex font extension for a font slot (0x523620)."
+
+  [[vtable.slot]]
+  index = 36
+  name = "set_font_palette"
+  wa_function = "DisplayGfx__SetFontPalette"
+  doc = "Set font palette for all loaded fonts (0x523690)."
+
+  [[vtable.slot]]
+  index = 37
+  name = "load_sprite_by_layer"
+  wa_function = "DisplayGfx__LoadSpriteByLayer"
+  doc = "Load sprite by layer with fallback allocation (0x56A4C0)."
+
+  [[vtable.slot]]
+  index = 39
+  name = "commit_layer_rect"
+  wa_function = "DisplayGfx__CommitLayerRect"
+  doc = "Commit a layer's dirty rectangle to the DDraw tile cache (0x56C330)."

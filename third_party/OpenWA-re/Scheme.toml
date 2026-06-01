@@ -1,0 +1,160 @@
+[[function]]
+va = 0x004D3890
+name = "Scheme__ReadFile"
+calling_convention = "__stdcall"
+
+  [function.signature]
+  returns = "uint"
+
+  [[function.param]]
+  name = "dest_struct"
+  type = "uint"
+
+  [[function.param]]
+  name = "file_path"
+  type = "uint"
+
+  [[function.param]]
+  name = "flag"
+  type = "uint"
+
+  [[function.param]]
+  name = "out_ptr"
+  type = "uint"
+
+[[function]]
+va = 0x004D4480
+name = "Scheme__DetectVersion"
+calling_convention = "__stdcall"
+custom_storage = true
+
+  [function.signature]
+  returns = "uint"
+
+  [[function.param]]
+  name = "dest"
+  type = "undefined4"
+  storage = "ESI"
+
+  [[function.param]]
+  name = "output_ptr"
+  type = "undefined4"
+  storage = "stack:0x4"
+
+[[function]]
+va = 0x004D44F0
+name = "Scheme__SaveFile"
+calling_convention = "__fastcall"
+
+  [function.signature]
+  returns = "uint"
+
+  [[function.param]]
+  name = "this"
+  type = "uint"
+
+  [[function.param]]
+  name = "edx"
+  type = "uint"
+
+  [[function.param]]
+  name = "name"
+  type = "uint"
+
+  [[function.param]]
+  name = "flag"
+  type = "uint"
+
+[[function]]
+va = 0x004D4CD0
+name = "Scheme__FileExists"
+calling_convention = "__stdcall"
+
+  [function.signature]
+  returns = "uint"
+
+  [[function.param]]
+  name = "name"
+  type = "uint"
+
+[[function]]
+va = 0x004D4E00
+name = "Scheme__LoadNumbered"
+calling_convention = "__stdcall"
+
+  [function.signature]
+  returns = "uint"
+
+  [[function.param]]
+  name = "name"
+  type = "uint"
+
+[[function]]
+va = 0x004D5020
+name = "Scheme__InitFromData"
+calling_convention = "__fastcall"
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "ecx"
+  type = "uint"
+
+  [[function.param]]
+  name = "src_data"
+  type = "uint"
+
+  [[function.param]]
+  name = "dest"
+  type = "uint"
+
+  [[function.param]]
+  name = "name_cstring"
+  type = "uint"
+
+[[function]]
+va = 0x004D50E0
+name = "Scheme__CheckWeaponLimits"
+calling_convention = "__stdcall"
+
+  [function.signature]
+  returns = "uint"
+
+[[function]]
+va = 0x004D5110
+name = "Scheme__ValidateExtendedOptions"
+calling_convention = "__cdecl"
+custom_storage = true
+
+  [function.signature]
+  returns = "uint"
+
+  [[function.param]]
+  name = "options_ptr"
+  type = "undefined4"
+  storage = "EAX"
+
+[[function]]
+va = 0x004D54E0
+name = "Scheme__ScanDirectory"
+calling_convention = "__stdcall"
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "cstring_param"
+  type = "uint"
+
+[[function]]
+va = 0x004D5720
+name = "Scheme__ExtractBuiltins"
+calling_convention = "__stdcall"
+
+  [function.signature]
+  returns = "void"
+
+[[function]]
+va = 0x004DA4C0
+name = "Scheme__Slot13Check"

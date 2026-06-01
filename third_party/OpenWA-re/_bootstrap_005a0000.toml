@@ -1,0 +1,12 @@
+[[function]]
+va = 0x005A2020
+name = "BlitScreen"
+
+# 0x005A2430 ConstructFrameBuffer and 0x005A2790 DrawLandscape moved to
+# re/RenderContext.toml as RenderContext__ConstructFrameBuffer and
+# RenderContext__DrawLandscape (vtable slots 6 and 23, __fastcall on
+# RenderContext *).
+
+[[function]]
+va = 0x005A4CA0
+name = "_WinMain_16_0"

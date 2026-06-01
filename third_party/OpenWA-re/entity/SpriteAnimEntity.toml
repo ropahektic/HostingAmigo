@@ -1,0 +1,90 @@
+[[function]]
+va = 0x005466C0
+name = "SpriteAnimEntity__Constructor"
+
+[[global]]
+va = 0x00669D00
+name = "SpriteAnimEntity__vtable"
+
+[[function]]
+va = 0x00546760
+name = "SpriteAnimEntity__message"
+
+[[function]]
+va = 0x00547C30
+name = "SpawnParticle"
+calling_convention = "__stdcall"
+custom_storage = true
+plate_comment = """
+Append a particle to the SpriteAnimEntity pool (singleton at SharedData type 0x1A, vtable 0x00669D00).
+
+Convention: __usercall(EAX=render_layer, ECX=pos_x) + stdcall(arg1..arg7), RET 0x1C, with ESI = sender at entry. SharedData__Lookup(ESI) returns the SpriteAnimEntity; if non-null, calls vtable[2] = HandleMessage(target, ESI, 0x56 CreateAnimation, 0x408, &payload).
+
+The 0x408-byte payload is the function's stack scratch. The msg-0x56 handler copies these 11 dwords into a fresh particle slot (slot stride 0x2C, base SpriteAnimEntity+0x30, capacity 64):
+  payload +0x00 → slot +0x00 = render_layer  (opaque Z-sort key — 0x80000 standard, smaller = behind)
+  payload +0x04 → slot +0x04 = pos_x         (initial position)
+  payload +0x08 → slot +0x08 = pos_y
+  payload +0x0C → slot +0x0C = vel_x         (velocity per tick)
+  payload +0x10 → slot +0x10 = vel_y
+  payload +0x14 → slot +0x14 = accel_x       (gravity-x, always 0)
+  payload +0x18 → slot +0x18 = accel_y       (gravity-y, from CollisionManager.particle_gravity_y; 0 in tested replays)
+  payload +0x1C → slot +0x28 = sprite_id     (e.g. 0x76/0x77 damage spurt, 0x50 punch spark, 0x73/0x75 muzzle flash)
+  payload +0x24 → slot +0x1C = anim_value    (initial sprite-strip frame)
+  payload +0x28 → slot +0x20 = lifetime      (slot freed when anim_value >= lifetime)
+  payload +0x2C → slot +0x24 = anim_step     (per-frame anim_value increment)
+
+The current Rust impl preserves the historical arg names `speed_x/speed_y/rng_scaled/rng_offset/size/scale` for stability; only the three slot-mis-named args (render_layer, accel_y, sprite_id) have been corrected so far.
+"""
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "sender"
+  type = "BaseEntity *"
+  storage = "ESI"
+
+  [[function.param]]
+  name = "render_layer"
+  type = "uint"
+  storage = "EAX"
+
+  [[function.param]]
+  name = "speed_x"
+  type = "Fixed"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "speed_y"
+  type = "Fixed"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "rng_scaled"
+  type = "int"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "rng_offset"
+  type = "int"
+  storage = "stack:0xC"
+
+  [[function.param]]
+  name = "accel_y"
+  type = "Fixed"
+  storage = "stack:0x10"
+
+  [[function.param]]
+  name = "sprite_id"
+  type = "uint"
+  storage = "stack:0x14"
+
+  [[function.param]]
+  name = "size"
+  type = "Fixed"
+  storage = "stack:0x18"
+
+  [[function.param]]
+  name = "scale"
+  type = "Fixed"
+  storage = "stack:0x1C"

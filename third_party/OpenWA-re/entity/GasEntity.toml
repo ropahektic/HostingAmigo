@@ -1,0 +1,239 @@
+[[function]]
+va = 0x00554750
+name = "GasEntity__Constructor"
+calling_convention = "__stdcall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "GasEntity *"
+  storage = "ESI"
+
+  [[function.param]]
+  name = "parent"
+  type = "BaseEntity *"
+  storage = "EAX"
+
+  [[function.param]]
+  name = "spawn_x"
+  type = "Fixed"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "spawn_y"
+  type = "Fixed"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "sprite"
+  type = "uint"
+  storage = "stack:0xC"
+
+  [[function.param]]
+  name = "owner"
+  type = "uint"
+  storage = "stack:0x10"
+
+[[function]]
+va = 0x00554810
+name = "GasEntity__ctor1_GasEntity"
+
+[[function]]
+va = 0x005548E0
+name = "GasEntity__WriteReplayState"
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "GasEntity *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "stream"
+  type = "byte *"
+  storage = "stack:0x4"
+
+[[function]]
+va = 0x00554980
+name = "GasEntity__check_for_target"
+calling_convention = "__stdcall"
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "GasEntity *"
+
+  [[function.param]]
+  name = "range"
+  type = "int"
+
+[[function]]
+va = 0x00554A70
+name = "GasEntity__HandleMessage"
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "GasEntity *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "sender"
+  type = "BaseEntity *"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "msg_type"
+  type = "EntityMessage"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "size"
+  type = "uint"
+  storage = "stack:0xC"
+
+  [[function.param]]
+  name = "data"
+  type = "const byte *"
+  storage = "stack:0x10"
+
+[[struct]]
+name = "GasEntity"
+namespace = "/OpenWA"
+size = 0x88
+rust_path = "openwa_game::entity::gas::GasEntity"
+plate_comment = """
+Gas-cloud entity (poison particle). Extends BaseEntity directly (not
+WorldEntity) — no physics body. Allocation: 0x88 bytes; only the first
+0x68 are memset by the caller. Spawned by MissileEntity (poisoned animal
+trail), WormEntity (poison suicide), and CanisterEntity (vent).
+"""
+
+  [[struct.field]]
+  offset = 0x0
+  name = "vtable"
+  type = "GasEntityVtable *"
+  size = 0x4
+
+  [[struct.field]]
+  offset = 0x30
+  name = "sprite_id"
+  type = "uint"
+  comment = "Sprite id passed at spawn — selects the gas cloud sprite."
+
+  [[struct.field]]
+  offset = 0x34
+  name = "pos_x"
+  type = "Fixed"
+
+  [[struct.field]]
+  offset = 0x38
+  name = "pos_y"
+  type = "Fixed"
+
+  [[struct.field]]
+  offset = 0x3C
+  name = "vel_x"
+  type = "Fixed"
+  comment = "Per-frame velocity X. Cleared by ctor; jittered each tick by RNG + collision-manager wind bias, then scaled by drag."
+
+  [[struct.field]]
+  offset = 0x40
+  name = "vel_y"
+  type = "Fixed"
+  comment = "Per-frame velocity Y. Cleared by ctor; combined with gravity each tick (order depends on game_version), jittered by RNG, scaled by drag."
+
+  [[struct.field]]
+  offset = 0x44
+  name = "fade_progress"
+  type = "Fixed"
+  comment = "Fade-progress accumulator (0..1.0). Increments by fade_rate each tick; despawn triggers when the integer part reaches 1."
+
+  [[struct.field]]
+  offset = 0x48
+  name = "fade_rate"
+  type = "Fixed"
+  comment = "Per-tick fade increment. Seeded by ctor to (rng & 0xFFFF)/200 + 0x3D7 — raw ~983..1311 ≈ 0.015..0.020 as Fixed, giving a cloud lifespan of ~50..65 ticks."
+
+  [[struct.field]]
+  offset = 0x4C
+  name = "_field_4c"
+  type = "uint"
+  comment = "Initial value 0x00200260 (renderer flags / mass bucket)."
+
+  [[struct.field]]
+  offset = 0x50
+  name = "_field_50"
+  type = "uint"
+  comment = "Initial value 1 (alive flag, presumably)."
+
+  [[struct.field]]
+  offset = 0x54
+  name = "_field_54"
+  type = "uint"
+  comment = "Initial value 0x17."
+
+  [[struct.field]]
+  offset = 0x58
+  name = "anim_seed"
+  type = "uint"
+  comment = "Initial value (frame_counter & 0x3FF) + 0x70000 — per-instance animation seed."
+
+  [[struct.field]]
+  offset = 0x5C
+  name = "drag"
+  type = "Fixed"
+  comment = "Drag factor. Initial value 0xF333 ≈ 0.95. Mirrored (1.0 - drag) when world+0x7E28 != 0."
+
+  [[struct.field]]
+  offset = 0x60
+  name = "gravity"
+  type = "Fixed"
+  comment = "Gravity acceleration. Initial value 0xFFFFD99A ≈ -0.15."
+
+  [[struct.field]]
+  offset = 0x64
+  name = "owner_id"
+  type = "uint"
+  comment = "Owning team index (1-based)."
+
+  [[struct.field]]
+  offset = 0x68
+  type = "byte[0x20]"
+  comment = "Caller-zeroed scratch region used by GasEntity::HandleMessage."
+
+[[vtable]]
+name = "GasEntityVtable"
+va = 0x00669E50
+size = 7
+parent_vtable = "BaseEntityVtable"
+plate_comment = """
+GasEntity vtable — 7-slot BaseEntity shape. Overrides slot 0
+(WriteReplayState) and slot 2 (HandleMessage). All other slots
+inherited from BaseEntity.
+"""
+
+  [[vtable.slot]]
+  index = 0
+  name = "write_replay_state"
+  wa_function = "GasEntity__WriteReplayState"
+  doc = "WriteReplayState — serializes gas state to replay stream."
+
+  [[vtable.slot]]
+  index = 2
+  name = "handle_message"
+  wa_function = "GasEntity__HandleMessage"
+  doc = "HandleMessage — per-frame integrator, render, target sweep."

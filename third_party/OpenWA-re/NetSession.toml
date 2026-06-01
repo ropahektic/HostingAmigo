@@ -1,0 +1,185 @@
+[[function]]
+va = 0x0053E300
+name = "NetSession__PeerInputQueuePop"
+
+[[function]]
+va = 0x0053E720
+name = "NetSession__MaxActivePeerScore"
+
+[[struct]]
+name = "NetSession"
+namespace = "/OpenWA"
+size = 0x20
+rust_path = "openwa_game::engine::net_session::NetSession"
+
+  [[struct.field]]
+  offset = 0x0
+  name = "vtable"
+  type = "NetSessionVtable *"
+  size = 0x4
+
+  [[struct.field]]
+  offset = 0x4
+  name = "_field_04"
+  type = "uint"
+
+  [[struct.field]]
+  offset = 0x8
+  name = "peer_count"
+  type = "int"
+  comment = "Number of peers in the session (loop bound for per-peer sweeps in update_network_game / max_peer_score)."
+
+  [[struct.field]]
+  offset = 0xC
+  name = "self_peer_idx"
+  type = "int"
+  comment = "Our own peer index — excluded from NetSession__MaxActivePeerScore."
+
+  [[struct.field]]
+  offset = 0x1C
+  name = "send_countdown"
+  type = "int"
+  comment = "Periodic-send countdown. WS_GameNet__update (0x58C3D0) decrements it each net-frame and, when it goes negative or the outgoing buffer is >=75% full, calls GameNet__send_block and resets it to 0x32 (50 frames). update_network_game / begin_network_game_end force it to 100 right after an explicit flush. Drives the ~1 Hz keep-alive an idle host still emits."
+
+[[vtable]]
+name = "NetSessionVtable"
+size = 11
+plate_comment = """
+Per-game network session vtable (`GameWorld::net_session`). Multiple
+transport-specific subclasses (LAN, online, …) provide concrete
+implementations at distinct `.rdata` addresses; only the shared slot
+shape is known. Observed slots are the per-peer query API used during
+end-of-round peer synchronisation.
+"""
+
+  [[vtable.slot]]
+  index = 2
+  name = "submit_message_buffer"
+  doc = """slot 2 (+0x08): submit an outgoing message buffer for sending. Only observed call site is `begin_network_game_end`, which builds a 12-byte end-of-round message in `runtime.ring_buffer_a` and forwards it through this slot. Exact wire semantics unconfirmed; the buffer is freshly reset before the call so it contains exactly one message."""
+
+    [vtable.slot.signature]
+    calling_convention = "__thiscall"
+    returns = "void"
+
+      [[vtable.slot.signature.param]]
+      name = "this"
+      type = "NetSession *"
+
+      [[vtable.slot.signature.param]]
+      name = "buffer"
+      type = "BufferObject *"
+
+  [[vtable.slot]]
+  index = 3
+  name = "set_peer_state"
+  doc = """slot 3 (+0x0C): per-peer connection-state transition. Concrete impl is `WS_GameNet__SetPeerState` (0x58C520). Caller passes `(peer_idx, kind)`: `Game__update_network_game` uses `kind=4` when a peer's local score countdown hits <= 0; the connection-mask gossip (`update_mask`/`process_mask`) uses `kind=1/2`. Arms the peer's receive-countdown to a grace value or, if the peer is gone, times it out. See WS_GameNet__SetPeerState."""
+
+    [vtable.slot.signature]
+    calling_convention = "__thiscall"
+    returns = "void"
+
+      [[vtable.slot.signature.param]]
+      name = "this"
+      type = "NetSession *"
+
+      [[vtable.slot.signature.param]]
+      name = "peer_idx"
+      type = "int"
+
+      [[vtable.slot.signature.param]]
+      name = "kind"
+      type = "int"
+
+  [[vtable.slot]]
+  index = 4
+  name = "peer_score"
+  doc = """slot 4 (+0x10): per-peer score / remaining-timeout. Caller takes `max()` over all active peers to decide whether to keep waiting."""
+
+    [vtable.slot.signature]
+    calling_convention = "__thiscall"
+    returns = "int"
+
+      [[vtable.slot.signature.param]]
+      name = "this"
+      type = "NetSession *"
+
+      [[vtable.slot.signature.param]]
+      name = "idx"
+      type = "uint"
+
+  [[vtable.slot]]
+  index = 5
+  name = "sync_in_progress"
+  doc = "slot 5 (+0x14): is a sync still in progress? Non-zero = keep waiting."
+
+    [vtable.slot.signature]
+    calling_convention = "__thiscall"
+    returns = "uint"
+
+      [[vtable.slot.signature.param]]
+      name = "this"
+      type = "NetSession *"
+
+  [[vtable.slot]]
+  index = 6
+  name = "peer_active"
+  doc = "slot 6 (+0x18): is peer `idx` still active/participating?"
+
+    [vtable.slot.signature]
+    calling_convention = "__thiscall"
+    returns = "uint"
+
+      [[vtable.slot.signature.param]]
+      name = "this"
+      type = "NetSession *"
+
+      [[vtable.slot.signature.param]]
+      name = "idx"
+      type = "uint"
+
+  [[vtable.slot]]
+  index = 7
+  name = "peer_input_pending_maybe"
+  doc = """slot 7 (+0x1C): polled by `Game__update_network_game` after `Game__receive_messages` leaves the per-peer receive ring empty — non-zero return = peer still has input in flight, caller bumps `team_score_array_3[peer_idx]` and waits; zero return = peer has nothing pending, caller drops through to `Game__FlushPendingLocalLogic_Maybe`. Provisional name."""
+
+    [vtable.slot.signature]
+    calling_convention = "__thiscall"
+    returns = "int"
+
+      [[vtable.slot.signature.param]]
+      name = "this"
+      type = "NetSession *"
+
+      [[vtable.slot.signature.param]]
+      name = "peer_idx"
+      type = "int"
+
+  [[vtable.slot]]
+  index = 9
+  name = "peer_pending_maybe"
+  doc = """slot 9 (+0x24): per-peer "pending / not-yet-ready" query used by the online `ShouldInterpolate` branch (`GameRuntime__PeerInputsCaughtUp`). Caller treats a non-zero return combined with `team_scoring_a[idx] > 0` as "this peer still hasn't caught up" and suppresses interp. Exact semantics (vs. slot 6's `peer_active`) are unconfirmed — name is a guess."""
+
+    [vtable.slot.signature]
+    calling_convention = "__thiscall"
+    returns = "uint"
+
+      [[vtable.slot.signature.param]]
+      name = "this"
+      type = "NetSession *"
+
+      [[vtable.slot.signature.param]]
+      name = "idx"
+      type = "uint"
+
+  [[vtable.slot]]
+  index = 10
+  name = "end_handshake_busy_maybe"
+  doc = """slot 10 (+0x28): "still busy with end-of-round handshake" predicate. Polled by `render_network_end_wait_textbox` (formerly named `RenderTurnStatus`) in network mode when the `net_end_countdown` countdown has reached zero — a non-zero return suppresses the on-screen "PLEASE WAIT" textbox once the timeout has expired and the predicate signals real work in flight. Exact wire semantics unconfirmed; name is provisional."""
+
+    [vtable.slot.signature]
+    calling_convention = "__thiscall"
+    returns = "uint"
+
+      [[vtable.slot.signature.param]]
+      name = "this"
+      type = "NetSession *"

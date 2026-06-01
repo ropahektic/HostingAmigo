@@ -1,0 +1,52 @@
+[[function]]
+va = 0x004F9450
+name = "SpriteBank__Constructor"
+
+[[function]]
+va = 0x004F95A0
+name = "SpriteBank__InitFromGfxDir"
+
+[[function]]
+va = 0x004F9640
+name = "SpriteBank__ParseData"
+
+[[function]]
+va = 0x004F9710
+name = "SpriteBank__GetFrameForBlit"
+plate_comment = "SpriteBank__GetFrameForBlit — usercall ESI=this(SpriteBank*). Same role as Sprite__GetFrameForBlit but for SpriteBank-backed sprite IDs: walks the bank's index_table to map sprite_id to a frame index, then looks up the frame entry and decompresses its surface via FUN_004FA950. Called from DisplayGfx::GetSpriteFrameForBlit (slot 33, 0x5237C0) for the sprite_banks path."
+
+[[function]]
+va = 0x004F98C0
+name = "SpriteBank__GetInfo"
+
+[[struct]]
+name = "SpriteBank"
+namespace = "/OpenWA"
+size = 0x17C
+rust_path = "openwa_game::render::sprite::SpriteBank"
+
+  [[struct.field]]
+  offset = 0x0
+  name = "vtable"
+  type = "SpriteBankVtable *"
+  size = 0x4
+
+[[vtable]]
+name = "SpriteBankVtable"
+va = 0x00664180
+size = 2
+plate_comment = """
+SpriteBank vtable (0x664180, 2 slots). Slot 0 = SpriteBank::Destructor
+(0x4F94E0), slot 1 = FrameCache eviction callback (0x4F9580). Both
+untyped — no Rust call site dispatches through these slots.
+"""
+
+  [[vtable.slot]]
+  index = 0
+  name = "destructor"
+  doc = "SpriteBank::Destructor (0x4F94E0)."
+
+  [[vtable.slot]]
+  index = 1
+  name = "on_subframe_evicted"
+  doc = "FrameCache eviction callback (0x4F9580). Clears subframe_cache_table[idx].decoded_ptr at +0x8 (vs Sprite's +0x4)."

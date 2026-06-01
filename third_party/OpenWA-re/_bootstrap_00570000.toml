@@ -1,0 +1,59 @@
+[[function]]
+va = 0x00573D20
+name = "Stub_RetZero_Ret14"
+calling_convention = "__thiscall"
+custom_storage = true
+plate_comment = """
+Shared no-op vtable stub. `XOR EAX, EAX; RET 0x14`. Five stack args
+plus `this` in ECX; all ignored.
+"""
+
+  [function.signature]
+  returns = "uint"
+
+  [[function.param]]
+  name = "this"
+  type = "void *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "p0"
+  type = "uint"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "p1"
+  type = "uint"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "p2"
+  type = "uint"
+  storage = "stack:0xC"
+
+  [[function.param]]
+  name = "p3"
+  type = "uint"
+  storage = "stack:0x10"
+
+  [[function.param]]
+  name = "p4"
+  type = "uint"
+  storage = "stack:0x14"
+
+[[function]]
+va = 0x00575590
+name = "VectorNormalize_Simple"
+
+[[function]]
+va = 0x005755D0
+name = "VectorNormalize_Overflow"
+
+[[function]]
+va = 0x0057C300
+name = "WriteLandRaw"
+
+[[function]]
+va = 0x0057CC10
+name = "RedrawLandRegion"
+

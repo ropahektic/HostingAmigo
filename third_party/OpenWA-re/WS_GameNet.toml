@@ -1,0 +1,202 @@
+[[function]]
+va = 0x0058C060
+name = "WS_GameNet__ctor0_WS_GameNet"
+
+[[function]]
+va = 0x0058C080
+name = "WS_GameNet__ctor1_WS_GameNet"
+
+[[function]]
+va = 0x0058C2D0
+name = "WS_GameNet__data_pending"
+
+[[function]]
+va = 0x0058C3D0
+name = "WS_GameNet__update"
+plate_comment = "NetSession vtable slot 1 — the 50 Hz per-net-frame handler, called in a loop from NetSession__ProcessNetworkFrame (0x53DF00). Steps: (1) host (self_peer_idx==0) → WS_GameNet__update_mask; client → eager release_peer_maybe(0,2) if peer_playing[0]>0 && conn[0]->state(+0xB8)!=3. (2) per-peer receive-countdown sweep: decrement peer_recv_countdown[i] (+0x176C); on reaching 0, WS_GameNet__PeerTimeout(reason=peer_disconnect_reason[i]). (3) periodic send — decrement send_countdown (+0x1c) and, when it expires or the outgoing ring is >=75% full, call GameNet__send_block + reset to 0x32. (4) receive drain — always call GameNet__update_incoming_1. So even an idle host emits a ~1 Hz keep-alive here."
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "NetInputCtrl *"
+  storage = "ECX"
+
+[[function]]
+va = 0x0058C480
+name = "WS_GameNet__ispending"
+
+[[function]]
+va = 0x0058C4C0
+name = "WS_GameNet__isconnected"
+
+[[function]]
+va = 0x0058C4E0
+name = "WS_GameNet__IsPeerPlaying"
+plate_comment = "NetSession vtable slot 7. Returns `peer_playing[peer] > 0` (NetInputCtrl+0xECC+peer*4). TurnGame_AutoSelectTeams (0x5611E0) reads this to decide whether to auto-forfeit a team: a peer that has timed out (PeerTimeout wrote -2) reads as not-playing and its team is surrendered."
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "bool"
+
+  [[function.param]]
+  name = "this"
+  type = "NetInputCtrl *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "peer_idx"
+  type = "int"
+  storage = "stack:0x4"
+
+[[function]]
+va = 0x0058C500
+name = "WS_GameNet__sub_58C500"
+
+[[function]]
+va = 0x0058C520
+name = "WS_GameNet__SetPeerState"
+plate_comment = """
+NetSession vtable slot 3 (the abstract `set_peer_state`). Per-peer connection-state transition —
+NOT a teardown despite the old `disconnect` name. thiscall(this=ECX, peer_idx, kind), RET 0x8.
+Calls GameNet__HandlePeerStateChange(peer, kind) to get a grace countdown; if nonzero it arms
+peer_recv_countdown[peer] (+0x176C) = grace and peer_disconnect_reason[peer] (+0x17A0) = kind, and
+sets peer_playing[peer] (+0xECC) = -(kind != 3). If grace is 0 (or HandlePeerStateChange says the
+peer is gone) it falls through to WS_GameNet__PeerTimeout (-2 + disconnect). Guarded at entry by
+`if (peer == self_peer_idx) return 0` and `if (peer_playing[peer] < 0) return 0`. Driven each frame
+by the connection-mask gossip (WS_GameNet__update_mask on the host, WS_GameNet__process_mask on a
+client) — so a peer stays armed only while mask packets keep flowing."""
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "int"
+
+  [[function.param]]
+  name = "this"
+  type = "NetInputCtrl *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "peer_idx"
+  type = "int"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "kind"
+  type = "int"
+  storage = "stack:0x8"
+
+[[function]]
+va = 0x0058C5C0
+name = "WS_GameNet__PeerTimeout"
+plate_comment = "Per-peer receive-timeout handler. Called from WS_GameNet__update when a peer's receive countdown (NetInputCtrl+0x176C+peer*4) decrements to 0. Writes peer_playing[peer] = -2 (NetInputCtrl+0xECC+peer*4), emits a 0x6d peer-event message, stores the disconnect reason in the MsgConnection (+0xE8), closes the connection (MsgConnection vtable slot 3), and notifies the GameWorld (Game__sub_52E4B0). On the client (self_peer_idx != 0) it also marks every other peer -2. This (not WS_GameNet__disconnect) is the writer of the -2 'timed out' sentinel that drives the loopback no-turns deadlock."
+calling_convention = "__stdcall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "NetInputCtrl *"
+  storage = "ESI"
+
+  [[function.param]]
+  name = "peer_idx"
+  type = "int"
+  storage = "EDI"
+
+  [[function.param]]
+  name = "reason"
+  type = "int"
+  storage = "stack:0x4"
+
+[[function]]
+va = 0x0058C6D0
+name = "WS_GameNet__get_outgoing_use"
+
+[[function]]
+va = 0x0058C730
+name = "WS_GameNet__process_command"
+
+[[function]]
+va = 0x0058C7B0
+name = "WS_GameNet__ReceivePacket"
+calling_convention = "__thiscall"
+custom_storage = true
+plate_comment = """
+NetSession vtable slot 11. Receives one framed packet from a peer's MsgConnection (slot 4,
++0x10) into recv scratch (NetInputCtrl+0xF34); returns the payload byte count (>0) or 0 when
+the socket is empty. *out_peer = source peer index, *out_seq_delta = sequence delta vs
+peer_last_seq[peer] (+0x1738), then peer_last_seq[peer] = seq+1.
+
+Star topology: on the HOST (self_peer_idx == 0) this also RELAYS the received packet to every
+other active peer via MsgConnection::Send (slot 13, +0x34) — clients only talk to the host and
+the host fans out, so the session behaves like a full mesh. Wire header (first dword at +0xF34):
+low nibble = source peer, high nibble (>>4) = command tag (0 = data; nonzero →
+WS_GameNet__process_command), dword>>8 = 24-bit sequence. Payload follows the 4-byte header.
+"""
+
+  [function.signature]
+  returns = "int"
+
+  [[function.param]]
+  name = "this"
+  type = "NetInputCtrl *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "out_peer"
+  type = "int *"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "payload_dst"
+  type = "void *"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "header_buf"
+  type = "void *"
+  storage = "stack:0xC"
+
+  [[function.param]]
+  name = "out_seq_delta"
+  type = "int *"
+  storage = "stack:0x10"
+
+[[function]]
+va = 0x0058CA20
+name = "WS_GameNet__update_mask"
+plate_comment = "Host-side connection-mask gossip (called from WS_GameNet__update when self_peer_idx == 0). Per peer 1..peer_count: if peer_playing[peer] > 0 and the peer connection's state byte (+0xB8) != 3 (connected), calls SetPeerState(peer, 2) to re-arm/transition it. Then recomputes a live-peer bitmask (field_17d8) and, if it changed, sends it via WS_GameNet__send (4 bytes, tag nibble 1). this = EAX."
+calling_convention = "__stdcall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "NetInputCtrl *"
+  storage = "EAX"
+
+[[function]]
+va = 0x0058CAE0
+name = "WS_GameNet__transmit_0"
+
+[[function]]
+va = 0x0058CB30
+name = "WS_GameNet__send"
+
+[[function]]
+va = 0x0058CBF0
+name = "WS_GameNet__transmit_1"
+
+[[function]]
+va = 0x0058CC40
+name = "WS_GameNet__process_mask"

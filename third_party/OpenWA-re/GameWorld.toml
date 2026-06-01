@@ -1,0 +1,1223 @@
+[[function]]
+va = 0x005220B0
+name = "GameWorld__InitTeamsFromSetup"
+calling_convention = "__stdcall"
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "arena"
+  type = "TeamArena *"
+
+  [[function.param]]
+  name = "game_info"
+  type = "GameInfo *"
+
+[[function]]
+va = 0x00524700
+name = "GameWorld__InitFeatureFlags"
+
+[[function]]
+va = 0x00525BE0
+name = "GameWorld__InitVersionFlags"
+
+[[function]]
+va = 0x00526080
+name = "GameWorld__InitRenderIndices"
+calling_convention = "__cdecl"
+custom_storage = true
+
+  [function.signature]
+  returns = "uint"
+
+  [[function.param]]
+  name = "base"
+  type = "uint"
+  storage = "ESI"
+
+[[function]]
+va = 0x00526120
+name = "GameWorld__InitFields"
+calling_convention = "__cdecl"
+custom_storage = true
+
+  [function.signature]
+  returns = "GameWorld *"
+
+  [[function.param]]
+  name = "world"
+  type = "GameWorld *"
+  storage = "EDI"
+
+[[function]]
+va = 0x005261E0
+name = "GameWorld__IsSoundSuppressed"
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "uint"
+
+  [[function.param]]
+  name = "this"
+  type = "GameWorld *"
+  storage = "ECX"
+
+[[function]]
+va = 0x00526500
+name = "GameWorld__InitGameState"
+
+[[function]]
+va = 0x0053D0E0
+name = "GameWorld__LoadHudAndWeaponSprites"
+
+[[function]]
+va = 0x0053FFC0
+name = "GameWorld__CheckWeaponAvail"
+calling_convention = "__cdecl"
+custom_storage = true
+
+  [function.signature]
+  returns = "int"
+
+  [[function.param]]
+  name = "world"
+  type = "GameWorld *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "weapon_id"
+  type = "uint"
+  storage = "ESI"
+
+[[function]]
+va = 0x0053F320
+name = "GameWorld__AdvanceRNG"
+calling_convention = "__fastcall"
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "world"
+  type = "GameWorld *"
+
+[[function]]
+va = 0x00547D10
+name = "GameWorld__RecordLandingEvent"
+calling_convention = "__stdcall"
+custom_storage = true
+plate_comment = """
+Record a landing-event point in the per-kind bbox slot at
+`world->render_entries[idx]` (world+0x73B0 + idx*0x14). Gated on
+`world+0x45E8 == 0`; on first hit initialises the slot to a single
+point `(x, y)` and arms `active = 1`; on subsequent hits expands
+min/max in both axes to include `(x, y)`.
+
+Reaches the world via `entity->world` (`BaseEntity + 0x2C`) — callers
+pass the firing/landing entity, not the world directly.
+
+Ported as `engine::world::GameWorld::record_landing_event_raw`.
+"""
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "x"
+  type = "Fixed"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "y"
+  type = "Fixed"
+  storage = "EDX"
+
+  [[function.param]]
+  name = "entity"
+  type = "BaseEntity *"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "idx"
+  type = "uint"
+  storage = "stack:0x8"
+
+[[function]]
+va = 0x00547E70
+name = "GameWorld__RegisterEventPoint"
+plate_comment = """
+Reset effect-event point at world+0x73A0..+0x73AC to (ECX, EDX) and arm the gate at +0x739C.
+
+The disassembly shape suggests a "reset bbox / expand bbox" pattern, but the entry path unconditionally zeros the gate at 0x547E78 BEFORE checking it at 0x547E8A, so the JNZ at 0x547E8E is never taken — the "expand" branch (0x547EA5..) is dead code. Effective behavior: always reset to single point + arm gate.
+
+Calling convention: __usercall(ECX=x, EDX=y) + stdcall(task), RET 0x4. The task argument is read at +0x2C to get the GameWorld pointer.
+
+Ported in Rust as openwa-game::engine::world::GameWorld::register_event_point_raw. Was bridged earlier as bridge_set_gravity_center / call_set_gravity_center; the "gravity center" interpretation was incorrect.
+"""
+
+[[function]]
+va = 0x0056A830
+name = "GameWorld__InitDisplayFinal"
+
+[[function]]
+va = 0x0056E220
+name = "GameWorld__Constructor"
+calling_convention = "__stdcall"
+
+  [function.signature]
+  returns = "void *"
+
+  [[function.param]]
+  name = "this"
+  type = "void *"
+
+  [[function.param]]
+  name = "display"
+  type = "void *"
+
+  [[function.param]]
+  name = "sound"
+  type = "void *"
+
+  [[function.param]]
+  name = "keyboard"
+  type = "void *"
+
+  [[function.param]]
+  name = "palette"
+  type = "void *"
+
+  [[function.param]]
+  name = "music"
+  type = "void *"
+
+  [[function.param]]
+  name = "param7"
+  type = "void *"
+
+  [[function.param]]
+  name = "param8"
+  type = "void *"
+
+  [[function.param]]
+  name = "game_info"
+  type = "void *"
+
+[[function]]
+va = 0x005706D0
+name = "GameWorld__InitPaletteGradientSprites"
+
+[[function]]
+va = 0x00570E20
+name = "GameWorld__InitDisplayLayerColors"
+calling_convention = "__cdecl"
+custom_storage = true
+
+  [function.signature]
+  returns = "GameRuntime *"
+
+  [[function.param]]
+  name = "runtime"
+  type = "GameRuntime *"
+  storage = "ESI"
+
+[[global]]
+va = 0x00669C28
+name = "GameWorld__vtable_Maybe"
+
+[[struct]]
+name = "GameWorld"
+namespace = "/OpenWA"
+size = 0x98D8
+rust_path = "openwa_game::engine::world::GameWorld"
+
+  [[struct.field]]
+  offset = 0x0
+  name = "keyboard"
+  type = "Keyboard *"
+  comment = "Keyboard pointer (vtable 0x66AEC8). Constructor param \"keyboard\"."
+
+  [[struct.field]]
+  offset = 0x4
+  name = "display"
+  type = "DisplayGfx *"
+  comment = "DisplayGfx pointer (vtable 0x66A218)."
+
+  [[struct.field]]
+  offset = 0x8
+  name = "sound"
+  type = "void *"
+  comment = "DSSound pointer (vtable 0x66AF20). Null means sound is disabled."
+
+  [[struct.field]]
+  offset = 0xC
+  name = "active_sounds"
+  type = "void *"
+  comment = "ActiveSoundTable (0x608 bytes). Tracks up to 64 positional sounds for 3D audio mixing. NULL when headless or sound == NULL."
+
+  [[struct.field]]
+  offset = 0x10
+  name = "mouse_input"
+  type = "void *"
+  comment = "MouseInput adapter (vtable 0x66A2E4). Small mouse-input wrapper that debounces button presses through per-instance latches."
+
+  [[struct.field]]
+  offset = 0x14
+  name = "music"
+  type = "Music *"
+  comment = "Music object pointer (vtable 0x66B3E0)."
+
+  [[struct.field]]
+  offset = 0x18
+  name = "localized_string_cache"
+  type = "LocalizedStringCache *"
+  comment = "Localized-string cache + resolver (from GameSession+0xBC). Wraps WA's localization tables with a per-token cache + escape-code post-processor."
+
+  [[struct.field]]
+  offset = 0x1C
+  name = "net_session"
+  type = "NetSession *"
+  comment = "Per-game network session object. NULL for offline play. When non-null, drives end-of-round peer synchronisation via its vtable."
+
+  [[struct.field]]
+  offset = 0x20
+  name = "landscape"
+  type = "void *"
+  comment = "Landscape pointer (copied from GameRuntime[0x133])."
+
+  [[struct.field]]
+  offset = 0x24
+  name = "game_info"
+  type = "GameInfo *"
+
+  [[struct.field]]
+  offset = 0x28
+  name = "net_game"
+  type = "byte *"
+  comment = "Network game object (param_9 to GameRuntime constructor)."
+
+  [[struct.field]]
+  offset = 0x2C
+  name = "secondary_palette_ctx"
+  type = "PaletteContext *"
+  comment = "Secondary PaletteContext (0x70C bytes, conditional on secondary GfxDir)."
+
+  [[struct.field]]
+  offset = 0x30
+  name = "gradient_image"
+  type = "BitGrid *"
+  comment = "Gradient image (decoded from gradient.img via IMG_Decode)."
+
+  [[struct.field]]
+  offset = 0x34
+  name = "gradient_image_2"
+  type = "BitGrid *"
+
+  [[struct.field]]
+  offset = 0x38
+  name = "arrow_sprites"
+  type = "BitGrid *[32]"
+  comment = "Arrow sprite BitGrid pointers (decoded from arrow*.img)."
+
+  [[struct.field]]
+  offset = 0xB8
+  name = "arrow_gfxdirs"
+  type = "byte *[32]"
+  comment = "Arrow GfxDir pointers (conditional)."
+
+  [[struct.field]]
+  offset = 0x138
+  name = "display_bitgrid"
+  type = "DisplayBitGrid *"
+  comment = "Primary display BitGrid. Allocated as 0x4C bytes, initialized with BitGrid::init(8, 0x100, 0x1E0)."
+
+  [[struct.field]]
+  offset = 0x13C
+  name = "sprite_cache"
+  type = "byte *[144]"
+  comment = "Sprite/image BitGrid cache (vtable 0x664144). Filled during gameplay with weapon sprites, effect images, cursor graphics, etc."
+
+  [[struct.field]]
+  offset = 0x37C
+  name = "windbar_bitgrid"
+  type = "DisplayBitGrid *"
+  comment = "Wind-direction indicator bitmap (~64x16 pixels). Painted by `LandEntity::init_windbar` and updated each frame by the HUD wind dispatcher. Was the last slot of `sprite_cache` before being carved out."
+
+  [[struct.field]]
+  offset = 0x380
+  name = "collision_grid"
+  type = "void *"
+  comment = "Collision BitGrid pointer (vtable 0x664118, 0x2C bytes). Used for terrain collision/spatial queries."
+
+  [[struct.field]]
+  offset = 0x384
+  name = "sprite_cache_2"
+  type = "byte *[57]"
+  comment = "Additional sprite/image object slots (vtable 0x664144). ~20 entries populated at runtime."
+
+  [[struct.field]]
+  offset = 0x468
+  name = "landscape_property"
+  type = "uint"
+  comment = "Landscape property from Landscape vtable[0xB] (thiscall getter)."
+
+  [[struct.field]]
+  offset = 0x46C
+  name = "sprite_regions"
+  type = "byte *[8]"
+  comment = "8 SpriteRegion pointers (0x9C bytes each, vtable 0x66B268). Each contains 32 BitGrid sub-objects."
+
+  [[struct.field]]
+  offset = 0x48C
+  name = "arrow_collision_regions"
+  type = "byte *[32]"
+
+  [[struct.field]]
+  offset = 0x50C
+  name = "coord_list"
+  type = "void *"
+  comment = "Coordinate list — dynamic array of packed (x,y) terrain coords."
+
+  [[struct.field]]
+  offset = 0x510
+  name = "weapon_table"
+  type = "void *"
+  comment = "Weapon table pointer (0x10 header + 71 × WeaponEntry)."
+
+  [[struct.field]]
+  offset = 0x514
+  name = "mine_list"
+  type = "void *"
+  comment = "Pointer to the world's mine registry — a flat array of MineEntity pointers, allocated and zeroed by init_game_state from game_info.mine_list_capacity."
+
+  [[struct.field]]
+  offset = 0x524
+  name = "render_queue"
+  type = "RenderQueue *"
+  comment = "RenderQueue pointer (passed as this to all Draw* functions)."
+
+  [[struct.field]]
+  offset = 0x528
+  name = "collision_manager"
+  type = "CollisionManager *"
+  type_namespace = "/OpenWA"
+  comment = "Entity registry + collision/spatial buckets. See `[[struct]] CollisionManager` in re/CollisionManager.toml."
+
+  [[struct.field]]
+  offset = 0x530
+  name = "turn_order_widget"
+  type = "void *"
+  comment = "Turn order widget (vtable 0x66A088). Renders team banners with animated sliding transitions."
+
+  [[struct.field]]
+  offset = 0x534
+  name = "fire_effect"
+  type = "void *"
+  comment = "Ranked-MP fire-effect overlay."
+
+  [[struct.field]]
+  offset = 0x538
+  name = "fire_palette_high"
+  type = "DisplayBitGrid *"
+  comment = "Fire-effect palette LUT for the higher rank-reward tier. Selected when fire_effect_tier >= 2."
+
+  [[struct.field]]
+  offset = 0x53C
+  name = "fire_palette_low"
+  type = "DisplayBitGrid *"
+  comment = "Fire-effect palette LUT for the lower rank-reward tier. Selected when fire_effect_tier == 1."
+
+  [[struct.field]]
+  offset = 0x544
+  name = "textbox"
+  type = "void *"
+  comment = "HUD-text Textbox, allocated by init_game_state_display."
+
+  [[struct.field]]
+  offset = 0x548
+  name = "weapon_panel"
+  type = "byte *"
+
+  [[struct.field]]
+  offset = 0x54C
+  name = "entity_land"
+  type = "byte *"
+  comment = "LandEntity pointer (set by LandEntity__InitLandscape at 0x5056F0). Vtable at 0x664388."
+
+  [[struct.field]]
+  offset = 0x5C4
+  name = "vector_normalize_fn"
+  type = "uint"
+  comment = "Vector normalize function pointer. < 0x99 → VECTOR_NORMALIZE_SIMPLE, >= 0x99 → VECTOR_NORMALIZE_OVERFLOW."
+
+  [[struct.field]]
+  offset = 0x5C8
+  name = "stack_height"
+  type = "uint"
+  comment = "Stack height config. < -1 → 0x700, >= -1 → 0x800."
+
+  [[struct.field]]
+  offset = 0x5CC
+  name = "frame_counter"
+  type = "int"
+  comment = "Game frame counter. Incremented at end of each frame in GameFrameDispatcher."
+
+  [[struct.field]]
+  offset = 0x5D0
+  name = "_field_5d0"
+  type = "uint"
+  comment = "Frame processing flag (set 0/1 by GameFrameEndProcessor, zeroed by InitGameState)."
+
+  [[struct.field]]
+  offset = 0x5D4
+  name = "_field_5d4"
+  type = "uint"
+
+  [[struct.field]]
+  offset = 0x5D8
+  name = "_field_5d8"
+  type = "uint"
+
+  [[struct.field]]
+  offset = 0x5DC
+  name = "_field_5dc"
+  type = "int"
+  comment = "World-level activity-watchdog timer. Refreshed by MineEntity's tick whenever the mine is moving / armed / triggered."
+
+  [[struct.field]]
+  offset = 0x5E0
+  name = "water_level"
+  type = "int"
+  comment = "Water level in pixels. Computed as (100 - water_pct) * level_height / 100."
+
+  [[struct.field]]
+  offset = 0x5E4
+  name = "water_kill_y"
+  type = "int"
+  comment = "Water kill Y boundary (pixels). Derived from level_bound_max_y integer part + 0x28."
+
+  [[struct.field]]
+  offset = 0x5E8
+  name = "water_level_initial"
+  type = "int"
+
+  [[struct.field]]
+  offset = 0x5EC
+  name = "_field_5ec"
+  type = "uint"
+
+  [[struct.field]]
+  offset = 0x5F0
+  name = "_field_5f0"
+  type = "uint"
+  comment = "Set to 1 by InitGameState."
+
+  [[struct.field]]
+  offset = 0x5F4
+  name = "_field_5f4"
+  type = "uint"
+  comment = "Set to 100 by InitGameState."
+
+  [[struct.field]]
+  offset = 0x5F8
+  name = "_field_5f8"
+  type = "uint"
+
+  [[struct.field]]
+  offset = 0x5FC
+  name = "_field_5fc"
+  type = "uint"
+
+  [[struct.field]]
+  offset = 0x600
+  name = "entity_activity_queue"
+  type = "EntityActivityQueue"
+  comment = "Most-recent-activity rank table over every WorldEntity (Worm, OldWorm, Crate, Mine, OilDrum, etc.)."
+
+  [[struct.field]]
+  offset = 0x45D4
+  name = "terrain_pct_a"
+  type = "uint"
+  comment = "Terrain drop percentage A (from GameInfo+0xD955)."
+
+  [[struct.field]]
+  offset = 0x45D8
+  name = "terrain_pct_b"
+  type = "uint"
+  comment = "Terrain drop percentage B (from GameInfo+0xD958)."
+
+  [[struct.field]]
+  offset = 0x45DC
+  name = "terrain_pct_c"
+  type = "uint"
+  comment = "Terrain drop percentage C (from GameInfo+0xD957)."
+
+  [[struct.field]]
+  offset = 0x45E0
+  name = "_field_45e0"
+  type = "uint"
+
+  [[struct.field]]
+  offset = 0x45E4
+  name = "_field_45e4"
+  type = "uint"
+
+  [[struct.field]]
+  offset = 0x45E8
+  name = "_field_45e8"
+  type = "uint"
+
+  [[struct.field]]
+  offset = 0x45EC
+  name = "game_rng"
+  type = "uint"
+  comment = "Game RNG state. rng = (frame_counter + rng) * 0x19660D + 0x3C6EF35F. Single shared RNG — affects both gameplay AND visual effects."
+
+  [[struct.field]]
+  offset = 0x45F0
+  name = "team_health_ratio"
+  type = "int[6]"
+  comment = "Per-team health ratio (Fixed-point, 1-indexed). 0x10000 = 100% health. Index 0 repurposed as effect RNG state."
+
+  [[struct.field]]
+  offset = 0x4608
+  name = "team_health_ratio_2"
+  type = "int[6]"
+  comment = "Per-team health ratio 2 (Fixed-point, 1-indexed). Initialized to 0x10000. Likely target/previous value for interpolation."
+
+  [[struct.field]]
+  offset = 0x4624
+  name = "hud_status_code"
+  type = "int"
+  comment = "HUD status message code. Set to 6 when object pool is full. Read by HUD rendering."
+
+  [[struct.field]]
+  offset = 0x4628
+  name = "team_arena"
+  type = "TeamArena"
+  comment = "Per-team data, ammo, delays, alliance tracking."
+
+  [[struct.field]]
+  offset = 0x7270
+  name = "teams_per_owner"
+  type = "uint[13]"
+  comment = "Per-player team-ownership counter, indexed by team_records[i].owner_player_slot. Populated by GameWorld__InitTeamsFromSetup; nonzero entries gate input dispatch for teams owned by that player slot."
+
+  [[struct.field]]
+  offset = 0x72A4
+  name = "object_pool_count"
+  type = "int"
+  comment = "Object pool counter. +7 per MissileEntity, +2 per ArrowEntity. Cap 700."
+
+  [[struct.field]]
+  offset = 0x72D8
+  name = "game_speed"
+  type = "Fixed"
+  comment = "Game speed multiplier."
+
+  [[struct.field]]
+  offset = 0x72DC
+  name = "game_speed_target"
+  type = "Fixed"
+
+  [[struct.field]]
+  offset = 0x72E4
+  name = "render_slot_count"
+  type = "uint"
+  comment = "Active render/weapon slot count. Reset to 14 by WeaponRelease sync check."
+
+  [[struct.field]]
+  offset = 0x72EC
+  name = "rng_state_1"
+  type = "uint"
+  comment = "RNG state word 1 (changes every frame)."
+
+  [[struct.field]]
+  offset = 0x72F0
+  name = "rng_state_2"
+  type = "uint"
+  comment = "RNG state word 2 (changes every frame)."
+
+  [[struct.field]]
+  offset = 0x72F4
+  name = "_field_72f4"
+  type = "uint"
+
+  [[struct.field]]
+  offset = 0x72F8
+  name = "_field_72f8"
+  type = "uint"
+
+  [[struct.field]]
+  offset = 0x72FC
+  name = "_field_72fc"
+  type = "uint"
+
+  [[struct.field]]
+  offset = 0x7300
+  name = "_field_7300"
+  type = "uint"
+
+  [[struct.field]]
+  offset = 0x7304
+  name = "_field_7304"
+  type = "uint"
+
+  [[struct.field]]
+  offset = 0x7308
+  name = "gfx_sprite_data"
+  type = "byte[4]"
+  comment = "Sprite/gfx dimension data (passed to GfxHandler__LoadSprites)."
+
+  [[struct.field]]
+  offset = 0x730C
+  name = "gfx_color_table"
+  type = "uint[11]"
+  comment = "GfxDir color table from colours.img. [6]=crosshair line color, [8]=crosshair line style, [9..10]=font palette entries."
+
+  [[struct.field]]
+  offset = 0x7338
+  name = "fill_pixel"
+  type = "uint"
+
+  [[struct.field]]
+  offset = 0x7340
+  name = "border_shader_color_a"
+  type = "uint"
+  comment = "Border shader-layer color A (sel=0 in the diagonal stripe). Paired with gfx_color_table[0] when Landscape::init_borders draws the indestructible-borders pattern."
+
+  [[struct.field]]
+  offset = 0x734C
+  name = "border_shader_color_b"
+  type = "uint"
+  comment = "Border shader-layer color B (sel=1). Paired with gfx_color_table[3]."
+
+  [[struct.field]]
+  offset = 0x7370
+  name = "team_color"
+  type = "uint"
+  comment = "Current team color index. From GameInfo+0xD924. Overridden to -1 if any CPU team is detected."
+
+  [[struct.field]]
+  offset = 0x7374
+  name = "_field_7374"
+  type = "uint"
+
+  [[struct.field]]
+  offset = 0x7378
+  name = "_field_7378"
+  type = "uint"
+
+  [[struct.field]]
+  offset = 0x737C
+  name = "_field_737c"
+  type = "uint"
+
+  [[struct.field]]
+  offset = 0x7380
+  name = "viewport_width"
+  type = "int"
+  comment = "Viewport width (Fixed-point)."
+
+  [[struct.field]]
+  offset = 0x7384
+  name = "viewport_height"
+  type = "int"
+
+  [[struct.field]]
+  offset = 0x7388
+  name = "viewport_width_2"
+  type = "int"
+
+  [[struct.field]]
+  offset = 0x738C
+  name = "viewport_height_2"
+  type = "int"
+
+  [[struct.field]]
+  offset = 0x7390
+  name = "_field_7390"
+  type = "uint"
+
+  [[struct.field]]
+  offset = 0x7394
+  name = "render_scale"
+  type = "Fixed"
+
+  [[struct.field]]
+  offset = 0x7398
+  name = "_field_7398"
+  type = "uint"
+
+  [[struct.field]]
+  offset = 0x739C
+  name = "render_state_flag"
+  type = "uint"
+  comment = "Zeroed by InitRenderIndices; armed to 1 by GameWorld::register_event_point."
+
+  [[struct.field]]
+  offset = 0x73A0
+  name = "camera_x"
+  type = "Fixed"
+  comment = "Effect-event point — written by GameWorld::register_event_point (WA 0x547E70). The entry path always resets +0x73A0..+0x73AC to a single (x, y) point."
+
+  [[struct.field]]
+  offset = 0x73A4
+  name = "camera_y"
+  type = "Fixed"
+
+  [[struct.field]]
+  offset = 0x73A8
+  name = "camera_target_x"
+  type = "Fixed"
+
+  [[struct.field]]
+  offset = 0x73AC
+  name = "camera_target_y"
+  type = "Fixed"
+
+  [[struct.field]]
+  offset = 0x73B0
+  name = "render_entries"
+  type = "byte[280]"
+  comment = "Render entry table (14 entries × 0x14 bytes). First u32 of each entry zeroed by InitRenderIndices."
+
+  [[struct.field]]
+  offset = 0x74C8
+  name = "weapon_table_backup"
+  type = "uint[94]"
+  comment = "0x178-byte backup region populated by init_weapon_table. Holds a verbatim copy of weapon_table+0x29EC."
+
+  [[struct.field]]
+  offset = 0x7640
+  name = "hud_worm_info_detail"
+  type = "uint"
+  comment = "HUD worm-info textbox detail level. 4-state cycle driven by ProcessControlInput action 0x26 (Delete with no modifiers): 0=name+health, 1=health only, 2=nothing, 3=team+name+health. Zero-initialised."
+
+  [[struct.field]]
+  offset = 0x7644
+  name = "hud_worm_info_dim"
+  type = "uint"
+  comment = "HUD worm-info textbox dim/transparent toggle. Initialised from GameInfo.info_transparency (+0xF363). Toggled by ProcessControlInput action 0x27 (Alt+Delete)."
+
+  [[struct.field]]
+  offset = 0x7648
+  name = "hud_info_spy_mode"
+  type = "uint"
+  comment = "Info-spy HUD mode toggle. Initialised from GameInfo.info_spy (+0xF364), toggled by ProcessControlInput action 0x29 (Shift+Alt+Delete). When enabled, reveals normally-hidden gameplay info: mine fuse timers (as floating textboxes), crate contents (Crate Spy-style), and more precise HUD timer readouts. Confirmed in replay playback."
+
+  [[struct.field]]
+  offset = 0x764C
+  name = "render_phase"
+  type = "int"
+  comment = "Rendering phase. Clouds only render when this == 5 (in-game rendering active)."
+
+  [[struct.field]]
+  offset = 0x7650
+  name = "team_index_maps"
+  type = "TeamIndexMap[3]"
+  comment = "Team index permutation maps (render order, turn order, display order). Identity permutations [0..15] with count=16 at init."
+
+  [[struct.field]]
+  offset = 0x777C
+  name = "is_cavern"
+  type = "uint"
+  comment = "Cavern / indestructible-borders flag. Nonzero = cavern level (fewer clouds, different level bounds, alternate super-weapon rules)."
+
+  [[struct.field]]
+  offset = 0x7780
+  name = "level_height_raw"
+  type = "uint"
+
+  [[struct.field]]
+  offset = 0x7784
+  name = "_field_7784"
+  type = "uint"
+
+  [[struct.field]]
+  offset = 0x7788
+  name = "_field_7788"
+  type = "uint"
+
+  [[struct.field]]
+  offset = 0x778C
+  name = "_field_778c"
+  type = "Fixed"
+  comment = "Set to Fixed 1.0 by InitTurnState."
+
+  [[struct.field]]
+  offset = 0x7790
+  name = "_field_7790"
+  type = "uint"
+
+  [[struct.field]]
+  offset = 0x7794
+  name = "shake_intensity_x"
+  type = "Fixed"
+
+  [[struct.field]]
+  offset = 0x7798
+  name = "shake_intensity_y"
+  type = "Fixed"
+
+  [[struct.field]]
+  offset = 0x779C
+  name = "level_bound_min_x"
+  type = "Fixed"
+
+  [[struct.field]]
+  offset = 0x77A0
+  name = "level_bound_max_x"
+  type = "Fixed"
+
+  [[struct.field]]
+  offset = 0x77A4
+  name = "level_bound_min_y"
+  type = "Fixed"
+
+  [[struct.field]]
+  offset = 0x77A8
+  name = "level_bound_max_y"
+  type = "Fixed"
+
+  [[struct.field]]
+  offset = 0x77AC
+  name = "viewport_pixel_width"
+  type = "int"
+  comment = "Derived each frame in GameRender as (level_bound_max_x - min_x) >> 16, clamped to display dimensions."
+
+  [[struct.field]]
+  offset = 0x77B0
+  name = "viewport_pixel_height"
+  type = "int"
+
+  [[struct.field]]
+  offset = 0x77B4
+  name = "viewport_pixel_height_prev"
+  type = "int"
+  comment = "Previous frame's viewport_pixel_height. Saved at top of GameRender before new height is computed."
+
+  [[struct.field]]
+  offset = 0x77B8
+  name = "level_width_sound"
+  type = "int"
+  comment = "Level width for 3D sound distance computation (pixels)."
+
+  [[struct.field]]
+  offset = 0x77BC
+  name = "screen_height_pixels"
+  type = "int"
+
+  [[struct.field]]
+  offset = 0x77C0
+  name = "level_width"
+  type = "uint"
+
+  [[struct.field]]
+  offset = 0x77C4
+  name = "level_height"
+  type = "uint"
+
+  [[struct.field]]
+  offset = 0x77C8
+  name = "level_total_pixels"
+  type = "uint"
+
+  [[struct.field]]
+  offset = 0x77CC
+  name = "map_boundary_width"
+  type = "uint"
+  comment = "Default 0x30D4; updated to level_w + 0x2954 for version > 0x32."
+
+  [[struct.field]]
+  offset = 0x77D0
+  name = "map_boundary_height"
+  type = "uint"
+  comment = "Default = level_height; updated to 0x2B8 for version > 0x32."
+
+  [[struct.field]]
+  offset = 0x77D4
+  name = "frame"
+  type = "uint"
+
+  [[struct.field]]
+  offset = 0x77D8
+  name = "scaled_frame_accum"
+  type = "Fixed"
+  comment = "Fixed accumulator of scaled-frame time — companion to frame_counter with sub-frame precision. Zeroed by InitTurnState."
+
+  [[struct.field]]
+  offset = 0x77DC
+  name = "_field_77dc"
+  type = "uint"
+
+  [[struct.field]]
+  offset = 0x77E0
+  name = "_field_77e0"
+  type = "uint"
+
+  [[struct.field]]
+  offset = 0x77E4
+  name = "speech_slot_table"
+  type = "byte[1440]"
+  comment = "Speech slot table. Maps (team, speech_line_id) → DSSound buffer index. Cleared by DSSound_LoadAllSpeechBanks, filled by GameRuntime__LoadSpeechWAV."
+
+  [[struct.field]]
+  offset = 0x7D84
+  name = "_field_7d84"
+  type = "uint"
+
+  [[struct.field]]
+  offset = 0x7D88
+  name = "_field_7d88"
+  type = "uint[13]"
+  comment = "Per-team u32 flags (zeroed per team by InitTurnState)."
+
+  [[struct.field]]
+  offset = 0x7DBC
+  name = "_field_7dbc"
+  type = "byte[13]"
+  comment = "Per-team byte flags array 1 (set to 1 by InitTurnState)."
+
+  [[struct.field]]
+  offset = 0x7DC9
+  name = "_field_7dc9"
+  type = "byte[13]"
+  comment = "Per-team byte flags array 2 (set to 1 by InitTurnState)."
+
+  [[struct.field]]
+  offset = 0x7DD6
+  name = "_field_7dd6"
+  type = "byte[13]"
+  comment = "Per-team byte flags array 3 (zeroed by InitTurnState)."
+
+  [[struct.field]]
+  offset = 0x7DE3
+  name = "net_peer_ready_flags"
+  type = "byte[13]"
+  comment = "Per-team byte flags array 4 (zeroed by InitTurnState)."
+
+  [[struct.field]]
+  offset = 0x7DF0
+  name = "_field_7df0"
+  type = "byte[13]"
+  comment = "Per-team byte flags array 5 (zeroed by InitTurnState)."
+
+  [[struct.field]]
+  offset = 0x7E03
+  name = "_field_7e03"
+  type = "byte"
+
+  [[struct.field]]
+  offset = 0x7E04
+  name = "_field_7e04"
+  type = "byte"
+
+  [[struct.field]]
+  offset = 0x7E25
+  name = "supersheep_restricted"
+  type = "byte"
+  comment = "SuperSheep/AquaSheep restriction active flag. When nonzero, weapon check is applied."
+
+  [[struct.field]]
+  offset = 0x7E2E
+  name = "version_flag_1"
+  type = "byte"
+  comment = "Version flag byte 1 (set by InitVersionFlags)."
+
+  [[struct.field]]
+  offset = 0x7E2F
+  name = "version_flag_2"
+  type = "byte"
+
+  [[struct.field]]
+  offset = 0x7E3F
+  name = "version_flag_3"
+  type = "byte"
+  comment = "Controls whether Select Worm is considered a super weapon (in is_super_weapon)."
+
+  [[struct.field]]
+  offset = 0x7E40
+  name = "version_flag_4"
+  type = "byte"
+  comment = "Game logic version byte 4. Used in FireWeapon__MailMineMole to gate vtable call behavior by version."
+
+  [[struct.field]]
+  offset = 0x7E41
+  name = "_field_7e41"
+  type = "byte"
+
+  [[struct.field]]
+  offset = 0x7E48
+  name = "_field_7e48"
+  type = "int"
+  comment = "Companion world-level activity-watchdog timer to _field_5dc."
+
+  [[struct.field]]
+  offset = 0x7E4C
+  name = "_field_7e4c"
+  type = "uint"
+
+  [[struct.field]]
+  offset = 0x7E50
+  name = "_fields_7e50"
+  type = "uint[5]"
+  comment = "Unknown fields (zeroed by InitTurnState)."
+
+  [[struct.field]]
+  offset = 0x7E64
+  name = "_field_7e64"
+  type = "uint"
+
+  [[struct.field]]
+  offset = 0x7E68
+  name = "render_skip_gate"
+  type = "uint"
+  comment = "Skip render gate. When non-zero, GameRender (0x00533DC0) early-exits at the very top."
+
+  [[struct.field]]
+  offset = 0x7E6C
+  name = "_field_7e6c"
+  type = "uint"
+
+  [[struct.field]]
+  offset = 0x7E70
+  name = "team_scoring_flags"
+  type = "uint[6]"
+  comment = "Per-team scoring flags (written by InitAllianceData)."
+
+  [[struct.field]]
+  offset = 0x7E88
+  name = "_fields_7e88"
+  type = "uint[5]"
+
+  [[struct.field]]
+  offset = 0x7E9C
+  name = "kb_poll_result"
+  type = "uint"
+  comment = "Last keyboard poll result. Written each frame by DispatchFrame from Keyboard::vtable[1](0xd) when wrapper._field_410 == 0."
+
+  [[struct.field]]
+  offset = 0x7EA0
+  name = "field_7ea0"
+  type = "uint"
+  comment = "Flag/counter (value 4 at runtime — likely team count)."
+
+  [[struct.field]]
+  offset = 0x7EA4
+  name = "field_7ea4"
+  type = "uint"
+
+  [[struct.field]]
+  offset = 0x7EA8
+  name = "turn_time_limit"
+  type = "uint"
+  comment = "Turn time limit in seconds (150 = 2:30 default)."
+
+  [[struct.field]]
+  offset = 0x7EF0
+  name = "recorded_frame_counter"
+  type = "int"
+  comment = "Recording-side frame counter — -1 during replay playback. DDNetGameWrapper::SendGameState increments it once per game frame whose state was handed to the network / recording stream."
+
+  [[struct.field]]
+  offset = 0x7EF4
+  name = "hud_status_text"
+  type = "char *"
+  comment = "HUD status message string pointer. Set when object pool overflows (LOG_CRASH_TOO_MANY_OBJECTS)."
+
+  [[struct.field]]
+  offset = 0x7EF8
+  name = "is_headful"
+  type = "uint"
+  comment = "Headful/interactive mode flag (0 = headless, 1 = headful). Computed as game_info.headless_mode == 0."
+
+  [[struct.field]]
+  offset = 0x7EFC
+  name = "field_7efc"
+  type = "uint"
+  comment = "Always initialized to 1 in constructor."
+
+  [[struct.field]]
+  offset = 0x7F00
+  name = "sound_queue"
+  type = "byte[576]"
+  comment = "Sound queue (16 entries, stride 0x24). Appended by PlaySoundGlobal."
+
+  [[struct.field]]
+  offset = 0x8140
+  name = "sound_queue_count"
+  type = "int"
+  comment = "Number of entries currently in the sound queue (0–16)."
+
+  [[struct.field]]
+  offset = 0x8144
+  name = "round_jetpack_fuel_total"
+  type = "uint"
+  comment = "Round-wide total jetpack fuel used. When nonzero at end-of-round headless-log time, StepFrame emits LOG_JETPACK_FUEL_TOTAL footer."
+
+  [[struct.field]]
+  offset = 0x8148
+  name = "_field_8148"
+  type = "uint"
+  comment = "Set to 1 by InitTurnState."
+
+  [[struct.field]]
+  offset = 0x8150
+  name = "render_interp_a"
+  type = "Fixed"
+  comment = "Render interpolation factor A. Sub-frame progress ratio between 50Hz simulation ticks."
+
+  [[struct.field]]
+  offset = 0x8154
+  name = "render_interp_b"
+  type = "Fixed"
+  comment = "Parallels render_interp_a but driven by frame_accum_b (running accumulator) instead of frame_accum_a (paused accumulator)."
+
+  [[struct.field]]
+  offset = 0x8158
+  name = "replay_speed_accum"
+  type = "Fixed64"
+  comment = "Replay-speed accumulator. Advanced by 50 * Fixed::ONE per replay-dispatch frame. Divided by GameInfo::replay_ticks for the running replay-time clock."
+
+  [[struct.field]]
+  offset = 0x8160
+  name = "replay_frame_accum"
+  type = "Fixed64"
+  comment = "Replay-progress accumulator. StepFrame adds Fixed::ONE per tick in replay mode."
+
+  [[struct.field]]
+  offset = 0x818C
+  name = "turn_status_text"
+  type = "char[64]"
+  comment = "Turn status text buffer (null-terminated ASCII). Shows on screen during gameplay, e.g. \"Cheesy is considering their move\"."
+
+  [[struct.field]]
+  offset = 0x8CBC
+  name = "viewport_coords"
+  type = "byte[80]"
+  comment = "5 viewport coordinate entries (0x10-byte stride). InitGameState writes camera center to entries 1..5. Entry 3 is the listener position for 3D audio."
+
+  [[struct.field]]
+  offset = 0x9850
+  name = "screen_coords_2"
+  type = "byte[64]"
+  comment = "4 coordinate entries (0x10-byte stride, zeroed by InitFields)."
+
+  [[struct.field]]
+  offset = 0x98A4
+  name = "checkpoint_active"
+  type = "uint"
+
+  [[struct.field]]
+  offset = 0x98AC
+  name = "fast_forward_request"
+  type = "uint"
+
+  [[struct.field]]
+  offset = 0x98B0
+  name = "fast_forward_active"
+  type = "uint"
+  comment = "When set to 1, Game__ProcessLogic processes up to 50 game frames per render cycle. Sound is suppressed and rendering is skipped. Cleared at turn boundaries, so must be re-set continuously. Same flag toggled by spacebar during replay."

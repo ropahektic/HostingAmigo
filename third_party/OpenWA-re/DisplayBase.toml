@@ -1,0 +1,519 @@
+[[function]]
+va = 0x00522DB0
+name = "DisplayBase__Constructor"
+
+[[function]]
+va = 0x00522F60
+name = "DisplayBase__Destructor"
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "DisplayBase *"
+
+  [[function.param]]
+  name = "this"
+  type = "DisplayBase *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "flags"
+  type = "byte"
+  storage = "stack:0x4"
+
+[[function]]
+va = 0x00523190
+name = "DisplayBase__AllocPaletteSlots"
+
+[[struct]]
+name = "DisplayBase"
+namespace = "/OpenWA"
+size = 0x3560
+rust_path = "openwa_game::render::display::base::DisplayBase"
+plate_comment = """
+DisplayBase — base class of the display subsystem hierarchy (0x3560 bytes).
+Holds the sprite cache, font/sprite tables, palette slot allocator, and
+clip rect state. Extended by DisplayGfx (vtable 0x66A218).
+"""
+
+  [[struct.field]]
+  offset = 0x0
+  name = "vtable"
+  type = "DisplayBaseVtable *"
+  size = 0x4
+
+[[vtable]]
+name = "DisplayBaseVtable"
+va = 0x006645F8
+size = 40
+plate_comment = """
+DisplayBase primary vtable (40 slots, 0x6645F8). Transient — assigned by
+DisplayBase__Constructor, then immediately overwritten by either
+DisplayGfx__Constructor_Maybe (→ DisplayGfxVtable @ 0x66A218, headful) or
+GameEngine__InitHardware (→ DisplayBase__HeadlessVtable @ 0x66A0F8,
+headless). No live instance retains this vtable past its constructor
+chain, so no virtual call dispatches through it at runtime.
+
+Most slots are _purecall (0x5D4E16). Slots 4..=10 and 30..=36 happen to
+share the same concrete DisplayGfx implementations referenced by the two
+overlays — see DisplayGfxVtable for the full documentation. Slot 0
+(destructor) is the DisplayGfx destructor at 0x5660A0, not the canonical
+DisplayGfx__Destructor at 0x569CE0.
+
+The DLL's display_vtable::install() rewrites every remaining _purecall
+slot to noop_thiscall as a safety net for any virtual call that does
+manage to fire during the constructor window.
+"""
+
+  [[vtable.slot]]
+  index = 0
+  name = "destructor"
+  doc = "Headless-style destructor at 0x5660A0 (same as DisplayBase__HeadlessVtable slot 0)."
+
+  [[vtable.slot]]
+  index = 1
+  name = "slot_01_purecall"
+  doc = "_purecall."
+
+  [[vtable.slot]]
+  index = 2
+  name = "slot_02_purecall"
+  doc = "_purecall."
+
+  [[vtable.slot]]
+  index = 3
+  name = "slot_03_purecall"
+  doc = "_purecall."
+
+  [[vtable.slot]]
+  index = 4
+  name = "set_layer_color"
+  wa_function = "DisplayGfx__SetLayerColor"
+  doc = "Shared with DisplayGfxVtable[4]."
+
+  [[vtable.slot]]
+  index = 5
+  name = "set_active_layer"
+  wa_function = "DisplayGfx__SetActiveLayer"
+  doc = "Shared with DisplayGfxVtable[5]."
+
+  [[vtable.slot]]
+  index = 6
+  name = "get_sprite_info"
+  wa_function = "DisplayGfx__GetSpriteInfo"
+  doc = "Shared with DisplayGfxVtable[6]."
+
+  [[vtable.slot]]
+  index = 7
+  name = "draw_text_on_bitmap"
+  wa_function = "DisplayGfx__DrawTextOnBitmap"
+  doc = "Shared with DisplayGfxVtable[7]."
+
+  [[vtable.slot]]
+  index = 8
+  name = "get_font_info"
+  wa_function = "DisplayGfx__GetFontInfo"
+  doc = "Shared with DisplayGfxVtable[8]."
+
+  [[vtable.slot]]
+  index = 9
+  name = "get_font_metric"
+  wa_function = "DisplayGfx__GetFontMetric"
+  doc = "Shared with DisplayGfxVtable[9]."
+
+  [[vtable.slot]]
+  index = 10
+  name = "measure_text"
+  wa_function = "DisplayGfx__MeasureText"
+  doc = "Shared with DisplayGfxVtable[10]."
+
+  [[vtable.slot]]
+  index = 11
+  name = "slot_11_purecall"
+  doc = "_purecall (drawing slot)."
+
+  [[vtable.slot]]
+  index = 12
+  name = "slot_12_purecall"
+  doc = "_purecall (drawing slot)."
+
+  [[vtable.slot]]
+  index = 13
+  name = "slot_13_purecall"
+  doc = "_purecall (drawing slot)."
+
+  [[vtable.slot]]
+  index = 14
+  name = "slot_14_purecall"
+  doc = "_purecall (drawing slot)."
+
+  [[vtable.slot]]
+  index = 15
+  name = "slot_15_purecall"
+  doc = "_purecall (drawing slot)."
+
+  [[vtable.slot]]
+  index = 16
+  name = "slot_16_purecall"
+  doc = "_purecall (drawing slot)."
+
+  [[vtable.slot]]
+  index = 17
+  name = "slot_17_purecall"
+  doc = "_purecall (drawing slot)."
+
+  [[vtable.slot]]
+  index = 18
+  name = "slot_18_purecall"
+  doc = "_purecall (drawing slot)."
+
+  [[vtable.slot]]
+  index = 19
+  name = "slot_19_purecall"
+  doc = "_purecall (drawing slot)."
+
+  [[vtable.slot]]
+  index = 20
+  name = "slot_20_purecall"
+  doc = "_purecall (drawing slot)."
+
+  [[vtable.slot]]
+  index = 21
+  name = "slot_21_purecall"
+  doc = "_purecall (drawing slot)."
+
+  [[vtable.slot]]
+  index = 22
+  name = "slot_22_purecall"
+  doc = "_purecall (drawing slot)."
+
+  [[vtable.slot]]
+  index = 23
+  name = "slot_23_purecall"
+  doc = "_purecall (drawing slot)."
+
+  [[vtable.slot]]
+  index = 24
+  name = "slot_24_purecall"
+  doc = "_purecall (drawing slot)."
+
+  [[vtable.slot]]
+  index = 25
+  name = "slot_25_purecall"
+  doc = "_purecall."
+
+  [[vtable.slot]]
+  index = 26
+  name = "slot_26_purecall"
+  doc = "_purecall."
+
+  [[vtable.slot]]
+  index = 27
+  name = "slot_27_purecall"
+  doc = "_purecall."
+
+  [[vtable.slot]]
+  index = 28
+  name = "slot_28_purecall"
+  doc = "_purecall."
+
+  [[vtable.slot]]
+  index = 29
+  name = "slot_29_purecall"
+  doc = "_purecall."
+
+  [[vtable.slot]]
+  index = 30
+  name = "load_sprite_ex"
+  wa_function = "DisplayGfx__LoadSpriteEx"
+  doc = "Shared with DisplayGfxVtable[30]."
+
+  [[vtable.slot]]
+  index = 31
+  name = "load_sprite"
+  wa_function = "DisplayGfx__LoadSprite"
+  doc = "Shared with DisplayGfxVtable[31]."
+
+  [[vtable.slot]]
+  index = 32
+  name = "slot_32_purecall"
+  doc = "_purecall."
+
+  [[vtable.slot]]
+  index = 33
+  name = "get_sprite_frame_for_blit"
+  wa_function = "DisplayGfx__GetSpriteFrameForBlit"
+  doc = "Shared with DisplayGfxVtable[33]."
+
+  [[vtable.slot]]
+  index = 34
+  name = "load_font"
+  wa_function = "DisplayGfx__LoadFont"
+  doc = "Shared with DisplayGfxVtable[34]."
+
+  [[vtable.slot]]
+  index = 35
+  name = "load_font_extension"
+  wa_function = "DisplayGfx__LoadFontExtension"
+  doc = "Shared with DisplayGfxVtable[35]."
+
+  [[vtable.slot]]
+  index = 36
+  name = "set_font_palette"
+  wa_function = "DisplayGfx__SetFontPalette"
+  doc = "Shared with DisplayGfxVtable[36]."
+
+  [[vtable.slot]]
+  index = 37
+  name = "slot_37_purecall"
+  doc = "_purecall."
+
+  [[vtable.slot]]
+  index = 38
+  name = "slot_38_purecall"
+  doc = "_purecall."
+
+  [[vtable.slot]]
+  index = 39
+  name = "slot_39_purecall"
+  doc = "_purecall."
+
+[[vtable]]
+name = "DisplayBaseHeadlessVtable"
+va = 0x0066A0F8
+size = 40
+plate_comment = """
+Headless overlay vtable (40 slots, 0x66A0F8). Installed by
+GameEngine__InitHardware (0x56D4D2) onto a DisplayBase instance when the
+game runs in headless / `/getlog` mode (the gi+0xF914 branch). This is
+the live vtable for the headless renderer — replay-test runs all dispatch
+through here, never through DisplayGfxVtable.
+
+Slot pattern:
+- Drawing slots (most of 11..=29 + 37..=39) point at tiny return-only
+  stubs (FUN_00482860, FUN_00541020, FUN_005660d0, FUN_00566190, ...) so
+  the renderer becomes a no-op without losing simulation work.
+- Data-query / loader slots (4..=10, 30, 31, 33..=36) point at the SAME
+  concrete DisplayGfx implementations referenced by DisplayGfxVtable —
+  sprite/font metadata and asset loading still need to work in headless.
+  Hooks on these slots must be applied to BOTH vtables.
+- Slot 0 (headless destructor) and slot 1 (headless dimensions) are
+  headless-specific implementations distinct from the DisplayGfx versions.
+"""
+
+  [[vtable.slot]]
+  index = 0
+  name = "destructor_headless"
+  doc = "Headless-specific destructor at 0x5660A0. The DLL replaces this slot with display_vtable::headless_destructor at install time."
+
+  [[vtable.slot]]
+  index = 1
+  name = "get_dimensions_headless"
+  doc = "Headless dimensions stub at 0x5661A0."
+
+  [[vtable.slot]]
+  index = 2
+  name = "slot_02_noop"
+  wa_function = "WorldEntity__vt19"
+  doc = "Shared no-op stub (0x4AA060)."
+
+  [[vtable.slot]]
+  index = 3
+  name = "slot_03_noop"
+  wa_function = "WorldEntity__vt19"
+  doc = "Shared no-op stub (0x4AA060)."
+
+  [[vtable.slot]]
+  index = 4
+  name = "set_layer_color"
+  wa_function = "DisplayGfx__SetLayerColor"
+  doc = "Shared with DisplayGfxVtable[4]."
+
+  [[vtable.slot]]
+  index = 5
+  name = "set_active_layer"
+  wa_function = "DisplayGfx__SetActiveLayer"
+  doc = "Shared with DisplayGfxVtable[5]."
+
+  [[vtable.slot]]
+  index = 6
+  name = "get_sprite_info"
+  wa_function = "DisplayGfx__GetSpriteInfo"
+  doc = "Shared with DisplayGfxVtable[6]."
+
+  [[vtable.slot]]
+  index = 7
+  name = "draw_text_on_bitmap"
+  wa_function = "DisplayGfx__DrawTextOnBitmap"
+  doc = "Shared with DisplayGfxVtable[7]."
+
+  [[vtable.slot]]
+  index = 8
+  name = "get_font_info"
+  wa_function = "DisplayGfx__GetFontInfo"
+  doc = "Shared with DisplayGfxVtable[8]."
+
+  [[vtable.slot]]
+  index = 9
+  name = "get_font_metric"
+  wa_function = "DisplayGfx__GetFontMetric"
+  doc = "Shared with DisplayGfxVtable[9]."
+
+  [[vtable.slot]]
+  index = 10
+  name = "measure_text"
+  wa_function = "DisplayGfx__MeasureText"
+  doc = "Shared with DisplayGfxVtable[10]."
+
+  [[vtable.slot]]
+  index = 11
+  name = "slot_11_stub"
+  doc = "2-byte return stub at 0x482860 (shared with slot 12). Replaces DisplayGfx__DrawTiledBitmap."
+
+  [[vtable.slot]]
+  index = 12
+  name = "slot_12_stub"
+  doc = "2-byte return stub at 0x482860 (shared with slot 11). Replaces DisplayGfx__DrawPolyline."
+
+  [[vtable.slot]]
+  index = 13
+  name = "slot_13_stub"
+  doc = "2-byte return stub at 0x566190 (shared with slot 15). Replaces DisplayGfx__DrawLine."
+
+  [[vtable.slot]]
+  index = 14
+  name = "slot_14_stub"
+  doc = "2-byte return stub at 0x5660D0 (shared with slots 18, 21, 39). Replaces DisplayGfx__DrawLineClipped."
+
+  [[vtable.slot]]
+  index = 15
+  name = "slot_15_stub"
+  doc = "2-byte return stub at 0x566190 (shared with slot 13). Replaces DisplayGfx__DrawPixelStrip."
+
+  [[vtable.slot]]
+  index = 16
+  name = "slot_16_stub"
+  doc = "2-byte return stub at 0x541020 (shared with slots 17, 19, 22, 28). Replaces DisplayGfx__DrawCrosshair."
+
+  [[vtable.slot]]
+  index = 17
+  name = "slot_17_stub"
+  doc = "2-byte return stub at 0x541020 (shared with slot 16). Replaces DisplayGfx__DrawOutlinedPixel."
+
+  [[vtable.slot]]
+  index = 18
+  name = "slot_18_stub"
+  doc = "2-byte return stub at 0x5660D0 (shared with slot 14). Replaces DisplayGfx__FillRect."
+
+  [[vtable.slot]]
+  index = 19
+  name = "slot_19_stub"
+  doc = "2-byte return stub at 0x541020 (shared with slot 16). Replaces DisplayGfx__BlitSprite."
+
+  [[vtable.slot]]
+  index = 20
+  name = "slot_20_stub"
+  doc = "2-byte return stub at 0x540FA0. Replaces DisplayGfx__DrawScaledSprite."
+
+  [[vtable.slot]]
+  index = 21
+  name = "slot_21_stub"
+  doc = "2-byte return stub at 0x5660D0 (shared with slot 14). Replaces DisplayGfx__DrawViaCallback."
+
+  [[vtable.slot]]
+  index = 22
+  name = "slot_22_stub"
+  doc = "2-byte return stub at 0x541020 (shared with slot 16). Replaces DisplayGfx__DrawTiledTerrain."
+
+  [[vtable.slot]]
+  index = 23
+  name = "slot_23_stub"
+  doc = "Stub at 0x5660F0 (Display__sub_5660F0). Replaces DisplayGfx__SetLayerVisibility."
+
+  [[vtable.slot]]
+  index = 24
+  name = "slot_24_stub"
+  doc = "Stub at 0x566120 (Display__sub_566120). Replaces DisplayGfx__UpdatePalette."
+
+  [[vtable.slot]]
+  index = 25
+  name = "slot_25_noop"
+  wa_function = "WorldEntity__vt19"
+  doc = "Shared no-op stub (0x4AA060). Matches the unused slot in DisplayGfxVtable[25]."
+
+  [[vtable.slot]]
+  index = 26
+  name = "slot_26_noop"
+  wa_function = "WorldEntity__vt19"
+  doc = "Shared no-op stub (0x4AA060). Replaces DisplayGfx__FlushRender."
+
+  [[vtable.slot]]
+  index = 27
+  name = "slot_27_stub"
+  doc = "Stub_Void_Ret8 at 0x5931C0 (RET 8). Replaces DisplayGfx__SetCameraOffset."
+
+  [[vtable.slot]]
+  index = 28
+  name = "slot_28_stub"
+  doc = "2-byte return stub at 0x541020 (shared with slot 16). Replaces DisplayGfx__SetClipRect."
+
+  [[vtable.slot]]
+  index = 29
+  name = "slot_29_stub"
+  doc = "Stub at 0x545780."
+
+  [[vtable.slot]]
+  index = 30
+  name = "load_sprite_ex"
+  wa_function = "DisplayGfx__LoadSpriteEx"
+  doc = "Shared with DisplayGfxVtable[30]."
+
+  [[vtable.slot]]
+  index = 31
+  name = "load_sprite"
+  wa_function = "DisplayGfx__LoadSprite"
+  doc = "Shared with DisplayGfxVtable[31]."
+
+  [[vtable.slot]]
+  index = 32
+  name = "is_sprite_loaded_headless"
+  doc = "Headless-specific stub at 0x523160 (different from the canonical IsSpriteLoaded at 0x56A480)."
+
+  [[vtable.slot]]
+  index = 33
+  name = "get_sprite_frame_for_blit"
+  wa_function = "DisplayGfx__GetSpriteFrameForBlit"
+  doc = "Shared with DisplayGfxVtable[33]. Not invoked in headless (no sprite rendering)."
+
+  [[vtable.slot]]
+  index = 34
+  name = "load_font"
+  wa_function = "DisplayGfx__LoadFont"
+  doc = "Shared with DisplayGfxVtable[34]."
+
+  [[vtable.slot]]
+  index = 35
+  name = "load_font_extension"
+  wa_function = "DisplayGfx__LoadFontExtension"
+  doc = "Shared with DisplayGfxVtable[35]."
+
+  [[vtable.slot]]
+  index = 36
+  name = "set_font_palette"
+  wa_function = "DisplayGfx__SetFontPalette"
+  doc = "Shared with DisplayGfxVtable[36]."
+
+  [[vtable.slot]]
+  index = 37
+  name = "slot_37_stub"
+  doc = "Stub at 0x5660E0 (FUN_005660e0)."
+
+  [[vtable.slot]]
+  index = 38
+  name = "slot_38_stub"
+  doc = "Stub at 0x5660C0 (_DllMain_12_3 / unrelated cluster)."
+
+  [[vtable.slot]]
+  index = 39
+  name = "slot_39_stub"
+  doc = "2-byte return stub at 0x5660D0 (shared with slot 14)."

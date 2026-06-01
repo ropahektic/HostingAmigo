@@ -1,0 +1,4 @@
+[[typedef]]
+name = "SoundId"
+target = "uint"
+rust_path = "openwa_game::audio::SoundId"

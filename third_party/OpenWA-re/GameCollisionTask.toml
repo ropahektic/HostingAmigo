@@ -1,0 +1,115 @@
+[[function]]
+va = 0x004FEF30
+name = "WorldEntity__Destructor"
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "WorldEntity *"
+  storage = "ECX"
+
+[[function]]
+va = 0x004FF080
+name = "GameCollisionTask__Constructor_1"
+
+[[function]]
+va = 0x004FF490
+name = "GameCollisionTask__simple_rebound"
+
+[[function]]
+va = 0x004FF690
+name = "GameCollisionTask__rebound"
+
+[[function]]
+va = 0x004FFE70
+name = "GameCollisionTask__sub_4FFE70"
+
+[[function]]
+va = 0x00500100
+name = "GameCollisionTask__walk"
+
+[[function]]
+va = 0x00500230
+name = "GameCollisionTask__gradient"
+calling_convention = "__stdcall"
+custom_storage = true
+
+  [function.signature]
+  returns = "uint"
+
+  [[function.param]]
+  name = "this"
+  type = "WorldEntity *"
+  storage = "EAX"
+
+  [[function.param]]
+  name = "x"
+  type = "int"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "y"
+  type = "int"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "kind"
+  type = "int"
+  storage = "stack:0xC"
+
+  [[function.param]]
+  name = "out_grad"
+  type = "int *"
+  storage = "stack:0x10"
+
+[[function]]
+va = 0x005009C0
+name = "GameCollisionTask__detach_rope"
+
+[[function]]
+va = 0x00500D00
+name = "GameCollisionTask__set_rope_length"
+
+[[function]]
+va = 0x005010C0
+name = "GameCollisionTask__explosion2rope_0"
+
+[[function]]
+va = 0x00501240
+name = "GameCollisionTask__sub_501240"
+
+[[function]]
+va = 0x00501340
+name = "GameCollisionTask__collect_crate"
+calling_convention = "__stdcall"
+
+  [function.signature]
+  returns = "int"
+
+  [[function.param]]
+  name = "this"
+  type = "MissileEntity *"
+
+  [[function.param]]
+  name = "owner_id"
+  type = "uint"
+
+  [[function.param]]
+  name = "pickup_class"
+  type = "uint"
+
+  [[function.param]]
+  name = "flag"
+  type = "byte *"
+
+[[function]]
+va = 0x00501980
+name = "GameCollisionTask__sub_501980"
+
+[[function]]
+va = 0x00501A20
+name = "GameCollisionTask__sub_501A20"

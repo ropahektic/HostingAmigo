@@ -1,0 +1,314 @@
+[[function]]
+va = 0x00571B10
+name = "Keyboard__Destructor"
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "Keyboard *"
+
+  [[function.param]]
+  name = "this"
+  type = "Keyboard *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "flags"
+  type = "uint"
+  storage = "stack:0x4"
+
+[[function]]
+va = 0x00571B30
+name = "Keyboard__ReadInputRingBuffer"
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "byte"
+
+  [[function.param]]
+  name = "this"
+  type = "Keyboard *"
+  storage = "ECX"
+
+[[function]]
+va = 0x00571B50
+name = "Keyboard__CheckKeyState"
+
+[[function]]
+va = 0x00571BA0
+name = "Keyboard__CheckAction"
+
+[[function]]
+va = 0x00572210
+name = "Keyboard__IsActionPressed"
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "int"
+
+  [[function.param]]
+  name = "this"
+  type = "Keyboard *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "code"
+  type = "uint"
+  storage = "stack:0x4"
+
+[[function]]
+va = 0x00572230
+name = "Keyboard__IsActionActive"
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "int"
+
+  [[function.param]]
+  name = "this"
+  type = "Keyboard *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "code"
+  type = "uint"
+  storage = "stack:0x4"
+
+[[function]]
+va = 0x00572250
+name = "Keyboard__IsActionActive2"
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "int"
+
+  [[function.param]]
+  name = "this"
+  type = "Keyboard *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "code"
+  type = "uint"
+  storage = "stack:0x4"
+
+[[function]]
+va = 0x00572270
+name = "Keyboard__IsActionHeld"
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "int"
+
+  [[function.param]]
+  name = "this"
+  type = "Keyboard *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "code"
+  type = "uint"
+  storage = "stack:0x4"
+
+[[function]]
+va = 0x00572290
+name = "Keyboard__PollState"
+calling_convention = "__stdcall"
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "Keyboard *"
+  storage = "stack:0x4"
+
+[[function]]
+va = 0x005722F0
+name = "Keyboard__ClearKeyStates"
+calling_convention = "__cdecl"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "Keyboard *"
+  storage = "EAX"
+
+[[function]]
+va = 0x00572320
+name = "Keyboard__AlertUser"
+calling_convention = "__thiscall"
+custom_storage = true
+plate_comment = """
+Keyboard::AlertUser(flash, beep_kind)
+
+  Notifies the user when the WA window is not foreground:
+    1. Skip if foreground == GameSession.hwnd or g_FrontendHwnd
+    2. Beep: beep_kind 1 -> MessageBeep(MB_ICONINFORMATION 0x40)
+             beep_kind 2 -> MessageBeep(MB_ICONWARNING     0x30)
+             other       -> no beep
+    3. Flash window if `flash != 0`:
+         If g_FlashWindowExFn != NULL:
+           FlashWindowEx(FLASHWINFO { dwFlags=FLASHW_TRAY|FLASHW_TIMERNOFG (0x0E), uCount=15 })
+         Else (Win9x fallback):
+           FlashWindow(g_FrontendHwnd, TRUE)
+           g_WindowFlashing = 1
+"""
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "Keyboard *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "flash"
+  type = "byte"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "beep_kind"
+  type = "int"
+  storage = "stack:0x8"
+
+[[function]]
+va = 0x005723D0
+name = "Keyboard__VFunc7"
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "Keyboard *"
+  storage = "ECX"
+
+[[function]]
+va = 0x00572500
+name = "Keyboard__AcquireInput"
+plate_comment = """
+Keyboard::AcquireInput(esi_flag, param_1)
+
+  Operates on the global g_GameSession (does NOT take `this` despite living
+  on the Keyboard class — name is historical).
+
+  Called from OnSYSCOMMAND on focus restore (twice — once for ACTIVATE-related
+  path, once for SETFOCUS-style path). Re-acquires input ownership after the
+  game window regains foreground:
+    1. early-return if GameSession.flag_5c == 0 (not waiting for re-acquire)
+    2. if esi_flag != 0: GetCursorPos → GameSession.cursor_initial (+0x70)
+    3. GameSession.flag_2c = esi_flag
+    4. FrontendDialog::UpdateCursor(g_InGameFrontendDialog 0x7C0534) — cursor visibility/position
+    5. if esi_flag != 0: Cursor__ClipAndRecenter_Maybe (FUN_00573180)
+    6. GameSession.flag_60 = 1; GameSession._unknown_06c = esi_flag
+    7. if param_1 == 0: g_RenderContext->vtable[10] (renderer_restore_dims)
+    8. Keyboard::PollState(GameSession.keyboard) — flush WM_KEY messages + snapshot
+    9. if GameSession.display != 0:
+         Display__RestoreSurfaces_Maybe(display)
+         if returned nonzero:
+           if esi_flag != 0: SetFocus(g_FrontendHwnd)
+           GameSession.flag_5c = 0  // mark re-acquire done
+"""
+calling_convention = "__stdcall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "param_1"
+  type = "uint"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "esi_flag"
+  type = "uint"
+  storage = "ESI"
+
+[[struct]]
+name = "Keyboard"
+namespace = "/OpenWA"
+size = 0x33C
+rust_path = "openwa_game::input::keyboard::Keyboard"
+
+  [[struct.field]]
+  offset = 0x0
+  name = "vtable"
+  type = "KeyboardVtable *"
+  size = 0x4
+
+[[vtable]]
+name = "KeyboardVtable"
+va = 0x0066AEC8
+size = 19
+plate_comment = """
+Keyboard vtable (0x66AEC8). 19 slots in memory; slots beyond the concrete
+keyboard methods (9–18) are MSVC base-class destructor + small `return 0;`
+stubs left over from the C++ class layout.
+"""
+
+  [[vtable.slot]]
+  index = 0
+  name = "destructor"
+  wa_function = "Keyboard__Destructor"
+  doc = "Scalar deleting destructor (0x571B10)."
+
+  [[vtable.slot]]
+  index = 1
+  name = "is_action_pressed"
+  wa_function = "Keyboard__IsActionPressed"
+  doc = "Keyboard::IsActionPressed (0x572210). Edge-triggered (key just-pressed)."
+
+  [[vtable.slot]]
+  index = 2
+  name = "is_action_active"
+  wa_function = "Keyboard__IsActionActive"
+  doc = "Keyboard::IsActionActive (0x572230). EDI=1 → CheckAction."
+
+  [[vtable.slot]]
+  index = 3
+  name = "is_action_active2"
+  wa_function = "Keyboard__IsActionActive2"
+  doc = "Keyboard::IsActionActive2 (0x572250). EDI=2 → CheckAction. Level-triggered alternative; returns nonzero while held."
+
+  [[vtable.slot]]
+  index = 4
+  name = "is_action_held"
+  wa_function = "Keyboard__IsActionHeld"
+  doc = "Keyboard::IsActionHeld (0x572270). EDI=-1 → CheckAction."
+
+  [[vtable.slot]]
+  index = 5
+  name = "read_input_ring_buffer"
+  wa_function = "Keyboard__ReadInputRingBuffer"
+  doc = "Keyboard::ReadInputRingBuffer (0x571B30). Pops one byte from the 256-entry ASCII ring buffer; returns 0 when empty."
+
+  [[vtable.slot]]
+  index = 6
+  name = "slot_06_noop"
+  wa_function = "WorldEntity__vt19"
+  doc = "Shared `WorldEntity__vt19` ret stub (0x4AA060). No-op on the stock vtable; kept as a hook point (WormKit etc. may override). Called each frame from StepFrame when `GameWorld.is_headful != 0`."
+
+  [[vtable.slot]]
+  index = 7
+  name = "vfunc7"
+  wa_function = "Keyboard__VFunc7"
+  doc = "Keyboard::VFunc7 (0x5723D0). Calls vtable[8] (`AlertUser`) on `this` with `flash = (*game_info_input_ptr == 0)`, `beep_kind = 1`."
+
+  [[vtable.slot]]
+  index = 8
+  name = "alert_user"
+  wa_function = "Keyboard__AlertUser"
+  doc = "Keyboard::AlertUser (0x572320). Notifies the user when the game window is not foreground."

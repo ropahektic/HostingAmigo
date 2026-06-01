@@ -1,0 +1,354 @@
+[[function]]
+va = 0x0053F2E0
+name = "GameTask__fxrandom"
+
+[[function]]
+va = 0x0053F300
+name = "GameTask__netrandom"
+
+[[function]]
+va = 0x0053F340
+name = "GameTask__closest_object"
+
+[[function]]
+va = 0x0053F3F0
+name = "GameTask__find_closest_team"
+
+[[function]]
+va = 0x00546490
+name = "GameTask__sound_stop"
+
+[[function]]
+va = 0x005469C0
+name = "GameTask__ctor0_GameTask"
+
+[[function]]
+va = 0x005469F0
+name = "GameTask__save_0"
+
+[[function]]
+va = 0x00546A30
+name = "GameTask__machine_playing"
+
+[[function]]
+va = 0x00546A90
+name = "GameTask__moveto"
+
+[[function]]
+va = 0x00546AF0
+name = "GameTask__start_recording"
+
+[[function]]
+va = 0x00546B20
+name = "GameTask__ensure_recording"
+calling_convention = "__stdcall"
+custom_storage = true
+
+  [function.signature]
+  returns = "uint"
+
+  [[function.param]]
+  name = "this"
+  type = "WorldEntity *"
+  storage = "EAX"
+
+[[function]]
+va = 0x00546BB0
+name = "LoadAndPlayStreamingPositional"
+
+[[function]]
+va = 0x00546C20
+name = "LoadAndPlayStreaming"
+calling_convention = "__stdcall"
+custom_storage = true
+
+  [function.signature]
+  returns = "int"
+
+  [[function.param]]
+  name = "entity"
+  type = "WorldEntity *"
+  storage = "EAX"
+
+  [[function.param]]
+  name = "sound_id"
+  type = "SoundId"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "flags"
+  type = "uint"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "volume"
+  type = "Fixed"
+  storage = "stack:0xC"
+
+[[function]]
+va = 0x00546C80
+name = "GameTask__sound_volume"
+
+[[function]]
+va = 0x00546D60
+name = "GameTask__sound_play"
+
+[[function]]
+va = 0x00546DB0
+name = "GameTask__sub_546DB0"
+calling_convention = "__stdcall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "WormEntity *"
+  storage = "EAX"
+
+  [[function.param]]
+  name = "sound_id"
+  type = "uint"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "channel"
+  type = "uint"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "x"
+  type = "int"
+  storage = "stack:0xC"
+
+  [[function.param]]
+  name = "y"
+  type = "int"
+  storage = "stack:0x10"
+
+[[function]]
+va = 0x00546EB0
+name = "GameTask__sub_546EB0"
+
+[[function]]
+va = 0x00546F10
+name = "GameTask__sub_546F10"
+
+[[function]]
+va = 0x005471B0
+name = "GameTask__create_bubble_0"
+calling_convention = "__stdcall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "void *"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "parent"
+  type = "void *"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "descriptor"
+  type = "const uint *"
+  storage = "EDI"
+
+[[function]]
+va = 0x00547230
+name = "GameTask__create_score_bubble"
+
+[[function]]
+va = 0x005472C0
+name = "GameTask__create_bubble_1"
+calling_convention = "__stdcall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "pos_x"
+  type = "Fixed"
+  storage = "EAX"
+
+  [[function.param]]
+  name = "pos_y"
+  type = "Fixed"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "this"
+  type = "WorldEntity *"
+  storage = "ESI"
+
+  [[function.param]]
+  name = "zero"
+  type = "uint"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "kind"
+  type = "uint"
+  storage = "stack:0x8"
+
+[[function]]
+va = 0x00547310
+name = "GameTask__create_flames"
+
+[[function]]
+va = 0x00547490
+name = "GameTask__create_smoke_0"
+calling_convention = "__stdcall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "WorldEntity *"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "descriptor"
+  type = "uint *"
+  storage = "EDI"
+
+[[function]]
+va = 0x00547510
+name = "GameTask__create_smoke"
+
+[[function]]
+va = 0x00547CB0
+name = "GameTask__CalcDamage"
+calling_convention = "__stdcall"
+custom_storage = true
+
+  [function.signature]
+  returns = "int"
+
+  [[function.param]]
+  name = "base_damage"
+  type = "int"
+  storage = "ESI"
+
+  [[function.param]]
+  name = "entity"
+  type = "BaseEntity *"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "pct"
+  type = "int"
+  storage = "stack:0x8"
+
+[[function]]
+va = 0x00547D80
+name = "GameTask__set_track"
+calling_convention = "__fastcall"
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "BaseEntity *"
+
+  [[function.param]]
+  name = "arg"
+  type = "int"
+
+[[function]]
+va = 0x00547DB0
+name = "GameTask__get_track"
+
+[[function]]
+va = 0x00547ED0
+name = "BaseEntity__RefreshWorldActivity"
+calling_convention = "__stdcall"
+custom_storage = true
+plate_comment = """
+Refreshes the two world-level activity-watchdog timers
+(GameWorld._field_5dc and GameWorld._field_7e48) to `mode`, but only when each
+timer hasn't already decayed past `-mode`. The earlier name `set_active` was a
+guess; this function bumps the world watchdog when an entity wants the round to
+stay 'active' for another N frames (mines moving / armed, missiles in flight,
+turn-manager state transitions, etc.).
+"""
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "BaseEntity *"
+  storage = "ESI"
+
+  [[function.param]]
+  name = "mode"
+  type = "int"
+  storage = "EDX"
+
+[[function]]
+va = 0x00547F00
+name = "GameTask__bitmap3d_0"
+
+[[function]]
+va = 0x00547F30
+name = "GameTask__sub_547F30"
+
+[[function]]
+va = 0x00547F60
+name = "GameTask__comment_public_0"
+
+[[function]]
+va = 0x00547FC0
+name = "GameTask__game_text_public"
+
+[[function]]
+va = 0x00548020
+name = "GameTask__game_text_secret"
+
+[[function]]
+va = 0x005480F0
+name = "GameTask__comment_public"
+calling_convention = "__stdcall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "selector"
+  type = "int"
+  storage = "EAX"
+
+  [[function.param]]
+  name = "this"
+  type = "WormEntity *"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "name_array"
+  type = "char * *"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "kind"
+  type = "uint"
+  storage = "stack:0xC"
+
+  [[function.param]]
+  name = "worm_name_ptr"
+  type = "char *"
+  storage = "stack:0x10"
+
+[[function]]
+va = 0x005481E0
+name = "GameTask__sub_5481E0"

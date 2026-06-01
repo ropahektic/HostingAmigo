@@ -1,0 +1,369 @@
+[[function]]
+va = 0x004FB490
+name = "CollisionManager__Init"
+plate_comment = """
+Init the CollisionManager (at GameWorld+0x528) after the caller wrote
+the vtable. Sets the global entity DwordList at +0x18 (capacity=0x100,
+data=0x420 byte buffer) and the 32 per-class buckets at +0x28..+0x228
+to the same shape. The vtable and the +0x240 GameWorld back-pointer
+are written by the allocator (not this fn).
+
+Ported as `engine::collision_manager::collision_manager_init`; the WA
+function takes a pointer offset 0x14 *into* CollisionManager (so its
+writes look like `[+0x4..]` relative to that pointer).
+"""
+
+[[function]]
+va = 0x004FB5C0
+name = "CollisionManager__Destructor"
+
+[[function]]
+va = 0x004FB5F0
+name = "CollisionManager__Constructor"
+
+[[function]]
+va = 0x004FB520
+name = "CollisionManager__dtor1_CollisionManager"
+
+[[function]]
+va = 0x004FB680
+name = "CollisionManager__sub_4FB680"
+
+[[function]]
+va = 0x004FB730
+name = "CollisionManager__sub_4FB730"
+
+[[function]]
+va = 0x004FB7B0
+name = "CollisionManager__sub_4FB7B0"
+
+[[function]]
+va = 0x004FB890
+name = "CollisionManager__sub_4FB890"
+
+[[function]]
+va = 0x004FB9A0
+name = "CollisionManager__try_mask"
+
+[[function]]
+va = 0x004FBC30
+name = "CollisionManager__update_intersections"
+calling_convention = "__stdcall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "WorldEntity *"
+  storage = "ESI"
+
+  [[function.param]]
+  name = "cm"
+  type = "CollisionManager *"
+  storage = "EDI"
+
+[[function]]
+va = 0x004FBCA0
+name = "CollisionManager__find_intersections"
+
+[[function]]
+va = 0x004FBDC0
+name = "CollisionManager__rope"
+calling_convention = "__stdcall"
+custom_storage = true
+plate_comment = "Rope-mode collision/integration sweep used by `WorldEntity__StepRopePhysics_Maybe` when the entity is _not_ rope-attached (+0xBC == 0). Reads `this->speed_x/y` (via ESI), advances against the per-class entity list, returns the colliding `WorldEntity *` on a terminating contact (else NULL). Three stack params: the world's collision manager, an `out` slot that receives a 1..4 face code on contact, and the sub-frame `tick_fraction` (in/out, decremented by the integrator). RET 0xC."
+
+  [function.signature]
+  returns = "WorldEntity *"
+
+  [[function.param]]
+  name = "this"
+  type = "WorldEntity *"
+  storage = "ESI"
+
+  [[function.param]]
+  name = "cm"
+  type = "CollisionManager *"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "out_face_code"
+  type = "uint *"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "tick_fraction"
+  type = "Fixed *"
+  storage = "stack:0xC"
+
+[[function]]
+va = 0x004FC280
+name = "CollisionManager__apply_gravity"
+calling_convention = "__stdcall"
+custom_storage = true
+plate_comment = "Per-frame gravity / rope-gravity dispatcher. Selects between `apply_rope_gravity`, `apply_projectile_gravity`, and a direct +y velocity bump based on the worm's rope state. Plain RET — no stack args; both inputs are register-passed."
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "cm"
+  type = "CollisionManager *"
+  storage = "EAX"
+
+  [[function.param]]
+  name = "this"
+  type = "WorldEntity *"
+  storage = "ECX"
+
+[[function]]
+va = 0x004FC2F0
+name = "CollisionManager__apply_rope_gravity"
+
+[[function]]
+va = 0x004FC340
+name = "CollisionManager__sub_4FC340"
+
+[[function]]
+va = 0x004FC380
+name = "CollisionManager__sub_4FC380"
+
+[[function]]
+va = 0x004FC6D0
+name = "CollisionManager__apply_callback"
+
+[[function]]
+va = 0x004FCB30
+name = "CollisionManager__apply_projectile_gravity"
+
+[[function]]
+va = 0x004FCC50
+name = "CollisionManager__apply_quake"
+
+[[function]]
+va = 0x004FCD60
+name = "CollisionManager__sub_4FCD60"
+
+[[function]]
+va = 0x004FCDF0
+name = "CollisionManager__update_0"
+
+[[function]]
+va = 0x004FD230
+name = "CollisionManager__update_1"
+
+[[function]]
+va = 0x004FD300
+name = "CollisionManager__sub_4FD300"
+
+[[function]]
+va = 0x004FD360
+name = "CollisionManager__sub_4FD360"
+calling_convention = "__stdcall"
+plate_comment = "Rebuilds the rope-segment scratch globals at DAT_007739C8/CC/D0/D8.. from the entity's `rope_segments` buffer and `rope_segment_count`. Trims trailing zero-length segments. RET 0x4. Reachable only via `WorldEntity__StepRopePhysics_Maybe`'s rope-attached branch — in practice the entity is always a worm, but the function operates exclusively on WorldEntity-level fields."
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "WorldEntity *"
+
+[[function]]
+va = 0x004FD4C0
+name = "CollisionManager__sub_4FD4C0"
+calling_convention = "__stdcall"
+plate_comment = "Rope-segment line-of-sight / terrain probe. Returns non-zero if the rope (anchor + per-segment offsets) is blocked, telling `StepRopePhysics_Maybe` to skip its velocity damping + projectile sweep this tick. Param 1 is the owning `GameWorld *` (`this->world`; the body reads `world+0x24` = game_info and `world+0x20` = collision-helper table). Param 2 is the entity. Returns a byte in AL. RET 0x8."
+
+  [function.signature]
+  returns = "char"
+
+  [[function.param]]
+  name = "world"
+  type = "GameWorld *"
+
+  [[function.param]]
+  name = "this"
+  type = "WorldEntity *"
+
+[[function]]
+va = 0x004FD640
+name = "CollisionManager__projectile"
+calling_convention = "__stdcall"
+custom_storage = true
+plate_comment = "Per-tick projectile-style sub-step used by `StepRopePhysics_Maybe`'s rope-attached path. Advances the entity one sub-step under combined rope tension + gravity, performing the inner segment iteration and calling `WorldEntity__CheckMoveCollision` to detect terrain contact. Returns the colliding `WorldEntity *` on a hit, else NULL. `this` arrives in EAX; three stack args (cm, &budget, &tick_fraction). RET 0xC. Reachable only via the rope-attached branch, so `this` is always a worm in practice, but the function only touches WorldEntity-level fields."
+
+  [function.signature]
+  returns = "WorldEntity *"
+
+  [[function.param]]
+  name = "this"
+  type = "WorldEntity *"
+  storage = "EAX"
+
+  [[function.param]]
+  name = "cm"
+  type = "CollisionManager *"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "budget"
+  type = "Fixed *"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "tick_fraction"
+  type = "Fixed *"
+  storage = "stack:0xC"
+
+[[function]]
+va = 0x004FDC20
+name = "CollisionManager__sub_4FDC20"
+
+[[function]]
+va = 0x004FDC60
+name = "CollisionManager__sub_4FDC60"
+
+[[function]]
+va = 0x004FDD20
+name = "CollisionManager__sub_4FDD20"
+
+[[function]]
+va = 0x004FDD80
+name = "CollisionManager__sub_4FDD80"
+
+[[function]]
+va = 0x004FDE20
+name = "CollisionManager__apply_sea"
+
+[[function]]
+va = 0x004FDF40
+name = "CollisionManager__sub_4FDF40"
+calling_convention = "__fastcall"
+plate_comment = "Wind / drag clamp on an entity's `speed_y` while airborne above a configurable Y threshold. Compares `this->pos.y` (high 16 bits, read as i16 at +0x8A) against `cm->_unknown_228` and either does nothing (returns the cm pointer in the upper 32 bits) or multiplies both speed components by `this->subclass_data._field_54` and biases speed_y. Returns 1 on the active branch, else 0. Plain RET."
+
+  [function.signature]
+  returns = "int"
+
+  [[function.param]]
+  name = "this"
+  type = "WorldEntity *"
+
+  [[function.param]]
+  name = "cm"
+  type = "CollisionManager *"
+
+[[function]]
+va = 0x004FE0D0
+name = "CollisionManager__sub_4FE0D0"
+
+[[struct]]
+name = "DwordList"
+namespace = "/OpenWA"
+size = 0x10
+rust_path = "openwa_game::engine::collision_manager::DwordList"
+plate_comment = """
+Generic 16-byte dynamic-array header. Used by BaseEntity's children
+pool, every bucket in CollisionManager, and various collision-manager
+scratch lists. See `DwordList__Append` / `DwordList__Remove` for the
+insert/remove protocols.
+"""
+
+  [[struct.field]]
+  offset = 0x0
+  name = "capacity"
+  type = "uint"
+
+  [[struct.field]]
+  offset = 0x4
+  name = "dirty"
+  type = "uint"
+  comment = "Set to 1 by DwordList__Remove when a slot is nulled."
+
+  [[struct.field]]
+  offset = 0x8
+  name = "count"
+  type = "uint"
+  comment = "Insert watermark; Remove leaves null holes so callers must skip nulls."
+
+  [[struct.field]]
+  offset = 0xC
+  name = "data"
+  type = "void * *"
+
+[[struct]]
+name = "CollisionManager"
+namespace = "/OpenWA"
+size = 0x264
+rust_path = "openwa_game::engine::collision_manager::CollisionManager"
+plate_comment = """
+Entity registry + collision/spatial buckets, lives at GameWorld+0x528.
+Vtable at 0x664194. Every WorldEntity::Constructor registers `this`
+into `entities` and the matching `per_class[class_type]` bucket.
+"""
+
+  [[struct.field]]
+  offset = 0x0
+  name = "vtable"
+  type = "CollisionManagerVtable *"
+  type_namespace = "/OpenWA"
+
+  [[struct.field]]
+  offset = 0x4
+  name = "dirty"
+  type = "uint"
+  comment = "Cleared on every WorldEntity::Constructor registration."
+
+  [[struct.field]]
+  offset = 0x18
+  name = "entities"
+  type = "DwordList"
+  type_namespace = "/OpenWA"
+  comment = "Global all-entities list."
+
+  [[struct.field]]
+  offset = 0x28
+  name = "per_class"
+  type = "DwordList[32]"
+  type_namespace = "/OpenWA"
+  comment = "Per-class-type buckets, indexed by WorldEntity::contact_face."
+
+  [[struct.field]]
+  offset = 0x230
+  name = "wind_bias"
+  type = "Fixed"
+  comment = """
+  Wind bias added to the per-tick X-velocity jitter of gas-cloud
+  particles (GasEntity::HandleMessage, 0x00554A70). Zero gives the cloud
+  a centred ±0.5 random walk in X; non-zero shifts the walk's mean,
+  producing a sustained X drift — directional wind on the particles.
+  Zeroed at CollisionManager init.
+  """
+
+  [[struct.field]]
+  offset = 0x240
+  name = "world"
+  type = "GameWorld *"
+  type_namespace = "/OpenWA"
+  comment = "Back-pointer to the owning GameWorld."
+
+[[vtable]]
+name = "CollisionManagerVtable"
+va = 0x00664194
+size = 1
+plate_comment = "CollisionManager vtable (0x664194). Only slot 0 known so far."
+
+  [[vtable.slot]]
+  index = 0
+  name = "destructor"
+  doc = "Destructor (0x004FB5C0)."
+
+    [vtable.slot.signature]
+    calling_convention = "__thiscall"
+    returns = "void"
+
+      [[vtable.slot.signature.param]]
+      name = "this"
+      type = "CollisionManager *"

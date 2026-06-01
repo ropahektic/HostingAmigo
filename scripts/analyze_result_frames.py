@@ -23,7 +23,7 @@ REPLAY_FIXED_EVENT_SIZES = {
     0x11: 6,
     0x12: 3,
     0x13: 3,
-    0x16: 2,
+    0x16: 2,  # 2 B on wire; TaskMessageType = first_byte+1000 (0x16 -> 1022); see wa_serialization.py
     0x17: 1,
     0x1A: 2,
     0x1B: 2,
@@ -466,7 +466,8 @@ def bytes_diff(a: bytes, b: bytes) -> list[int]:
 def frame_map(records: list[dict], frame_min: int) -> dict[int, list[bytes]]:
     mapping: dict[int, list[bytes]] = defaultdict(list)
     for record in late_inbound_frames(records, frame_min):
-        mapping[record["frame"]].append(bytes.fromhex(record["body_hex"]))
+        hx = str(record.get("ws_payload_hex") or record["body_hex"])
+        mapping[record["frame"]].append(bytes.fromhex(hx))
     return dict(mapping)
 
 
@@ -487,7 +488,7 @@ def summarize_capture(path: Path, frame_min: int, tail: int) -> str:
         lines.append(f"no inbound channel-2 frames >= {frame_min}")
         return "\n".join(lines)
     for record in frames[-tail:]:
-        body = bytes.fromhex(record["body_hex"])
+        body = bytes.fromhex(str(record.get("ws_payload_hex") or record["body_hex"]))
         strings = printable_runs(body)
         suffix = f" strings={strings}" if strings else ""
         lines.append(
@@ -515,7 +516,7 @@ def summarize_endgame_window(path: Path, window: int) -> str:
     total = len(frames)
     for offset, record in enumerate(frames, start=1):
         rel_index = offset - total
-        body_hex = str(record["body_hex"])
+        body_hex = str(record.get("ws_payload_hex") or record["body_hex"])
         lines.append(
             "rel={rel:<3} frame={frame:<10} sender={sender:<3} family={family:<20} hex={body}".format(
                 rel=rel_index,
@@ -545,7 +546,8 @@ def inventory_relative_families(
         total = len(frames)
         for offset, record in enumerate(frames, start=1):
             rel_index = offset - total
-            counts_by_rel[rel_index][f"{winner_slot}:{packet_family(str(record['body_hex']))}"] += 1
+            hx = str(record.get("ws_payload_hex") or record["body_hex"])
+            counts_by_rel[rel_index][f"{winner_slot}:{packet_family(hx)}"] += 1
 
     lines = ["== relative family inventory =="]
     for rel_index in sorted(counts_by_rel):
@@ -575,7 +577,7 @@ def family_occurrences(
             total = len(frames)
             hits: list[tuple[int, str]] = []
             for offset, record in enumerate(frames, start=1):
-                body_hex = str(record["body_hex"])
+                body_hex = str(record.get("ws_payload_hex") or record["body_hex"])
                 family = packet_family(body_hex)
                 if family.startswith(family_prefix):
                     rel_index = offset - total
@@ -679,7 +681,7 @@ def family_consensus(
         frames = endgame_window(records, window)
         total = len(frames)
         for offset, record in enumerate(frames, start=1):
-            body_hex = str(record["body_hex"])
+            body_hex = str(record.get("ws_payload_hex") or record["body_hex"])
             family = packet_family(body_hex)
             if not family.startswith(family_prefix):
                 continue
@@ -722,7 +724,7 @@ def family_position_report(
         frames = endgame_window(records, window)
         total = len(frames)
         for offset, record in enumerate(frames, start=1):
-            body_hex = str(record["body_hex"])
+            body_hex = str(record.get("ws_payload_hex") or record["body_hex"])
             family = packet_family(body_hex)
             if not family.startswith(family_prefix):
                 continue

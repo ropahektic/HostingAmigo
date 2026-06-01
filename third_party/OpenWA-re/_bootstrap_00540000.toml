@@ -1,0 +1,633 @@
+[[function]]
+va = 0x00541D60
+name = "RQ_EnqueueTiledBitmap"
+calling_convention = "__stdcall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "queue"
+  type = "RenderQueue *"
+  storage = "EAX"
+
+  [[function.param]]
+  name = "y"
+  type = "Fixed"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "source"
+  type = "const TiledBitmapSource *"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "flags"
+  type = "uint"
+  storage = "stack:0xC"
+
+[[function]]
+va = 0x00541DD0
+name = "RQ_DrawLineStrip"
+calling_convention = "__stdcall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "queue"
+  type = "RenderQueue *"
+  storage = "EAX"
+
+  [[function.param]]
+  name = "count"
+  type = "uint"
+  storage = "EDI"
+
+  [[function.param]]
+  name = "vertices"
+  type = "int *"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "color"
+  type = "uint"
+  storage = "stack:0x8"
+
+[[function]]
+va = 0x00541E50
+name = "RQ_DrawPolygon"
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "queue"
+  type = "RenderQueue *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "count"
+  type = "uint"
+  storage = "ESI"
+
+  [[function.param]]
+  name = "vertices"
+  type = "int *"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "color1"
+  type = "uint"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "color2"
+  type = "uint"
+  storage = "stack:0xC"
+
+[[function]]
+va = 0x00541ED0
+name = "RQ_DrawCrosshair"
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "queue"
+  type = "RenderQueue *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "layer"
+  type = "uint"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "x"
+  type = "Fixed"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "y"
+  type = "Fixed"
+  storage = "stack:0xC"
+
+  [[function.param]]
+  name = "color_fg"
+  type = "uint"
+  storage = "stack:0x10"
+
+  [[function.param]]
+  name = "color_bg"
+  type = "uint"
+  storage = "stack:0x14"
+
+[[function]]
+va = 0x00541F40
+name = "RQ_DrawRect"
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "queue"
+  type = "RenderQueue *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "y_clip"
+  type = "Fixed"
+  storage = "EDX"
+
+  [[function.param]]
+  name = "layer"
+  type = "uint"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "x1"
+  type = "Fixed"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "y1"
+  type = "Fixed"
+  storage = "stack:0xC"
+
+  [[function.param]]
+  name = "x2"
+  type = "Fixed"
+  storage = "stack:0x10"
+
+  [[function.param]]
+  name = "y2"
+  type = "Fixed"
+  storage = "stack:0x14"
+
+  [[function.param]]
+  name = "color"
+  type = "uint"
+  storage = "stack:0x18"
+
+[[function]]
+va = 0x00541FE0
+name = "RQ_DrawSpriteGlobal"
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "y_pos"
+  type = "Fixed"
+  storage = "EAX"
+
+  [[function.param]]
+  name = "queue"
+  type = "RenderQueue *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "layer"
+  type = "uint"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "x_pos"
+  type = "Fixed"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "sprite"
+  type = "SpriteOp"
+  storage = "stack:0xC"
+
+  [[function.param]]
+  name = "anim_value"
+  type = "Fixed"
+  storage = "stack:0x10"
+
+[[function]]
+va = 0x00542060
+name = "RQ_DrawSpriteLocal"
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "y_pos"
+  type = "Fixed"
+  storage = "EAX"
+
+  [[function.param]]
+  name = "queue"
+  type = "RenderQueue *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "layer"
+  type = "uint"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "x_pos"
+  type = "Fixed"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "sprite"
+  type = "SpriteOp"
+  storage = "stack:0xC"
+
+  [[function.param]]
+  name = "anim_value"
+  type = "Fixed"
+  storage = "stack:0x10"
+
+[[function]]
+va = 0x005420E0
+name = "RQ_DrawSpriteOffset"
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "queue"
+  type = "RenderQueue *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "y_clip"
+  type = "Fixed"
+  storage = "EDX"
+
+  [[function.param]]
+  name = "layer"
+  type = "uint"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "x_pos"
+  type = "Fixed"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "y_pos"
+  type = "Fixed"
+  storage = "stack:0xC"
+
+  [[function.param]]
+  name = "flags"
+  type = "uint"
+  storage = "stack:0x10"
+
+  [[function.param]]
+  name = "sprite"
+  type = "SpriteOp"
+  storage = "stack:0x14"
+
+  [[function.param]]
+  name = "anim_value"
+  type = "Fixed"
+  storage = "stack:0x18"
+
+[[function]]
+va = 0x00542170
+name = "RQ_DrawBitmapGlobal"
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "queue"
+  type = "RenderQueue *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "y_pos"
+  type = "Fixed"
+  storage = "EDX"
+
+  [[function.param]]
+  name = "layer"
+  type = "uint"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "x_pos"
+  type = "Fixed"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "bitmap"
+  type = "DisplayBitGrid *"
+  storage = "stack:0xC"
+
+  [[function.param]]
+  name = "src_y"
+  type = "int"
+  storage = "stack:0x10"
+
+  [[function.param]]
+  name = "src_w"
+  type = "int"
+  storage = "stack:0x14"
+
+  [[function.param]]
+  name = "src_h"
+  type = "int"
+  storage = "stack:0x18"
+
+  [[function.param]]
+  name = "flags"
+  type = "uint"
+  storage = "stack:0x1C"
+
+[[function]]
+va = 0x00542200
+name = "RQ_DrawTextboxLocal"
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "queue"
+  type = "RenderQueue *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "y_pos"
+  type = "Fixed"
+  storage = "EDX"
+
+  [[function.param]]
+  name = "layer"
+  type = "uint"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "x_pos"
+  type = "Fixed"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "bitmap"
+  type = "DisplayBitGrid *"
+  storage = "stack:0xC"
+
+  [[function.param]]
+  name = "src_w"
+  type = "int"
+  storage = "stack:0x10"
+
+  [[function.param]]
+  name = "src_h"
+  type = "int"
+  storage = "stack:0x14"
+
+  [[function.param]]
+  name = "flags"
+  type = "uint"
+  storage = "stack:0x18"
+
+[[function]]
+va = 0x00542330
+name = "RQ_DrawCmdSortComparator"
+
+[[function]]
+va = 0x00542350
+name = "RenderDrawingQueue"
+calling_convention = "__stdcall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "queue"
+  type = "RenderQueue *"
+  storage = "EAX"
+
+  [[function.param]]
+  name = "display"
+  type = "DisplayGfx *"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "clip"
+  type = "ClipContext *"
+  storage = "stack:0x8"
+
+[[function]]
+va = 0x00542B10
+name = "RQ_TranslateCoordinates"
+
+[[function]]
+va = 0x00542BA0
+name = "RQ_ClipCoordinates"
+
+[[function]]
+va = 0x00542C70
+name = "RQ_ClipCoordinatesWithRef"
+
+[[function]]
+va = 0x00542D50
+name = "RQ_TransformWithZoom_Maybe"
+
+[[function]]
+va = 0x00542E60
+name = "RQ_SmoothInterpolate_Maybe"
+
+[[function]]
+va = 0x00542F70
+name = "RQ_SaturateClipBounds_Maybe"
+
+[[function]]
+va = 0x005430F0
+name = "Distance3D_Attenuation"
+
+[[function]]
+va = 0x005451F0
+name = "ControlEntity__HandleMessage"
+calling_convention = "__thiscall"
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "void *"
+
+  [[function.param]]
+  name = "sender"
+  type = "void *"
+
+  [[function.param]]
+  name = "msg_type"
+  type = "EntityMessage"
+
+  [[function.param]]
+  name = "size"
+  type = "uint"
+
+  [[function.param]]
+  name = "data"
+  type = "void *"
+
+[[function]]
+va = 0x00546140
+name = "ComputeStateChecksum"
+
+[[function]]
+va = 0x00546170
+name = "ComputeStateChecksum_Multi"
+
+[[function]]
+va = 0x00546260
+name = "RecordActiveSound"
+
+[[function]]
+va = 0x00546300
+name = "ComputeDistanceParams"
+
+[[function]]
+va = 0x00546360
+name = "DispatchLocalSound"
+
+[[function]]
+va = 0x005463F0
+name = "PlayLocalWithEmitter"
+
+[[function]]
+va = 0x00546430
+name = "PlayLocalNoEmitter"
+
+[[function]]
+va = 0x00546B50
+name = "PlaySoundPooled_Direct"
+calling_convention = "__fastcall"
+custom_storage = true
+
+  [function.signature]
+  returns = "int"
+
+  [[function.param]]
+  name = "entity"
+  type = "const BaseEntity *"
+  storage = "EDX"
+
+  [[function.param]]
+  name = "slot"
+  type = "SoundId"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "priority"
+  type = "int"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "volume"
+  type = "Fixed"
+  storage = "stack:0xC"
+
+[[function]]
+va = 0x00546E20
+name = "PlaySoundGlobal"
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "uint"
+
+  [[function.param]]
+  name = "this"
+  type = "const WorldEntity *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "sound_id"
+  type = "SoundId"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "flags"
+  type = "uint"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "volume"
+  type = "Fixed"
+  storage = "stack:0xC"
+
+  [[function.param]]
+  name = "pitch"
+  type = "Fixed"
+  storage = "stack:0x10"
+
+
+[[function]]
+va = 0x00546F70
+name = "GenerateDebrisParticles"
+
+[[function]]
+va = 0x00548080
+name = "CreateExplosion"
+calling_convention = "__stdcall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "pos_x"
+  type = "Fixed"
+  storage = "EAX"
+
+  [[function.param]]
+  name = "pos_y"
+  type = "Fixed"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "sender"
+  type = "BaseEntity *"
+  storage = "ESI"
+
+  [[function.param]]
+  name = "explosion_id"
+  type = "uint"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "damage"
+  type = "uint"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "caller_flag"
+  type = "uint"
+  storage = "stack:0xC"
+
+  [[function.param]]
+  name = "owner_id"
+  type = "uint"
+  storage = "stack:0x10"

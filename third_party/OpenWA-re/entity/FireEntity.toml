@@ -1,0 +1,134 @@
+[[function]]
+va = 0x0054F4C0
+name = "FireEntity__Constructor"
+
+[[function]]
+va = 0x0054F680
+name = "FireEntity__Free"
+
+[[function]]
+va = 0x0054F770
+name = "FireEntity__Init"
+
+[[function]]
+va = 0x005501A0
+name = "FireEntity__HandleMessage"
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "FireEntity *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "sender"
+  type = "BaseEntity *"
+  storage = "stack:0x4"
+
+  [[function.param]]
+  name = "msg_type"
+  type = "EntityMessage"
+  storage = "stack:0x8"
+
+  [[function.param]]
+  name = "size"
+  type = "uint"
+  storage = "stack:0xC"
+
+  [[function.param]]
+  name = "data"
+  type = "const byte *"
+  storage = "stack:0x10"
+
+[[function]]
+va = 0x005509E0
+name = "FireEntity__ProcessFrame"
+calling_convention = "__thiscall"
+custom_storage = true
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "FireEntity *"
+  storage = "ECX"
+
+  [[function.param]]
+  name = "flags"
+  type = "uint"
+  storage = "stack:0x4"
+
+[[struct]]
+name = "FireEntity"
+namespace = "/OpenWA"
+size = 0xD8
+rust_path = "openwa_game::entity::fire::FireEntity"
+
+  [[struct.field]]
+  offset = 0x0
+  name = "vtable"
+  type = "FireEntityVtable *"
+  size = 0x4
+
+[[vtable]]
+name = "FireEntityVtable"
+va = 0x00669DD8
+size = 12
+parent_vtable = "BaseEntityVtable"
+plate_comment = """
+FireEntity vtable — 12 slots. Extends BaseEntity (7-slot) with fire-specific
+HandleMessage and ProcessFrame overrides.
+"""
+
+  [[vtable.slot]]
+  index = 2
+  name = "handle_message"
+  wa_function = "FireEntity__HandleMessage"
+  doc = "HandleMessage — processes fire messages."
+
+  [[vtable.slot]]
+  index = 7
+  name = "process_frame_inner"
+  wa_function = "FireEntity__ProcessFrame"
+  doc = "FireEntity-specific tick called from slot-2 HandleMessage (per-frame countdown, spread, damage). Distinct from inherited slot-6 process_frame; takes a flags arg in addition to `this`."
+
+[[function]]
+va = 0x0054F6D0
+name = "FireEntity__ctor1_FireEntity"
+
+[[function]]
+va = 0x0054F7D0
+name = "FireEntity__insert_into_firelist"
+
+[[function]]
+va = 0x0054F940
+name = "FireEntity__create_fire"
+
+[[function]]
+va = 0x0054FAD0
+name = "FireEntity__check_for_impact"
+
+[[function]]
+va = 0x0054FD40
+name = "FireEntity__emit_smoke"
+
+[[function]]
+va = 0x0054FE20
+name = "FireEntity__update_falling"
+
+[[function]]
+va = 0x00550100
+name = "FireEntity__update_burning"
+
+[[function]]
+va = 0x00550140
+name = "FireEntity__perform_burning"
+
+[[function]]
+va = 0x005506F0
+name = "FireEntity__blast"

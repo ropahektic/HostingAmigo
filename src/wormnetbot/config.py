@@ -18,6 +18,15 @@ def _load_env_file(path: Path) -> None:
             os.environ.setdefault(key.strip(), value.strip())
 
 
+
+def _parse_roster_pins() -> dict[str, int]:
+    pins: dict[str, int] = {}
+    for slot, env_key in ((1, "WORMNET_ROSTER1_NICK"), (2, "WORMNET_ROSTER2_NICK")):
+        nick = os.getenv(env_key, "s" if slot == 1 else "wormstv").strip()
+        if nick:
+            pins[nick.casefold()] = slot
+    return pins
+
 def _read_env_file() -> None:
     candidates: list[Path] = []
     override = os.getenv("WORMNET_ENV_FILE", "").strip()
@@ -54,14 +63,31 @@ class BotConfig:
     game_type: str
     game_bind_host: str
     game_port: int
-    game_c2_relay: str  # "minimal" | "gameplay" (see WORMNET_GAME_C2_RELAY)
+    game_c2_relay: str  # "minimal" | "gameplay" (see WORMNET_GAME_C2_RELAY; gameplay = multi-human safe)
+    # How many of the last *incoming* (non-host) C2 game bodies to score for the
+    # 4020/1e endgame-family heuristic. Larger = more chance to see late endgame
+    # packets, more noise. Does not add engine-truth: wire is still BinaryCompressor-wrapped.
+    winner_endgame_incoming_frames: int
+    # Last dword of SRV_START_GAME (0x1C); 500 (0x1F4) matches WA 3.8.x; 0x4C is legacy 3.6.x.
+    wa_start_game_version: int
+    # nickname.casefold() -> fixed WA roster slot (1/2) for stable F1/F2 + chat identity
+    roster_pins: dict[str, int]
+    # JSON file written by OpenWA (RBOT_WINNER_SIDECAR_PATH on VM101) for arena winner.
+    openwa_winner_sidecar_path: str
 
     @classmethod
     def from_env(cls) -> "BotConfig":
         _read_env_file()
-        c2 = os.getenv("WORMNET_GAME_C2_RELAY", "minimal").lower().strip()
+        c2 = os.getenv("WORMNET_GAME_C2_RELAY", "gameplay").lower().strip()
         if c2 not in ("minimal", "gameplay"):
-            c2 = "minimal"
+            c2 = "gameplay"
+        wframes = int(os.getenv("WORMNET_WINNER_ENDGAME_FRAMES", "32").strip() or "32")
+        wframes = max(8, min(64, wframes))
+        start_ver_raw = os.getenv("WORMNET_WA_START_GAME_VERSION", "500").strip() or "500"
+        try:
+            wa_start_game_version = int(start_ver_raw, 0)
+        except ValueError:
+            wa_start_game_version = 500
         channels = [
             channel.strip()
             for channel in os.getenv("WORMNET_CHANNELS", "#AnythingGoes").split(",")
@@ -87,4 +113,8 @@ class BotConfig:
             game_bind_host=os.getenv("WORMNET_GAME_BIND_HOST", "0.0.0.0"),
             game_port=int(os.getenv("WORMNET_GAME_PORT", "17011")),
             game_c2_relay=c2,
+            winner_endgame_incoming_frames=wframes,
+            wa_start_game_version=wa_start_game_version,
+            roster_pins=_parse_roster_pins(),
+            openwa_winner_sidecar_path=os.getenv("WORMNET_OPENWA_WINNER_PATH", "").strip(),
         )

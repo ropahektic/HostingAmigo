@@ -1,0 +1,5 @@
+out_of_scope_reason = "Frontend code will not be ported."
+
+[[global]]
+va = 0x00654F60
+name = "FrontendLobbyOptions__vtable_Maybe"

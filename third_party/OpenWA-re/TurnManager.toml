@@ -1,0 +1,11 @@
+[[function]]
+va = 0x0055FDA0
+name = "TurnManager__ProcessFrame"
+calling_convention = "__stdcall"
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "turngame"
+  type = "uint"

@@ -1,0 +1,107 @@
+out_of_scope_reason = "MFC runtime statically linked into WA.exe. We won't reimplement MFC."
+
+[[function]]
+va = 0x0041A810
+name = "CWnd__MoveWindow_1"
+
+[[function]]
+va = 0x005C353F
+name = "CWnd__FromHandle"
+calling_convention = "__stdcall"
+
+  [function.signature]
+  returns = "CWnd *"
+
+  [[function.param]]
+  name = "hwnd"
+  type = "uint"
+
+[[function]]
+va = 0x005C6400
+name = "CWnd__MoveWindow"
+calling_convention = "__thiscall"
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "CWnd *"
+
+  [[function.param]]
+  name = "x"
+  type = "int"
+
+  [[function.param]]
+  name = "y"
+  type = "int"
+
+  [[function.param]]
+  name = "cx"
+  type = "int"
+
+  [[function.param]]
+  name = "cy"
+  type = "int"
+
+  [[function.param]]
+  name = "repaint"
+  type = "BOOL"
+
+[[function]]
+va = 0x005C643E
+name = "CWnd__ShowWindow"
+calling_convention = "__thiscall"
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "CWnd *"
+
+  [[function.param]]
+  name = "n_cmd_show"
+  type = "int"
+
+[[function]]
+va = 0x005C45A3
+name = "CWnd__GetWindowText"
+
+[[function]]
+va = 0x005C647A
+name = "CWnd__EnableWindow"
+calling_convention = "__thiscall"
+
+  [function.signature]
+  returns = "void"
+
+  [[function.param]]
+  name = "this"
+  type = "CWnd *"
+
+  [[function.param]]
+  name = "enable"
+  type = "BOOL"
+
+[[function]]
+va = 0x005C649B
+name = "CWnd__SetFocus"
+calling_convention = "__thiscall"
+
+  [function.signature]
+  returns = "CWnd *"
+
+  [[function.param]]
+  name = "this"
+  type = "CWnd *"
+
+[[struct]]
+name = "CWnd"
+size = 0x4
+rust_path = "openwa_game::wa::mfc::CWnd"
+
+[[struct]]
+name = "CWinApp"
+size = 0x4
+rust_path = "openwa_game::wa::mfc::CWinApp"
