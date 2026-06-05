@@ -27,7 +27,7 @@ What works well:
 
 - **Endgame network handshake** is relay-only today. Matches finish and both clients reach the result screen, but often after a ~10s **"Waiting for players"** PLEASE WAIT fallback instead of the instant transition vanilla WA shows after fanfare.
 - **Winner / match outcome** from wire traffic is still unresolved — see [Winner detection (status)](#winner-detection-status).
-- Lobby **ready / light bulb** quirks can still appear with multiple humans.
+
 
 Notes on reverse-engineering (protocol, endgame-shaped packets, tooling) are in `Findings.md`.
 
@@ -49,9 +49,6 @@ wormnetbot
 
 On Linux, keep `WORMNET_GAME_BIND_HOST=0.0.0.0` so the bot can own `17011` for remote WA clients.
 
-## Winner detection (status)
-
-Efforts were made to infer the winner from live hosted traffic, but **no dependable method exists yet** beyond weak heuristics. The closest usable hint is **who had the last turn before the session stops** (player/team), which still must not be treated as authoritative match results.
 
 Supporting tooling (captures, offline analysis):
 
