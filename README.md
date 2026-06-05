@@ -2,28 +2,32 @@
 
 Standalone WormNET bot for hosting Worms Armageddon games on WormNET.
 
-**Reliable for playing a full match with one human joiner.** Several clients can use the **pre-game lobby** mostly fine, but **starting the actual game** with more than one human fails — see [Current status](#current-status).
+**Reliable for playing a full rank match with two independent human clients.** The bot is a headless host that relays WA lobby and channel-2 traffic so peers can load, play turns, and reach the result screen without a real WA host process.
 
 The idea of this project is to make competitive worms self contained inside the Bot to minimize user workload when playing and reporting competitive games. The bot will contain the whole environment: ranking, player stats, matchmaking.
 
 ## Current status
 
-The bot can host Worms Armageddon sessions over WormNET with IRC advertising, a WA-compatible TCP listener, lobby/game relay logic, and captures — **but a multi-human match does not successfully leave “Waiting for players” and start** (see below).
+The bot can host Worms Armageddon sessions over WormNET with IRC advertising, a WA-compatible TCP listener, lobby/game relay logic, and captures.
 
 What works well:
 
 - IRC/WormNET connectivity with reconnect loop
 - game advertisement create/close via `wormageddonweb/Game.asp`
 - WA host listener on the advertised game port
-- join handshake, **team add / colour / worm-count sync** (multiple clients can pick teams without drifting colours/slots in typical tests)
+- join handshake, **team add / colour / worm-count sync** for multiple clients
+- **two-client load handshake and in-game channel-2 relay** (the main breakthrough — peers sync and play a full match)
 - scheme configuration and manual game start from IRC
 - channel-2 relay modes for loading and gameplay traffic
 - per-session capture logging to `captures/*.jsonl`
 - replay/capture analysis tooling in `scripts/analyze_result_frames.py`
+- GameNet wire decode helpers (`wa_lz77.py`, `wa_gamenet_wire.py`, `wa_task_stream.py`)
 
-**Winner / match outcome:** still unresolved — see [Winner detection (status)](#winner-detection-status).
+**Still imperfect:**
 
-
+- **Endgame network handshake** is relay-only today. Matches finish and both clients reach the result screen, but often after a ~10s **"Waiting for players"** PLEASE WAIT fallback instead of the instant transition vanilla WA shows after fanfare.
+- **Winner / match outcome** from wire traffic is still unresolved — see [Winner detection (status)](#winner-detection-status).
+- Lobby **ready / light bulb** quirks can still appear with multiple humans.
 
 Notes on reverse-engineering (protocol, endgame-shaped packets, tooling) are in `Findings.md`.
 
@@ -53,7 +57,7 @@ Supporting tooling (captures, offline analysis):
 
 - `captures/*.jsonl` — raw packets from hosted sessions
 - `scripts/analyze_result_frames.py` — replay/capture analysis helpers
-- `src/wormnetbot/game_host.py` — experimental scoring over late channel-2 patterns (often wrong or inconclusive)
+- `src/wormnetbot/game_host.py` — strict task-1020/1043 decode path (often misses on rank surrender)
 
 Background draws on an unstripped WA build and `text strings` material kept out of this repo; narrative and experiments live in `Findings.md`.
 
@@ -77,7 +81,7 @@ Background draws on an unstripped WA build and `text strings` material kept out 
 - `WORMNET_GAME_TYPE` game type sent to `Game.asp`
 - `WORMNET_GAME_BIND_HOST` local interface used for the WA host listener
 - `WORMNET_GAME_PORT` local WA host port, default `17011`
-- `WORMNET_GAME_C2_RELAY` relay mode: `gameplay` (default, relays channel-2 during loading/gameplay) or `minimal` (narrow tests only). Relay settings do **not** fix **multi-human game start** (stuck “Waiting for players”); use one human joiner for a match that actually loads.
+- `WORMNET_GAME_C2_RELAY` relay mode: `gameplay` (default, relays channel-2 during loading/gameplay) or `minimal` (narrow tests only)
 - `WORMNET_WA_START_GAME_VERSION` decimal or `0x…` dword in `0x1C` (default `500` / `0x1F4` for WA 3.8.x)
 - `WORMNET_ENV_FILE` optional override path for the env file
 
@@ -101,6 +105,13 @@ Background draws on an unstripped WA build and `text strings` material kept out 
 - Some lobby snapshots currently include a synthetic host placeholder team in slot `0`; this is an artifact of the current emulation and should not be treated as a real playable team.
 - Local reverse-engineering inputs such as the symbolized WA binary are kept out of git; the repo only contains the reusable tooling and conclusions.
 
+## Remaining gaps
+
+- **Winner inference:** need a validated on-wire signal (today: last-turn hint only).
+- **Endgame GameNet assist:** emulate `BeginNetworkGameEnd` / `MachineQuit` so clients skip the PLEASE WAIT countdown.
+- Keep widening validation coverage across more game formats, schemes, and edge-case finishes.
+- Improve map/scheme coverage and polish lobby emulation.
+- Add channel/user access control and other operational safeguards.
 
 ## License
 
