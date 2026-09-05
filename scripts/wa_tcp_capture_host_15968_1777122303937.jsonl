@@ -1,1 +1,0 @@
-{"meta":1,"role":"host","pid":15968,"arch":"ia32","log":"C:\\GOG Games\\Worms Armageddon\\wa_tcp_capture_host_15968_1777122303937.jsonl","ports":[17011],"capture_all":false,"note":"Game TCP lines use channel byte 0x01/0x02 at start of each WA record (TCP may coalesce/split)."}

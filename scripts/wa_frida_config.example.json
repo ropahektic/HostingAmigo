@@ -1,8 +1,0 @@
-{
-  "module": "WA.exe",
-  "image_base": "0x400000",
-  "put_message_rva": "0x141130",
-  "surrender_team_rva": "0x15BB50",
-  "msg_expand_rva": "0x164EA0",
-  "log_body": 128
-}
