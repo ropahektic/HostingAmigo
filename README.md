@@ -1,4 +1,4 @@
-# WormNETBot
+# HostingAmigo
 
 Standalone WormNET bot for hosting Worms Armageddon games on WormNET.
 
