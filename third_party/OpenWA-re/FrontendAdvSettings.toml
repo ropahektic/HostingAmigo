@@ -1,9 +1,0 @@
-out_of_scope_reason = "Frontend code will not be ported."
-
-[[function]]
-va = 0x004279E0
-name = "FrontendAdvSettings__Constructor"
-
-[[global]]
-va = 0x0064C718
-name = "FrontendAdvSettings__vtable"

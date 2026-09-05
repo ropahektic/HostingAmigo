@@ -1,5 +1,0 @@
-out_of_scope_reason = "MFC runtime statically linked into WA.exe. We won't reimplement MFC."
-
-[[function]]
-va = 0x005CBC79
-name = "CFile__Open"

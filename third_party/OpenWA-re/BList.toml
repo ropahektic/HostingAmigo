@@ -1,9 +1,0 @@
-out_of_scope_reason = "MFC runtime statically linked into WA.exe. We won't reimplement MFC."
-
-[[function]]
-va = 0x0041AAF0
-name = "BList__dtor_BList"
-
-[[function]]
-va = 0x005CC17B
-name = "BList__ctor_Blist"

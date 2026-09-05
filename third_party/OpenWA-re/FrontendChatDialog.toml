@@ -1,5 +1,0 @@
-out_of_scope_reason = "Frontend code will not be ported."
-
-[[global]]
-va = 0x0065EE60
-name = "FrontendChatDialog__vtable_Maybe"

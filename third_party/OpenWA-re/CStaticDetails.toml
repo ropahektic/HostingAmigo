@@ -1,5 +1,0 @@
-out_of_scope_reason = "Frontend code will not be ported."
-
-[[function]]
-va = 0x004D2500
-name = "CStaticDetails__ShowStats"

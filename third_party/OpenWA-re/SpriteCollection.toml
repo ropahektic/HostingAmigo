@@ -1,7 +1,0 @@
-[[function]]
-va = 0x0053DCE0
-name = "SpriteCollection__Destructor_Maybe"
-
-[[global]]
-va = 0x00667B54
-name = "SpriteCollection__vtable_Maybe"

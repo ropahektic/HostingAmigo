@@ -1,7 +1,0 @@
-[[function]]
-va = 0x0046B600
-name = "HtmlParser__InputFunction"
-
-[[function]]
-va = 0x0046B700
-name = "HtmlParser__HandleTag"

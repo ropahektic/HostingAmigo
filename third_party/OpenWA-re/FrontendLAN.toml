@@ -1,9 +1,0 @@
-out_of_scope_reason = "Frontend code will not be ported."
-
-[[function]]
-va = 0x00480A80
-name = "FrontendLAN__Constructor"
-
-[[global]]
-va = 0x00652B20
-name = "FrontendLAN__vtable"
